@@ -1,0 +1,27 @@
+{
+  "name": "git-oneflow",
+  "version": "0.1.0",
+  "description": "CLI tooling implementing GIT OneFlow branching model",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msanguineti/git-oneflow.git"
+  },
+  "keywords": [
+    "git",
+    "oneflow",
+    "branching",
+    "model",
+    "Adam",
+    "Ruka"
+  ],
+  "author": "Mirco Sanguineti",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/msanguineti/git-oneflow/issues"
+  },
+  "homepage": "https://github.com/msanguineti/git-oneflow#readme"
+}
