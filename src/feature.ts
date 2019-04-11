@@ -28,7 +28,11 @@ export default class Feature {
         await runExec(`git rebase ${interactive} ${mainBranch}`)
       }
       await runExec(`git checkout ${mainBranch}`)
-      await runExec(`git merge ${options['strategy'] === 1 ? '--ff-only' : '--no-ff'} ${featureBranch}/${featureName}`)
+      await runExec(
+        `git merge ${
+          options['strategy'] === 1 ? '--ff-only' : '--no-ff'
+        } ${featureBranch}/${featureName}`
+      )
       if (options['push']) {
         await runExec(`git push ${mainBranch}`)
       }
