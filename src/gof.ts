@@ -3,17 +3,28 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import program from 'commander'
-import shell from 'shelljs'
-import { version } from '../package.json'
+import program from 'yargs'
+import sh from 'shelljs'
+import chalk from 'chalk'
+import init from './init'
+import { loadConfigValues } from './core'
 
-if (!shell.which('git')) {
-  shell.echo("Sorry, git-OneFlow requires git... it's in the name")
-  shell.exit(1)
+if (!sh.which('git')) {
+  console.error("Sorry, git-OneFlow requires git... it's in the name")
+  process.exit(1)
 }
 
+// eslint-disable-next-line
 program
-  .version(version, '-v, --version')
-  .description('CLI tools for git-OneFlow')
-  .command('init', 'Create a config file')
-  .parse(process.argv)
+  .version()
+  .alias('v', 'version')
+  .config(loadConfigValues())
+  .pkgConf('git-oneflow')
+  .command(init)
+  .option('x', {
+    alias: 'dry-run',
+    description: 'Show what the command would do'
+  })
+  .demandCommand(1, chalk.red.bold('Please, choose a command'))
+  .help()
+  .alias('h', 'help').argv
