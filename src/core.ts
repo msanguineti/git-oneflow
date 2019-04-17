@@ -1,0 +1,175 @@
+import sh from 'shelljs'
+import findUp from 'find-up'
+import { error, info } from './utils/text'
+import { extname } from 'path'
+
+export type ConfigValues = { [key: string]: any }
+
+/**
+ * Returns the default config values of the application
+ *
+ * `main`: name of the main (production) branch (default `master`)
+ *
+ * `usedev`: whether to use a development branch (default `false`)
+ *
+ * `feature`: name of the features branch (default `feature`)
+ *
+ * `release`: name of the releases branch (default `release`)
+ *
+ * `hotfix`: name of the hotfixes branch (default `hotfix`)
+ *
+ * `integration`: which integration strategy to use (default #`1`)
+ *
+ * `interactive`: whether to rebase interactively (default `always`)
+ *
+ * `push`: whether to push to origin after finishing (default `always`)
+ *
+ * @returns {ConfigValues} the default config values
+ */
+export function getDefaultConfigValues(): ConfigValues {
+  return { ...{}, ...defaultConfigValues }
+}
+
+export function loadConfigFile(configFile?: string): ConfigValues {
+  if (!configFile || !sh.test('-f', configFile)) {
+    return defaultConfigValues
+  }
+
+  const configValues =
+    getFileExt(configFile) === '.js'
+      ? require(configFile)
+      : JSON.parse(sh.sed(/(\/\*[\w\W]+\*\/|(\/\/.*))/g, '', configFile))
+
+  return { ...defaultConfigValues, ...configValues }
+}
+
+export function loadConfigValues(): ConfigValues {
+  const configFile = findUp.sync(defaultConfigFileNames) || undefined
+
+  return loadConfigFile(configFile)
+}
+
+export function writeConfigFile({
+  file = defaultConfigFileName,
+  data = defaultConfigValues
+}: {
+  file?: string
+  data?: ConfigValues
+}): boolean {
+  let toWrite: string
+
+  switch (getFileExt(file)) {
+    case '.js':
+      toWrite = [
+        'module.exports = {',
+        ...generateCommentedValues(data),
+        '}'
+      ].join('\n')
+      break
+    case '.json':
+      toWrite = JSON.stringify(data, null, 2)
+      break
+    default: {
+      console.error(
+        error(
+          `Cannot write to ${file}. Supported extensions: ${supportedExtensions}`
+        )
+      )
+      return false
+    }
+  }
+
+  sh.ShellString(toWrite).to(file)
+  console.log(`Values written to: ${info(file)}`)
+  return true
+}
+
+export function isValidBranchName(branchName: string): boolean {
+  return checkGitRefFormat(`refs/heads/${branchName}`)
+}
+
+export function isValidTagName(tagName: string): boolean {
+  return checkGitRefFormat(`refs/tags/${tagName}`)
+}
+
+function checkGitRefFormat(value: string): boolean {
+  return (
+    sh.exec(`git check-ref-format "${value}"`, {
+      silent: true
+    }).code === 0
+  )
+}
+
+const defaultConfigValues: ConfigValues = {
+  main: 'master',
+  usedev: false,
+  feature: 'feature',
+  release: 'release',
+  hotfix: 'hotfix',
+  integration: 1,
+  interactive: 'always',
+  push: 'always'
+}
+
+const defaultConfigFileName: string = 'gof.config.js'
+
+const defaultConfigFileNames: string[] = [
+  defaultConfigFileName,
+  '.gofrc.js',
+  '.gofrc.json'
+]
+
+const supportedExtensions = ['.js', '.json']
+
+function getCommentFor(key: string): string {
+  switch (key) {
+    case 'main': {
+      return 'Main (production) branch name. Default `master`'
+    }
+    case 'usedev': {
+      return 'Use development branch? Default `false`'
+    }
+    case 'development': {
+      return 'Development branch name. Default `develop`'
+    }
+    case 'release': {
+      return 'Release branch name. Default: `release`'
+    }
+    case 'hotfix': {
+      return 'Hotfix branch name. Default: `hotfix`'
+    }
+    case 'feature': {
+      return 'Feature branch name. Default: `feature`'
+    }
+    case 'integration': {
+      return 'Integration method to use (see https://www.endoflineblog.com/oneflow-a-git-branching-model-and-workflow#feature-branches). Options: [`1`, `2`, `3`]. Default: `1`.'
+    }
+    case 'interactive': {
+      return 'Use interactve rebase (`git rebase -i` only valid for integration === 1 || 3)? Options: [`always`, `never`, `ask`]. Default: `always`.'
+    }
+    case 'push': {
+      return 'Push to origin after finishing feature/hotfix/release? Options: [`always`, `never`, `ask`]. Default: `always`.'
+    }
+    default: {
+      return ''
+    }
+  }
+}
+
+function getFileExt(configFile: string) {
+  return extname(configFile)
+}
+
+function generateCommentedValues(configValues: ConfigValues) {
+  const output: string[] = []
+  for (const key in configValues) {
+    if (configValues.hasOwnProperty(key)) {
+      const element =
+        typeof configValues[key] === 'string'
+          ? `"${configValues[key]}"`
+          : configValues[key]
+      output.push(`\t/** ${getCommentFor(key)} */\n\t${key}: ${element},`)
+    }
+  }
+  return output
+}
