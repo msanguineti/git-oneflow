@@ -13,13 +13,14 @@ function _interopDefault(e) {
     return e && "object" == typeof e && "default" in e ? e.default : e;
 }
 
-var program = _interopDefault(require("yargs")), sh = _interopDefault(require("shelljs")), chalk = _interopDefault(require("chalk")), inquirer = _interopDefault(require("inquirer")), findUp = _interopDefault(require("find-up")), path = require("path");
+var yargs = _interopDefault(require("yargs")), sh = _interopDefault(require("shelljs")), inquirer = _interopDefault(require("inquirer")), findUp = _interopDefault(require("find-up")), chalk = _interopDefault(require("chalk")), path = require("path");
 
-const success = e => chalk.black.bgGreen(e), error = e => chalk.black.bgRed(e);
+const success = e => chalk.black.bgGreen(e), error = e => chalk.black.bgRed(e), info = e => chalk.black.bgCyan(e);
 
 function getDefaultConfigValues() {
     return {
-        ...defaultConfigValues
+        ...defaultConfigValues,
+        ...loadConfigValues()
     };
 }
 
@@ -37,25 +38,29 @@ function loadConfigValues() {
 }
 
 function writeConfigFile({file: e = defaultConfigFileName, data: a = defaultConfigValues}) {
-    let t;
+    let n;
     switch (getFileExt(e)) {
       case ".js":
-        t = [ "module.exports = {", ...generateCommentedValues(a), "}" ];
+        n = [ "module.exports = {", ...generateCommentedValues(a), "}" ].join("\n");
         break;
 
       case ".json":
-        t = JSON.stringify(a, null, 2);
+        n = JSON.stringify(a, null, 2);
         break;
 
       default:
-        return sh.echo(error(`Cannot write to ${e}. Supported extensions: ${supportedExtensions}`)), 
+        return console.error(error(`Cannot write to ${e}. Supported extensions: ${supportedExtensions}`)), 
         !1;
     }
-    return sh.ShellString(t).to(e), sh.echo(`Values written to: ${e}`), !0;
+    return sh.ShellString(n).to(e), console.log(`Values written to: ${info(e)}`), !0;
 }
 
-function checkBranchName(e) {
-    return 0 === sh.exec(`git check-ref-format "refs/heads/${e}"`, {
+function isValidBranchName(e) {
+    return checkGitRefFormat(`refs/heads/${e}`);
+}
+
+function checkGitRefFormat(e) {
+    return 0 === sh.exec(`git check-ref-format "${e}"`, {
         silent: !0
     }).code;
 }
@@ -79,7 +84,7 @@ function getCommentFor(e) {
       case "usedev":
         return "Use development branch? Default `false`";
 
-      case "develop":
+      case "development":
         return "Development branch name. Default `develop`";
 
       case "release":
@@ -111,9 +116,9 @@ function getFileExt(e) {
 
 function generateCommentedValues(e) {
     const a = [];
-    for (const t in e) if (e.hasOwnProperty(t)) {
-        const n = "string" == typeof e[t] ? `"${e[t]}"` : e[t];
-        a.push(`\t/** ${getCommentFor(t)} */\n\t${t}: ${n},`);
+    for (const n in e) if (e.hasOwnProperty(n)) {
+        const t = "string" == typeof e[n] ? `"${e[n]}"` : e[n];
+        a.push(`\t/** ${getCommentFor(n)} */\n\t${n}: ${t},`);
     }
     return a;
 }
@@ -128,11 +133,11 @@ var init = {
     handler: async function(e) {
         try {
             const a = e.defaultValues ? getDefaultConfigValues() : await inquirer.prompt(generateQuestions(e));
-            sh.echo(JSON.stringify(a, null, 2)), e.dryRun || (e.defaultValues || await askConfirmationBeforeWrite()) && writeConfigFile({
+            console.log(JSON.stringify(a, null, 2)), e.dryRun || (e.defaultValues || await askConfirmationBeforeWrite()) && writeConfigFile({
                 data: a
-            }) && sh.echo(success("Initialisation done!"));
+            }) && console.log(success("Initialisation done!"));
         } catch (e) {
-            sh.echo(error(e));
+            console.error(error(e));
         }
     }
 };
@@ -143,7 +148,7 @@ function generateQuestions(e) {
         type: "input",
         message: "Main (production) branch:",
         default: e.main || "master",
-        validate: e => checkBranchName(e) || "Please, choose a valid name for the branch"
+        validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
     }, {
         name: "usedev",
         type: "confirm",
@@ -157,25 +162,25 @@ function generateQuestions(e) {
         when: function(e) {
             return e.usedev;
         },
-        validate: e => checkBranchName(e) || "Please, choose a valid name for the branch"
+        validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
     }, {
         name: "feature",
         type: "input",
         message: "Feature branch:",
         default: e.feature || "feature",
-        validate: e => checkBranchName(e) || "Please, choose a valid name for the branch"
+        validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
     }, {
         name: "release",
         type: "input",
         message: "Release branch:",
         default: e.release || "release",
-        validate: e => checkBranchName(e) || "Please, choose a valid name for the branch"
+        validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
     }, {
         name: "hotfix",
         type: "input",
         message: "Hotfix branch:",
         default: e.hotfix || "hotfix",
-        validate: e => checkBranchName(e) || "Please, choose a valid name for the branch"
+        validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
     }, {
         type: "list",
         name: "integration",
@@ -244,8 +249,34 @@ async function askConfirmationBeforeWrite() {
     } ])).write;
 }
 
-sh.which("git") || (sh.echo("Sorry, git-OneFlow requires git... it's in the name"), 
-sh.exit(1)), program.version().alias("v", "version").config(loadConfigValues()).pkgConf("git-oneflow").command(init).option("x", {
+var start = {
+    command: "start <featureBranch> [options]",
+    desc: "Start a new feature",
+    builder: e => e.option("i", {
+        alias: "interactive",
+        describe: "Rebase using `rebase -i`. It applies only if `integration` option is set to 1 or 3"
+    }),
+    handler: e => {}
+}, finish = {
+    command: "finish <featureBranch> [options]",
+    desc: "Finish a feature",
+    builder: e => {},
+    handler: e => {}
+}, feature = {
+    command: "feature <command>",
+    desc: "Manage starting and finishing features",
+    builder: function(e) {
+        return e.command(start).command(finish);
+    },
+    handler: function(e) {}
+};
+
+sh.which("git") || (console.error("Sorry, git-OneFlow requires git... it's in the name"), 
+process.exit(1));
+
+var argv = yargs.version().alias("v", "version").config(loadConfigValues()).pkgConf("git-oneflow").command(init).command(feature).option("x", {
     alias: "dry-run",
     description: "Show what the command would do"
-}).demandCommand(1, chalk.red.bold("Please, choose a command")).help().alias("h", "help").argv;
+}).help().alias("h", "help").argv;
+
+argv._.length <= 0 && console.log(`Try ${path.basename(process.argv[1])} --help`);

@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2019 Mirco Sanguineti
+ *
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
 import sh from 'shelljs'
 import findUp from 'find-up'
 import { error, info } from './utils/text'
@@ -12,6 +19,8 @@ export type ConfigValues = { [key: string]: any }
  *
  * `usedev`: whether to use a development branch (default `false`)
  *
+ * `development`: the name of the development branch (default: `develop`)
+ *
  * `feature`: name of the features branch (default `feature`)
  *
  * `release`: name of the releases branch (default `release`)
@@ -20,17 +29,17 @@ export type ConfigValues = { [key: string]: any }
  *
  * `integration`: which integration strategy to use (default #`1`)
  *
- * `interactive`: whether to rebase interactively (default `always`)
+ * `interactive`: whether to rebase interactively (default `always`, can also be `never` or `ask`)
  *
- * `push`: whether to push to origin after finishing (default `always`)
+ * `push`: whether to push to origin after finishing (default `always`, can also be `never` or `ask`)
  *
  * @returns {ConfigValues} the default config values
  */
-export function getDefaultConfigValues(): ConfigValues {
-  return { ...{}, ...defaultConfigValues }
+export function getDefaultConfigValues (): ConfigValues {
+  return { ...defaultConfigValues, ...loadConfigValues() }
 }
 
-export function loadConfigFile(configFile?: string): ConfigValues {
+export function loadConfigFile (configFile?: string): ConfigValues {
   if (!configFile || !sh.test('-f', configFile)) {
     return defaultConfigValues
   }
@@ -40,16 +49,61 @@ export function loadConfigFile(configFile?: string): ConfigValues {
       ? require(configFile)
       : JSON.parse(sh.sed(/(\/\*[\w\W]+\*\/|(\/\/.*))/g, '', configFile))
 
-  return { ...defaultConfigValues, ...configValues }
+  if (sanityCheck(configValues)) {
+    return { ...defaultConfigValues, ...configValues }
+  } else {
+    return { ...defaultConfigValues }
+  }
 }
 
-export function loadConfigValues(): ConfigValues {
+function sanityCheck (configValues: ConfigValues): boolean {
+  for (const key in configValues) {
+    const element = configValues[key]
+    switch (key) {
+      case 'main':
+      case 'development':
+      case 'hotfix':
+      case 'release':
+      case 'feature':
+        if (!isValidBranchName(element)) {
+          console.log('failing ' + key + ':' + element)
+          return false
+        }
+        break
+      case 'usedev':
+        if (typeof element !== 'boolean') {
+          console.log('failing ' + key + ':' + element)
+          return false
+        }
+        break
+      case 'integration':
+        if (typeof element !== 'number' || (element < 1 || element > 3)) {
+          console.log('failing ' + key + ':' + element)
+          return false
+        }
+        break
+      case 'interactive':
+      case 'push':
+        if (
+          typeof element !== 'string' ||
+          !element.match(/(ask|always|never)/)
+        ) {
+          console.log('failing ' + key + ':' + element)
+          return false
+        }
+        break
+    }
+  }
+  return true
+}
+
+export function loadConfigValues (): ConfigValues {
   const configFile = findUp.sync(defaultConfigFileNames) || undefined
 
   return loadConfigFile(configFile)
 }
 
-export function writeConfigFile({
+export function writeConfigFile ({
   file = defaultConfigFileName,
   data = defaultConfigValues
 }: {
@@ -57,6 +111,8 @@ export function writeConfigFile({
   data?: ConfigValues
 }): boolean {
   let toWrite: string
+
+  if (!sanityCheck(data)) return false
 
   switch (getFileExt(file)) {
     case '.js':
@@ -84,15 +140,15 @@ export function writeConfigFile({
   return true
 }
 
-export function isValidBranchName(branchName: string): boolean {
+export function isValidBranchName (branchName: string): boolean {
   return checkGitRefFormat(`refs/heads/${branchName}`)
 }
 
-export function isValidTagName(tagName: string): boolean {
+export function isValidTagName (tagName: string): boolean {
   return checkGitRefFormat(`refs/tags/${tagName}`)
 }
 
-function checkGitRefFormat(value: string): boolean {
+function checkGitRefFormat (value: string): boolean {
   return (
     sh.exec(`git check-ref-format "${value}"`, {
       silent: true
@@ -103,6 +159,7 @@ function checkGitRefFormat(value: string): boolean {
 const defaultConfigValues: ConfigValues = {
   main: 'master',
   usedev: false,
+  development: 'develop',
   feature: 'feature',
   release: 'release',
   hotfix: 'hotfix',
@@ -121,7 +178,7 @@ const defaultConfigFileNames: string[] = [
 
 const supportedExtensions = ['.js', '.json']
 
-function getCommentFor(key: string): string {
+function getCommentFor (key: string): string {
   switch (key) {
     case 'main': {
       return 'Main (production) branch name. Default `master`'
@@ -156,20 +213,20 @@ function getCommentFor(key: string): string {
   }
 }
 
-function getFileExt(configFile: string) {
+function getFileExt (configFile: string) {
   return extname(configFile)
 }
 
-function generateCommentedValues(configValues: ConfigValues) {
+function generateCommentedValues (configValues: ConfigValues) {
   const output: string[] = []
   for (const key in configValues) {
-    if (configValues.hasOwnProperty(key)) {
-      const element =
-        typeof configValues[key] === 'string'
-          ? `"${configValues[key]}"`
-          : configValues[key]
-      output.push(`\t/** ${getCommentFor(key)} */\n\t${key}: ${element},`)
-    }
+    // if (configValues.hasOwnProperty(key)) {
+    const element =
+      typeof configValues[key] === 'string'
+        ? `"${configValues[key]}"`
+        : configValues[key]
+    output.push(`\t/** ${getCommentFor(key)} */\n\t${key}: ${element},`)
+    // }
   }
   return output
 }
