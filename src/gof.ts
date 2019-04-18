@@ -11,6 +11,8 @@ import init from './cmds/init'
 import { loadConfigValues } from './core'
 import feature from './cmds/feature'
 import { basename } from 'path'
+import release from './cmds/release'
+import hotfix from './cmds/hotfix'
 
 if (!sh.which('git')) {
   console.error("Sorry, git-OneFlow requires git... it's in the name")
@@ -24,6 +26,8 @@ var argv = yargs
   .pkgConf('git-oneflow')
   .command(init)
   .command(feature)
+  .command(release)
+  .command(hotfix)
   .option('x', {
     alias: 'dry-run',
     description: 'Show what the command would do'

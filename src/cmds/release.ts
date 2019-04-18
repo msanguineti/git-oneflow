@@ -10,7 +10,7 @@ import finish from './release_finish'
 
 export default {
   command: 'release <command>',
-  desc: 'Manage starting and finishing releases',
+  desc: 'Manage starting and finishing releases.',
   builder: function (yargs: any) {
     return yargs.command(start).command(finish)
   },
