@@ -10,17 +10,16 @@ import { info } from '../utils/text'
 import inquirer from 'inquirer'
 
 export default {
-  command: 'finish <releaseBranch>',
-  desc:
-    'Finishes a release. Release branch name should be something like `2.3.0` or some version convention',
+  command: 'finish <releaseName>',
+  desc: 'Finishes a release.',
   builder: (yargs: any) => {},
   handler: async (argv: { [key: string]: any }) => {
     const mergeInto = argv.usedev ? argv.development : argv.main
 
-    exec(`git checkout ${argv.release}/${argv.releaseBranch}`)
-    exec(`git tag ${argv.releaseBranch}`)
+    exec(`git checkout ${argv.release}/${argv.releaseName}`)
+    exec(`git tag ${argv.releaseName}`)
     exec(`git checkout ${mergeInto}`)
-    exec(`git merge ${argv.release}/${argv.releaseBranch}`)
+    exec(`git merge ${argv.release}/${argv.releaseName}`)
 
     switch (argv.push) {
       case 'always':
@@ -42,7 +41,7 @@ export default {
 
     if (argv.usedev) {
       exec(`git checkout master`)
-      exec(`git merge --ff-only ${argv.releaseBranch}`)
+      exec(`git merge --ff-only ${argv.releaseName}`)
     }
 
     switch (argv.deleteBranch) {
@@ -54,9 +53,7 @@ export default {
       case 'ask':
         if (
           await ask(
-            `Do you want to delete branch ${argv.release}/${
-              argv.releaseBranch
-            }?`
+            `Do you want to delete branch ${argv.release}/${argv.releaseName}?`
           )
         ) {
           deleteBranch(argv)
@@ -67,8 +64,8 @@ export default {
 }
 
 function deleteBranch (argv: { [key: string]: any }) {
-  exec(`git branch -d ${argv.feature}/${argv.featureBranch}`)
-  exec(`git push origin :${argv.feature}/${argv.featureBranch}`)
+  exec(`git branch -d ${argv.release}/${argv.releaseName}`)
+  exec(`git push origin :${argv.release}/${argv.releaseName}`)
 }
 
 async function ask (question: string) {
