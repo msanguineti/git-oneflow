@@ -1,25 +1,30 @@
-// import program from 'yargs'
-// import sh from "shelljs";
+/**
+ * Copyright (c) 2019 Mirco Sanguineti
+ *
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
 import inquirer from 'inquirer'
 import {
   isValidBranchName,
   writeConfigFile,
   getDefaultConfigValues
-} from './core'
+} from '../core'
 
-import { success, error } from './utils/text'
+import { success, error } from '../utils/text'
 
 export default {
   command: 'init [options]',
   desc: 'Generate a config file',
-  builder: (program: any) => {
-    return program.option('y', {
+  builder: (yargs: any) => {
+    return yargs.option('y', {
       alias: 'default-values',
       describe:
         'Auto-generate config file using default values. These values WILL NOT overwrite existing values!'
     })
   },
-  handler: async function(argv: any) {
+  handler: async function (argv: { [key: string]: any }) {
     try {
       const jsonValues = argv.defaultValues
         ? getDefaultConfigValues()
@@ -39,7 +44,7 @@ export default {
   }
 }
 
-function generateQuestions(argv: { [key: string]: any }) {
+function generateQuestions (argv: { [key: string]: any }) {
   return [
     {
       name: 'main',
@@ -64,7 +69,7 @@ function generateQuestions(argv: { [key: string]: any }) {
       type: 'input',
       message: 'Development branch:',
       default: argv.development || 'develop',
-      when: function(answers: { [key: string]: any }) {
+      when: function (answers: { [key: string]: any }) {
         return answers.usedev
       },
       validate: (value: string) => {
@@ -158,7 +163,7 @@ function generateQuestions(argv: { [key: string]: any }) {
           value: 'ask'
         }
       ],
-      when: function(answers: { [key: string]: any }) {
+      when: function (answers: { [key: string]: any }) {
         return answers.integration !== 2
       }
     },
@@ -188,7 +193,7 @@ function generateQuestions(argv: { [key: string]: any }) {
   ]
 }
 
-async function askConfirmationBeforeWrite() {
+async function askConfirmationBeforeWrite () {
   const ans: { write: boolean } = await inquirer.prompt([
     {
       type: 'confirm',

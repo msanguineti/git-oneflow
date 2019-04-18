@@ -1,30 +1,37 @@
-// Copyright (c) 2019 Mirco Sanguineti
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
+/**
+ * Copyright (c) 2019 Mirco Sanguineti
+ *
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
 
-import program from 'yargs'
+import yargs from 'yargs'
 import sh from 'shelljs'
-import chalk from 'chalk'
-import init from './init'
+import init from './cmds/init'
 import { loadConfigValues } from './core'
+import feature from './cmds/feature'
+import { basename } from 'path'
 
 if (!sh.which('git')) {
   console.error("Sorry, git-OneFlow requires git... it's in the name")
   process.exit(1)
 }
 
-// eslint-disable-next-line
-program
+var argv = yargs
   .version()
   .alias('v', 'version')
   .config(loadConfigValues())
   .pkgConf('git-oneflow')
   .command(init)
+  .command(feature)
   .option('x', {
     alias: 'dry-run',
     description: 'Show what the command would do'
   })
-  .demandCommand(1, chalk.red.bold('Please, choose a command'))
+  // .demandCommand(1, chalk.red.bold('Please, choose a command'))
   .help()
   .alias('h', 'help').argv
+
+if (argv['_'].length <= 0) {
+  console.log(`Try ${basename(process.argv[1])} --help`)
+}
