@@ -10,7 +10,7 @@ import finish from './hotfix_finish'
 
 export default {
   command: 'hotfix <command>',
-  desc: 'Manage starting and finishing hotfixes',
+  desc: 'Manage starting and finishing hotfixes.',
   builder: function (yargs: any) {
     return yargs.command(start).command(finish)
   },
