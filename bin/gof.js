@@ -13,7 +13,7 @@ function _interopDefault(e) {
     return e && "object" == typeof e && "default" in e ? e.default : e;
 }
 
-var yargs = _interopDefault(require("yargs")), sh = _interopDefault(require("shelljs")), inquirer = _interopDefault(require("inquirer")), findUp = _interopDefault(require("find-up")), chalk = _interopDefault(require("chalk")), path = require("path");
+var yargs = _interopDefault(require("yargs")), sh = require("shelljs"), sh__default = _interopDefault(sh), inquirer = _interopDefault(require("inquirer")), findUp = _interopDefault(require("find-up")), chalk = _interopDefault(require("chalk")), path = require("path");
 
 const success = e => chalk.black.bgGreen(e), error = e => chalk.black.bgRed(e), info = e => chalk.black.bgCyan(e);
 
@@ -25,12 +25,45 @@ function getDefaultConfigValues() {
 }
 
 function loadConfigFile(e) {
-    if (!e || !sh.test("-f", e)) return defaultConfigValues;
-    const a = ".js" === getFileExt(e) ? require(e) : JSON.parse(sh.sed(/(\/\*[\w\W]+\*\/|(\/\/.*))/g, "", e));
-    return {
+    if (!e || !sh__default.test("-f", e)) return defaultConfigValues;
+    const a = ".js" === getFileExt(e) ? require(e) : JSON.parse(sh__default.sed(/(\/\*[\w\W]+\*\/|(\/\/.*))/g, "", e));
+    return sanityCheck(a) ? {
         ...defaultConfigValues,
         ...a
+    } : {
+        ...defaultConfigValues
     };
+}
+
+function sanityCheck(e) {
+    for (const a in e) {
+        const t = e[a];
+        switch (a) {
+          case "main":
+          case "development":
+          case "hotfix":
+          case "release":
+          case "feature":
+            if (!isValidBranchName(t)) return console.log("failing " + a + ":" + t), !1;
+            break;
+
+          case "usedev":
+            if ("boolean" != typeof t) return console.log("failing " + a + ":" + t), !1;
+            break;
+
+          case "integration":
+            if ("number" != typeof t || t < 1 || t > 3) return console.log("failing " + a + ":" + t), 
+            !1;
+            break;
+
+          case "interactive":
+          case "push":
+          case "delete":
+            if ("string" != typeof t || !t.match(/(ask|always|never)/)) return console.log("failing " + a + ":" + t), 
+            !1;
+        }
+    }
+    return !0;
 }
 
 function loadConfigValues() {
@@ -38,21 +71,23 @@ function loadConfigValues() {
 }
 
 function writeConfigFile({file: e = defaultConfigFileName, data: a = defaultConfigValues}) {
-    let n;
+    let t;
+    if (!sanityCheck(a)) return !1;
     switch (getFileExt(e)) {
       case ".js":
-        n = [ "module.exports = {", ...generateCommentedValues(a), "}" ].join("\n");
+        t = [ "module.exports = {", ...generateCommentedValues(a), "}" ].join("\n");
         break;
 
       case ".json":
-        n = JSON.stringify(a, null, 2);
+        t = JSON.stringify(a, null, 2);
         break;
 
       default:
         return console.error(error(`Cannot write to ${e}. Supported extensions: ${supportedExtensions}`)), 
         !1;
     }
-    return sh.ShellString(n).to(e), console.log(`Values written to: ${info(e)}`), !0;
+    return sh__default.ShellString(t).to(e), console.log(`Values written to: ${info(e)}`), 
+    !0;
 }
 
 function isValidBranchName(e) {
@@ -60,7 +95,7 @@ function isValidBranchName(e) {
 }
 
 function checkGitRefFormat(e) {
-    return 0 === sh.exec(`git check-ref-format "${e}"`, {
+    return 0 === sh__default.exec(`git check-ref-format "${e}"`, {
         silent: !0
     }).code;
 }
@@ -68,12 +103,14 @@ function checkGitRefFormat(e) {
 const defaultConfigValues = {
     main: "master",
     usedev: !1,
+    development: "develop",
     feature: "feature",
     release: "release",
     hotfix: "hotfix",
     integration: 1,
     interactive: "always",
-    push: "always"
+    push: "always",
+    delete: "always"
 }, defaultConfigFileName = "gof.config.js", defaultConfigFileNames = [ defaultConfigFileName, ".gofrc.js", ".gofrc.json" ], supportedExtensions = [ ".js", ".json" ];
 
 function getCommentFor(e) {
@@ -105,6 +142,9 @@ function getCommentFor(e) {
       case "push":
         return "Push to origin after finishing feature/hotfix/release? Options: [`always`, `never`, `ask`]. Default: `always`.";
 
+      case "delete":
+        return "Delete the working branch (feature/hotfix/release) after merging with main/development? Options: [`always`, `never`, `ask`]. Default: `always`.";
+
       default:
         return "";
     }
@@ -116,9 +156,9 @@ function getFileExt(e) {
 
 function generateCommentedValues(e) {
     const a = [];
-    for (const n in e) if (e.hasOwnProperty(n)) {
-        const t = "string" == typeof e[n] ? `"${e[n]}"` : e[n];
-        a.push(`\t/** ${getCommentFor(n)} */\n\t${n}: ${t},`);
+    for (const t in e) {
+        const n = "string" == typeof e[t] ? `"${e[t]}"` : e[t];
+        a.push(`\t/** ${getCommentFor(t)} */\n\t${t}: ${n},`);
     }
     return a;
 }
@@ -250,31 +290,210 @@ async function askConfirmationBeforeWrite() {
 }
 
 var start = {
-    command: "start <featureBranch> [options]",
+    command: "start <featureBranch>",
     desc: "Start a new feature",
+    builder: e => {},
+    handler: e => {
+        const a = e.usedev ? e.development : e.main;
+        isValidBranchName(e.featureBranch) && sh.exec(`git checkout -b ${e.feature}/${e.featureBranch} ${a}`);
+    }
+}, finish = {
+    command: "finish <featureBranch> [options]",
+    desc: "Finish a feature",
     builder: e => e.option("i", {
         alias: "interactive",
         describe: "Rebase using `rebase -i`. It applies only if `integration` option is set to 1 or 3"
     }),
-    handler: e => {}
-}, finish = {
-    command: "finish <featureBranch> [options]",
-    desc: "Finish a feature",
-    builder: e => {},
-    handler: e => {}
-}, feature = {
+    handler: e => {
+        handleFinish(e, e.usedev ? e.development : e.main);
+    }
+};
+
+async function handleFinish(e, a) {
+    switch (2 !== e.integration && await rebaseStep(e, a), sh.exec(`git checkout ${a}`), 
+    2 === e.integration ? sh.exec(`git merge --ff-only ${e.feature}/${e.featureBranch}`) : sh.exec(`git merge --no-ff ${e.feature}/${e.featureBranch}`), 
+    e.push) {
+      case "always":
+        sh.exec(`git push origin ${a}`);
+        break;
+
+      case "never":
+        break;
+
+      case "ask":
+        await ask(`Do you want to push to ${a}?`) && sh.exec(`git push origin ${a}`);
+    }
+    switch (e.deleteBranch) {
+      case "always":
+        sh.exec(`git branch -d ${e.feature}/${e.featureBranch}`);
+        break;
+
+      case "never":
+        break;
+
+      case "ask":
+        await ask(`Do you want to delete branch ${e.feature}/${e.featureBranch}?`) && sh.exec(`git branch -d ${e.feature}/${e.featureBranch}`);
+    }
+}
+
+async function rebaseStep(e, a) {
+    switch (sh.exec(`git checkout ${e.feature}/${e.featureBranch}`), e.interactive) {
+      case "always":
+        sh.exec(`git rebase -i ${a}`);
+        break;
+
+      case "never":
+        sh.exec(`git rebase ${a}`);
+        break;
+
+      case "ask":
+        await ask("Do you want to use rebase interactively?") ? sh.exec(`git rebase -i ${a}`) : sh.exec(`git rebase ${a}`);
+    }
+}
+
+async function ask(e) {
+    return (await inquirer.prompt([ {
+        type: "confirm",
+        name: "accept",
+        message: e
+    } ])).accept;
+}
+
+var feature = {
     command: "feature <command>",
     desc: "Manage starting and finishing features",
     builder: function(e) {
         return e.command(start).command(finish);
     },
     handler: function(e) {}
+}, start$1 = {
+    command: "start <releaseName> <from>",
+    desc: "Start a new release.\n<releaseName> should be something like `2.3.0`.\n<from> should be a branch (e.g. develop) or a commit (e.g. 9af345)",
+    builder: e => {},
+    handler: e => {
+        isValidBranchName(e.releaseName) && sh.exec(`git checkout -b ${e.release}/${e.releaseName} ${e.from}`);
+    }
+}, finish$1 = {
+    command: "finish <releaseName>",
+    desc: "Finishes a release.",
+    builder: e => {},
+    handler: async e => {
+        const a = e.usedev ? e.development : e.main;
+        switch (sh.exec(`git checkout ${e.release}/${e.releaseName}`), sh.exec(`git tag ${e.releaseName}`), 
+        sh.exec(`git checkout ${a}`), sh.exec(`git merge ${e.release}/${e.releaseName}`), 
+        e.push) {
+          case "always":
+            sh.exec(`git push --tags origin ${a}`);
+            break;
+
+          case "never":
+            console.log(`Remember to ${info(`git push --tags origin ${a}`)} when you're done.`);
+            break;
+
+          case "ask":
+            await ask$1(`Do you want to push to ${a}?`) && sh.exec(`git push --tags origin ${a}`);
+        }
+        switch (e.usedev && (sh.exec("git checkout master"), sh.exec(`git merge --ff-only ${e.releaseName}`)), 
+        e.deleteBranch) {
+          case "always":
+            deleteBranch(e);
+            break;
+
+          case "never":
+            break;
+
+          case "ask":
+            await ask$1(`Do you want to delete branch ${e.release}/${e.releaseName}?`) && deleteBranch(e);
+        }
+    }
 };
 
-sh.which("git") || (console.error("Sorry, git-OneFlow requires git... it's in the name"), 
+function deleteBranch(e) {
+    sh.exec(`git branch -d ${e.release}/${e.releaseName}`), sh.exec(`git push origin :${e.release}/${e.releaseName}`);
+}
+
+async function ask$1(e) {
+    return (await inquirer.prompt([ {
+        type: "confirm",
+        name: "accept",
+        message: e
+    } ])).accept;
+}
+
+var release = {
+    command: "release <command>",
+    desc: "Manage starting and finishing releases.",
+    builder: function(e) {
+        return e.command(start$1).command(finish$1);
+    },
+    handler: function(e) {}
+}, start$2 = {
+    command: "start <branchName> <from>",
+    desc: "Start a new hotfix",
+    builder: e => {},
+    handler: e => {
+        isValidBranchName(e.branchName) && sh.exec(`git checkout -b ${e.hotfix}/${e.branchName} ${e.from}`);
+    }
+}, finish$2 = {
+    command: "finish <hotfixBranch>",
+    desc: "Finishes a hotfix. Hotfix branch name should be something like `2.3.1` or some version convention",
+    builder: e => {},
+    handler: async e => {
+        const a = e.usedev ? e.development : e.main;
+        switch (sh.exec(`git checkout ${e.hotfix}/${e.hotfixBranch}`), sh.exec(`git tag ${e.hotfixBranch}`), 
+        sh.exec(`git checkout ${a}`), sh.exec(`git merge ${e.hotfix}/${e.hotfixBranch}`), 
+        e.push) {
+          case "always":
+            sh.exec(`git push --tags origin ${a}`);
+            break;
+
+          case "never":
+            console.log(`Remember to ${info(`git push --tags origin ${a}`)} when you're done.`);
+            break;
+
+          case "ask":
+            await ask$2(`Do you want to push to ${a}?`) && sh.exec(`git push --tags origin ${a}`);
+        }
+        switch (e.usedev && (sh.exec("git checkout master"), sh.exec(`git merge --ff-only ${e.hotfixBranch}`)), 
+        e.deleteBranch) {
+          case "always":
+            deleteBranch$1(e);
+            break;
+
+          case "never":
+            break;
+
+          case "ask":
+            await ask$2(`Do you want to delete branch ${e.hotfix}/${e.hotfixBranch}?`) && deleteBranch$1(e);
+        }
+    }
+};
+
+function deleteBranch$1(e) {
+    sh.exec(`git branch -d ${e.hotfix}/${e.hotfixBranch}`), sh.exec(`git push origin :${e.hotfix}/${e.hotfixBranch}`);
+}
+
+async function ask$2(e) {
+    return (await inquirer.prompt([ {
+        type: "confirm",
+        name: "accept",
+        message: e
+    } ])).accept;
+}
+
+var hotfix = {
+    command: "hotfix <command>",
+    desc: "Manage starting and finishing hotfixes",
+    builder: function(e) {
+        return e.command(start$2).command(finish$2);
+    },
+    handler: function(e) {}
+};
+
+sh__default.which("git") || (console.error("Sorry, git-OneFlow requires git... it's in the name"), 
 process.exit(1));
 
-var argv = yargs.version().alias("v", "version").config(loadConfigValues()).pkgConf("git-oneflow").command(init).command(feature).option("x", {
+var argv = yargs.version().alias("v", "version").config(loadConfigValues()).pkgConf("git-oneflow").command(init).command(feature).command(release).command(hotfix).option("x", {
     alias: "dry-run",
     description: "Show what the command would do"
 }).help().alias("h", "help").argv;
