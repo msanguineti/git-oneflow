@@ -33,6 +33,8 @@ export type ConfigValues = { [key: string]: any }
  *
  * `push`: whether to push to origin after finishing (default `always`, can also be `never` or `ask`)
  *
+ * `delete`: whether to delete the branch after merging with main/development (default `always`, can also be `never` or `ask`)
+ *
  * @returns {ConfigValues} the default config values
  */
 export function getDefaultConfigValues (): ConfigValues {
@@ -84,6 +86,7 @@ function sanityCheck (configValues: ConfigValues): boolean {
         break
       case 'interactive':
       case 'push':
+      case 'delete':
         if (
           typeof element !== 'string' ||
           !element.match(/(ask|always|never)/)
@@ -165,7 +168,8 @@ const defaultConfigValues: ConfigValues = {
   hotfix: 'hotfix',
   integration: 1,
   interactive: 'always',
-  push: 'always'
+  push: 'always',
+  delete: 'always'
 }
 
 const defaultConfigFileName: string = 'gof.config.js'
@@ -206,6 +210,9 @@ function getCommentFor (key: string): string {
     }
     case 'push': {
       return 'Push to origin after finishing feature/hotfix/release? Options: [`always`, `never`, `ask`]. Default: `always`.'
+    }
+    case 'delete': {
+      return 'Delete the working branch (feature/hotfix/release) after merging with main/development? Options: [`always`, `never`, `ask`]. Default: `always`.'
     }
     default: {
       return ''
