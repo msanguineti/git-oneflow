@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2019 Mirco Sanguineti
+ *
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
 import chalk from 'chalk'
 
 export const success = (str: string): string => {

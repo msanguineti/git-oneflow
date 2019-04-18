@@ -59,6 +59,19 @@ describe('testing core functionalities', () => {
       expect(defaults.test).toMatch('test value')
     })
 
+    test('config value from file is wrong, revert to defaults', () => {
+      sh.ShellString(
+        `{
+        "development": "asldk  /.. ,./3"
+      }`
+      ).to(tempConfigFile)
+
+      const defaults = core.loadConfigFile(tempConfigFile)
+
+      expect(defaults).toBeDefined()
+      expect(defaults.development).toMatch('develop')
+    })
+
     test('write to (and load from) .js file', () => {
       const jsFile = sh.tempdir() + '/gof.config.js'
 
@@ -75,10 +88,34 @@ describe('testing core functionalities', () => {
       expect(jsObject.test).toBeTruthy()
     })
 
-    test('attemp to write to wrong file type', () => {
+    test('attempt to write to wrong file type', () => {
       const wrong = core.writeConfigFile({ file: 'file.wrong' })
 
       expect(wrong).not.toBeTruthy()
+    })
+
+    test('config value for a branch name is invalid', () => {
+      core.writeConfigFile({
+        data: { development: 'akn//&&svn...#k/' }
+      })
+    })
+
+    test('config value usedev is invalid', () => {
+      core.writeConfigFile({
+        data: { usedev: 'true' }
+      })
+    })
+
+    test('config value push is invalid', () => {
+      core.writeConfigFile({
+        data: { push: 'maybe' }
+      })
+    })
+
+    test('config value integration is invalid', () => {
+      core.writeConfigFile({
+        data: { integration: 4 }
+      })
     })
   })
 
@@ -86,12 +123,15 @@ describe('testing core functionalities', () => {
     test('the branch name is valid', () => {
       expect(core.isValidBranchName('branch/name')).toBeTruthy()
     })
+
     test('the branch name is invalid', () => {
       expect(core.isValidBranchName('branch///dkd/.kdk,.l')).not.toBeTruthy()
     })
+
     test('the tag name is valid', () => {
-      expect(core.isValidTagName('1.2.3')).toBeTruthy()
+      expect(core.isValidTagName('v1.2.3')).toBeTruthy()
     })
+
     test('the tag name is invalid', () => {
       expect(core.isValidTagName('1...3.4.5')).not.toBeTruthy()
     })
