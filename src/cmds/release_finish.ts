@@ -1,13 +1,13 @@
-import { exec } from 'shelljs'
-import { info } from '../utils/text'
-import inquirer from 'inquirer'
-
 /**
  * Copyright (c) 2019 Mirco Sanguineti
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
+
+import { exec } from 'shelljs'
+import { info } from '../utils/text'
+import inquirer from 'inquirer'
 
 export default {
   command: 'finish <releaseBranch>',
