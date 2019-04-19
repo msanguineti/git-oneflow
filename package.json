@@ -17,7 +17,7 @@
     "lint": "standard **/*.ts --fix",
     "watch": "rollup -c --watch",
     "typecheck": "tsc",
-    "release": "standard-version"
+    "release": "standard-version -t"
   },
   "repository": {
     "type": "git",
