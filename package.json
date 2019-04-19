@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "CLI tooling implementing GIT OneFlow branching model",
   "bin": {
-    "gof": "bin/gof.js"
+    "gof": "bin/gof.js",
+    "git-oneflow": "bin/gof.js"
   },
   "files": [
     "bin/**/*"
@@ -17,6 +18,7 @@
     "lint": "standard **/*.ts --fix",
     "watch": "rollup -c --watch",
     "typecheck": "tsc",
+    "prerelease": "run-s test clean build",
     "release": "standard-version -t"
   },
   "repository": {
