@@ -20,7 +20,7 @@ git-oneflow --help
 
 ## Changelog
 
-[CHANGELOG](./CHANGELOG.md)
+See [CHANGELOG](./CHANGELOG.md) for latest changes.
 
 ## License
 
