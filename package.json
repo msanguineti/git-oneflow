@@ -16,7 +16,8 @@
     "format": "prettier --write **/*.ts",
     "lint": "standard **/*.ts --fix",
     "watch": "rollup -c --watch",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
