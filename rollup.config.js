@@ -15,18 +15,18 @@ const preamble = `#!/usr/bin/env node
 `
 const extensions = ['.js', '.ts']
 
-const input = 'src/gof.ts'//['src/gof.ts', 'src/gof-init.ts']
+const input = 'src/index.ts'
 
 const plugins = [
   json(),
   resolve({ extensions }),
   cjs(),
   babel({ extensions, include: ['src/**/*'] }),
-  terser({ output: { beautify: true, preamble: preamble } })
+  terser({ output: { beautify: false, preamble: preamble } })
 ]
 
 const output = {
-  file: 'bin/gof.js',
+  file: 'bin/index.js',
   format: 'cjs'
 }
 
@@ -35,7 +35,15 @@ export default {
 
   // Specify here external modules which you don't want to include in your bundle (for instance: 'lodash', 'moment' etc.)
   // https://rollupjs.org/guide/en#external-e-external
-  external: ['shelljs', 'commander', 'inquirer', 'chalk', 'yargs', 'path', 'find-up'],
+  external: [
+    'shelljs',
+    'commander',
+    'inquirer',
+    'chalk',
+    'yargs',
+    'path',
+    'find-up'
+  ],
 
   plugins,
 

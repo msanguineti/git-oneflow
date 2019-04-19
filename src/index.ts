@@ -14,12 +14,15 @@ import { basename } from 'path'
 import release from './cmds/release'
 import hotfix from './cmds/hotfix'
 
+import pkg from '../package.json'
+
 if (!sh.which('git')) {
   console.error("Sorry, git-OneFlow requires git... it's in the name")
   process.exit(1)
 }
 
 var argv = yargs
+  .scriptName(pkg.name)
   .version()
   .alias('v', 'version')
   .config(loadConfigValues())
