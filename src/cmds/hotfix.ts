@@ -5,8 +5,8 @@
  * https://opensource.org/licenses/MIT
  */
 
-import start from './hotfix_start'
-import finish from './hotfix_finish'
+import start from './hotfix/start'
+import finish from './hotfix/finish'
 
 export default {
   command: 'hotfix <command>',

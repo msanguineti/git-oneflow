@@ -5,8 +5,8 @@
  * https://opensource.org/licenses/MIT
  */
 
-import start from './release_start'
-import finish from './release_finish'
+import start from './release/start'
+import finish from './release/finish'
 
 export default {
   command: 'release <command>',
