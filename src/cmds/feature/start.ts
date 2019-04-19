@@ -1,5 +1,5 @@
 import { exec } from 'shelljs'
-import { isValidBranchName } from '../core'
+import { isValidBranchName } from '../../core'
 
 /**
  * Copyright (c) 2019 Mirco Sanguineti

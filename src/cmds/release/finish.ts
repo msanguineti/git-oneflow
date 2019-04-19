@@ -6,7 +6,7 @@
  */
 
 import { exec } from 'shelljs'
-import { info } from '../utils/text'
+import { info } from '../../utils/text'
 import inquirer from 'inquirer'
 
 export default {

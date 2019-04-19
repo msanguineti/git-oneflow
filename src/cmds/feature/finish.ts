@@ -9,7 +9,7 @@
 import { exec } from 'shelljs'
 
 // eslint-disable-next-line
-import { ConfigValues } from '../core'
+import { ConfigValues } from '../../core'
 import inquirer from 'inquirer'
 
 export default {

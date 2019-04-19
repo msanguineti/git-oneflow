@@ -7,7 +7,7 @@
 
 import sh from 'shelljs'
 import findUp from 'find-up'
-import { error, info } from './utils/text'
+// import { error, info } from './utils/text'
 import { extname } from 'path'
 
 export type ConfigValues = { [key: string]: any }
@@ -58,48 +58,6 @@ export function loadConfigFile (configFile?: string): ConfigValues {
   }
 }
 
-function sanityCheck (configValues: ConfigValues): boolean {
-  for (const key in configValues) {
-    const element = configValues[key]
-    switch (key) {
-      case 'main':
-      case 'development':
-      case 'hotfix':
-      case 'release':
-      case 'feature':
-        if (!isValidBranchName(element)) {
-          console.log('failing ' + key + ':' + element)
-          return false
-        }
-        break
-      case 'usedev':
-        if (typeof element !== 'boolean') {
-          console.log('failing ' + key + ':' + element)
-          return false
-        }
-        break
-      case 'integration':
-        if (typeof element !== 'number' || (element < 1 || element > 3)) {
-          console.log('failing ' + key + ':' + element)
-          return false
-        }
-        break
-      case 'interactive':
-      case 'push':
-      case 'delete':
-        if (
-          typeof element !== 'string' ||
-          !element.match(/(ask|always|never)/)
-        ) {
-          console.log('failing ' + key + ':' + element)
-          return false
-        }
-        break
-    }
-  }
-  return true
-}
-
 export function loadConfigValues (): ConfigValues {
   const configFile = findUp.sync(defaultConfigFileNames) || undefined
 
@@ -129,17 +87,17 @@ export function writeConfigFile ({
       toWrite = JSON.stringify(data, null, 2)
       break
     default: {
-      console.error(
-        error(
-          `Cannot write to ${file}. Supported extensions: ${supportedExtensions}`
-        )
-      )
+      // console.error(
+      //   error(
+      //     `Cannot write to ${file}. Supported extensions: ${supportedExtensions}`
+      //   )
+      // )
       return false
     }
   }
 
   sh.ShellString(toWrite).to(file)
-  console.log(`Values written to: ${info(file)}`)
+  // console.log(`Values written to: ${info(file)}`)
   return true
 }
 
@@ -149,6 +107,44 @@ export function isValidBranchName (branchName: string): boolean {
 
 export function isValidTagName (tagName: string): boolean {
   return checkGitRefFormat(`refs/tags/${tagName}`)
+}
+
+function sanityCheck (configValues: ConfigValues): boolean {
+  for (const key in configValues) {
+    const element = configValues[key]
+    switch (key) {
+      case 'main':
+      case 'development':
+      case 'hotfix':
+      case 'release':
+      case 'feature':
+        if (!isValidBranchName(element)) {
+          return false
+        }
+        break
+      case 'usedev':
+        if (typeof element !== 'boolean') {
+          return false
+        }
+        break
+      case 'integration':
+        if (typeof element !== 'number' || (element < 1 || element > 3)) {
+          return false
+        }
+        break
+      case 'interactive':
+      case 'push':
+      case 'delete':
+        if (
+          typeof element !== 'string' ||
+          !element.match(/(ask|always|never)/)
+        ) {
+          return false
+        }
+        break
+    }
+  }
+  return true
 }
 
 function checkGitRefFormat (value: string): boolean {
@@ -180,7 +176,7 @@ const defaultConfigFileNames: string[] = [
   '.gofrc.json'
 ]
 
-const supportedExtensions = ['.js', '.json']
+// const supportedExtensions = ['.js', '.json']
 
 function getCommentFor (key: string): string {
   switch (key) {
