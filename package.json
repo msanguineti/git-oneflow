@@ -9,13 +9,13 @@
     "bin/**/*"
   ],
   "scripts": {
-    "pretest": "run-s typecheck format 'lint -- --fix'",
+    "pretest": "run-s typecheck format lint",
     "test": "jest",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "clean": "rimraf bin",
     "build": "rollup -c",
     "format": "prettier --write **/*.ts",
-    "lint": "standard **/*.ts",
+    "lint": "standard **/*.ts --fix",
     "watch": "rollup -c --watch",
     "typecheck": "tsc"
   },
