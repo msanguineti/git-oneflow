@@ -34,8 +34,11 @@ export default {
 
       if (!argv.dryRun) {
         if (argv.defaultValues || (await askConfirmationBeforeWrite())) {
-          writeConfigFile({ data: jsonValues }) &&
+          if (writeConfigFile({ data: jsonValues })) {
             console.log(success('Initialisation done!'))
+          } else {
+            console.error(error('Cannot write config file!'))
+          }
         }
       }
     } catch (err) {

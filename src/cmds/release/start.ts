@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { isValidBranchName } from '../core'
+import { isValidBranchName } from '../../core'
 import { exec } from 'shelljs'
 
 export default {

@@ -5,8 +5,8 @@
  * https://opensource.org/licenses/MIT
  */
 
-import start from './feature_start'
-import finish from './feature_finish'
+import start from './feature/start'
+import finish from './feature/finish'
 
 export default {
   command: 'feature <command>',
