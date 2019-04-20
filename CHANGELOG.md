@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/msanguineti/git-oneflow/compare/0.1.0...0.2.0) (2019-04-20)
+
+
+### Features
+
+* **init:** add delete branch after merging option ([1988c39](https://github.com/msanguineti/git-oneflow/commit/1988c39))
+
+
+
 <a name="0.1.0"></a>
 # 0.1.0 (2019-04-19)
 
