@@ -1,6 +1,6 @@
 # git-OneFlow
 
-![npm](https://img.shields.io/npm/v/git-oneflow.svg) ![Travis (.org)](https://img.shields.io/travis/msanguineti/git-oneflow.svg) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+![npm](https://img.shields.io/npm/v/git-oneflow.svg) ![Travis (.org)](https://img.shields.io/travis/msanguineti/git-oneflow.svg) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![Greenkeeper badge](https://badges.greenkeeper.io/msanguineti/git-oneflow.svg)](https://greenkeeper.io/)
 
 CLI tools implementing the *OneFlow* git branching model.
 
