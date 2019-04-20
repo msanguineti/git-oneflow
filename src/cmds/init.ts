@@ -192,6 +192,29 @@ function generateQuestions (argv: { [key: string]: any }) {
           value: 'ask'
         }
       ]
+    },
+    {
+      name: 'delete',
+      type: 'expand',
+      message: 'Do you want to delete working branch after merging?',
+      default: argv.push || 'always',
+      choices: [
+        {
+          key: 'y',
+          name: 'Always',
+          value: 'always'
+        },
+        {
+          key: 'n',
+          name: 'Never',
+          value: 'never'
+        },
+        {
+          key: 'a',
+          name: 'Ask me every time',
+          value: 'ask'
+        }
+      ]
     }
   ]
 }
