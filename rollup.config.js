@@ -15,7 +15,7 @@ const preamble = `#!/usr/bin/env node
 `
 const extensions = ['.js', '.ts']
 
-const input = 'src/index.ts'
+const input = 'src/cli.ts'
 
 const plugins = [
   json(),
@@ -26,7 +26,7 @@ const plugins = [
 ]
 
 const output = {
-  file: 'bin/index.js',
+  file: 'bin/cli.js',
   format: 'cjs'
 }
 
