@@ -170,4 +170,3 @@ See [CHANGELOG](./CHANGELOG.md) for latest changes.
 ## License
 
 ***git-OneFlow*** is released under the MIT License. See [LICENSE](./LICENSE) for more details.
-
