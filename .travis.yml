@@ -8,6 +8,11 @@ os:
   - linux
   - osx
   - windows
+  
+branches:
+  only:
+    - master
+    - greenkeper/
 
 cache:
   directories:
