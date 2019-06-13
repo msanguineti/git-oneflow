@@ -45,7 +45,7 @@ Fun facts:
 ## Installation
 
 ```sh
-npm install --save-dev git-oneflow
+npm install -g git-oneflow
 ```
 
 ## Usage
