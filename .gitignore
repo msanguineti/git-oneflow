@@ -62,3 +62,5 @@ typings/
 
 # IDE specifics
 .vscode
+
+gof.config.js
