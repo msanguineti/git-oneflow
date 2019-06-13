@@ -69,7 +69,7 @@ export function writeConfigFile ({
   data = defaultConfigValues
 }: {
   file?: string
-  data?: ConfigValues
+  data?: any
 }): boolean {
   let toWrite: string
 
