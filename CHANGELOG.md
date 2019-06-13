@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.5](https://github.com/msanguineti/git-oneflow/compare/v0.2.4...v0.2.5) (2019-06-13)
+
+
+
+### 0.2.5 (2019-06-13)
+
+
+### Build System
+
+* cli script ([392ae4f](https://github.com/msanguineti/git-oneflow/commit/392ae4f))
+
+
+### Features
+
+* **git:** integrate simple-git - part II ([c0fa62f](https://github.com/msanguineti/git-oneflow/commit/c0fa62f))
+* **git:** intergrating simple-git ([f33a9b5](https://github.com/msanguineti/git-oneflow/commit/f33a9b5))
+
+
+
 ### [0.2.4](https://github.com/msanguineti/git-oneflow/compare/v0.2.3...v0.2.4) (2019-06-13)
 
 
