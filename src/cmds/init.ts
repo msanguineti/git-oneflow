@@ -10,6 +10,7 @@ import {
   isValidBranchName,
   writeConfigFile,
   getDefaultConfigValues
+  // ConfigValues
 } from '../core'
 
 import { success, error } from '../utils/text'
@@ -47,7 +48,7 @@ export default {
   }
 }
 
-function generateQuestions (argv: { [key: string]: any }) {
+function generateQuestions (argv: { [key: string]: any }): any {
   return [
     {
       name: 'main',
