@@ -4,6 +4,10 @@
 
 CLI tools implementing the *OneFlow* git branching model.
 
+## Disclaimer
+
+Do ***NOT*** use this in production, yet. Far from ready.
+
 ## Introduction
 
 OneFlow is a git branching model proposed by [Adam Ruka](https://github.com/skinny85) as an [alternative to GitFlow](https://www.endoflineblog.com/gitflow-considered-harmful).
