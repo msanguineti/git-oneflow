@@ -6,9 +6,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 
 
-## 0.3.0 (2019-06-13)
-
-
 ### Bug Fixes
 
 * wrong branch in release 'finish' ([8eae965](https://github.com/msanguineti/git-oneflow/commit/8eae965))
