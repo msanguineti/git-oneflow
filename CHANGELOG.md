@@ -1,8 +1,18 @@
-# Changelog
+# Change Log
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [0.2.5](https://github.com/msanguineti/git-oneflow/compare/v0.2.4...v0.2.5) (2019-06-13)
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/msanguineti/git-oneflow/compare/v0.2.5...v0.3.0) (2019-06-14)
+
+
+### Features
+
+* **feature:** finish with interactive rebase ([9d73d33](https://github.com/msanguineti/git-oneflow/commit/9d73d33))
+
+
+
+## [0.2.5](https://github.com/msanguineti/git-oneflow/compare/v0.2.4...v0.2.5) (2019-06-13)
 
 
 
