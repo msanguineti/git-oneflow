@@ -12,6 +12,7 @@
 import { ConfigValues } from '../../core'
 import inquirer from 'inquirer'
 import simplegit from 'simple-git/promise'
+import { spawnSync } from 'child_process'
 
 const git = simplegit()
 
@@ -95,7 +96,10 @@ async function rebaseStep (argv: ConfigValues, mergeInto: string) {
   switch (argv.interactive) {
     case 'always':
       // exec(`git rebase -i ${mergeInto}`)
-      await git.rebase(['-i', `${mergeInto}`])
+      // await git.rebase(['-i', `${mergeInto}`])
+      spawnSync('git', ['rebase', '-i', `${mergeInto}`], {
+        stdio: 'inherit'
+      })
       break
     case 'never':
       // exec(`git rebase ${mergeInto}`)
@@ -104,7 +108,10 @@ async function rebaseStep (argv: ConfigValues, mergeInto: string) {
     case 'ask':
       if (await ask('Do you want to use rebase interactively?')) {
         // exec(`git rebase -i ${mergeInto}`)
-        await git.rebase(['-i', `${mergeInto}`])
+        // await git.rebase(['-i', `${mergeInto}`])
+        spawnSync('git', ['rebase', '-i', `${mergeInto}`], {
+          stdio: 'inherit'
+        })
       } else {
         // exec(`git rebase ${mergeInto}`)
         await git.rebase([`${mergeInto}`])
