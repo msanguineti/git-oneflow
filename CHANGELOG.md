@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/msanguineti/git-oneflow/compare/v0.2.5...v0.4.0) (2019-06-14)
+
+
+### Bug Fixes
+
+* **rollup:** add external dep ([e90f50c](https://github.com/msanguineti/git-oneflow/commit/e90f50c))
+
+
+### Features
+
+* **feature:** finish with interactive rebase ([9d73d33](https://github.com/msanguineti/git-oneflow/commit/9d73d33))
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/msanguineti/git-oneflow/compare/v0.2.5...v0.3.0) (2019-06-14)
 
