@@ -44,6 +44,7 @@ export default {
     'yargs',
     'path',
     'find-up',
+    'child_process'
   ],
 
   plugins,

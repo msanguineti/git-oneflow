@@ -86,7 +86,9 @@ async function deleteBranch (argv: { [key: string]: any }) {
   // exec(`git push origin :${argv.release}/${argv.releaseName}`)
   if (
     await ask(
-      `Do you want to delete on origin branch ${argv.release}/${argv.releaseName}?`
+      `Do you want to delete on origin branch ${argv.release}/${
+        argv.releaseName
+      }?`
     )
   ) {
     await git.push('origin', `:${argv.release}/${argv.releaseName}`)
