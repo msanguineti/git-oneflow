@@ -25,13 +25,17 @@ For a good overview of why you should _and_ when you shouldn't use rebase read [
 
 ## Documentation
 
-- [Description](#description)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Initialisation](#initialisation)
-  - [Examples](#examples)
-- [Changelog](#changelog)
-- [License](#license)
+- [git-OneFlow](#git-oneflow)
+  - [Disclaimer](#disclaimer)
+  - [Introduction](#introduction)
+  - [Documentation](#documentation)
+  - [Description](#description)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Configuration](#configuration)
+    - [Examples](#examples)
+  - [Changelog](#changelog)
+  - [License](#license)
 
 ## Description
 
@@ -120,6 +124,10 @@ $ git push --tags origin master
 $ git branch -d release/2.3.0
 ```
 
+_Tags_
+
+Automatic tagging when releasing or hotfixing might not be needed. One case would be if something like `standard version` is used, which tags releases based on some commit conventions. Therefore, there's an `init` options called `tags` which is `true` by default. Setting it to false, commits are not tagged and tags are not pushed.
+
 ***Customisation***
 
 ```sh
@@ -162,6 +170,8 @@ By default, ***git-OneFlow*** checks for a config file [`gof.config.js`, `.gofrc
 `push`: whether to push to `origin` after finishing (default `always`, can also be `never` or `ask`)
 
 `delete`: whether to delete the current working branch after merging with main/development (default `always`, can also be `never` or `ask`)
+
+`tags`: whether to automatically tag releases and hotfixes (default: `true`)
 
 ### Examples
 
