@@ -18,7 +18,7 @@
     "lint": "standard **/*.ts --fix",
     "watch": "rollup -c --watch",
     "typecheck": "tsc",
-    "prerelease": "run-s test clean build",
+    "prerelease": "run-s clean build test",
     "release": "standard-version -t"
   },
   "repository": {
