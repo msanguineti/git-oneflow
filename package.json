@@ -14,14 +14,11 @@
     "test": "jest",
     "clean": "rimraf bin",
     "prebuild": "run-s test clean",
-    "build": "run-s rollup addbuild",
-    "rollup": "rollup -c",
-    "addbuild": "git add .",
+    "build": "rollup -c",
     "format": "prettier --write **/*.ts",
     "lint": "standard **/*.ts --fix",
     "watch": "rollup -c --watch",
     "typecheck": "tsc",
-    "prerelease": "npm run build",
     "release": "standard-version -t"
   },
   "repository": {

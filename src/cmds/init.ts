@@ -216,6 +216,12 @@ function generateQuestions (argv: { [key: string]: any }): any {
           value: 'ask'
         }
       ]
+    },
+    {
+      name: 'tags',
+      type: 'confirm',
+      default: argv.usedev || true,
+      message: 'Do you want automatic tagging of releases/hotfixes?'
     }
   ]
 }
