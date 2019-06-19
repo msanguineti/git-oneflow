@@ -35,6 +35,8 @@ export type ConfigValues = { [key: string]: any }
  *
  * `delete`: whether to delete the branch after merging with main/development (default `always`, can also be `never` or `ask`)
  *
+ * `tags`: whether to automatically tag releases and hotfixes (default: `true`)
+ *
  * @returns {ConfigValues} the default config values
  */
 export function getDefaultConfigValues (): ConfigValues {
@@ -142,6 +144,11 @@ function sanityCheck (configValues: ConfigValues): boolean {
           return false
         }
         break
+      case 'tags':
+        if (typeof element !== 'boolean') {
+          return false
+        }
+        break
     }
   }
   return true
@@ -165,7 +172,8 @@ const defaultConfigValues: ConfigValues = {
   integration: 1,
   interactive: 'always',
   push: 'always',
-  delete: 'always'
+  delete: 'always',
+  tags: true
 }
 
 const defaultConfigFileName: string = 'gof.config.js'
@@ -209,6 +217,9 @@ function getCommentFor (key: string): string {
     }
     case 'delete': {
       return 'Delete the working branch (feature/hotfix/release) after merging with main/development? Options: [`always`, `never`, `ask`]. Default: `always`.'
+    }
+    case 'tags': {
+      return 'Automatic tag releases and hotfixes (based on user input, e.g. release/0.2.0 => tag = 0.2.0. Default: `true`'
     }
     default: {
       return ''
