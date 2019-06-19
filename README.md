@@ -126,7 +126,7 @@ $ git branch -d release/2.3.0
 
 _Tags_
 
-Automatic tagging when releasing or hotfixing might not be needed. One case would be if something like `standard version` is used, which tags releases based on some commit conventions. Therefore, there's an `init` options called `tags` which is `true` by default. Setting it to false, commits are not tagged and tags are not pushed.
+Automatic tagging when releasing or hotfixing might not be needed. One case would be if something like `standard version` is used, which tags releases based on some commit conventions. Therefore, there's an `init` option called `tags` which is `true` by default. Setting it to false, commits are not tagged and tags are not pushed.
 
 ***Customisation***
 
