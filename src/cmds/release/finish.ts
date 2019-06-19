@@ -31,16 +31,18 @@ async function handleFinish (argv: { [key: string]: any }) {
   // exec(`git checkout ${argv.release}/${argv.releaseName}`);
   await git.checkout(`${argv.release}/${argv.releaseName}`)
   // exec(`git tag ${argv.releaseName}`);
-  await git.addTag(`${argv.releaseName}`)
+  if (argv.tags) await git.addTag(`${argv.releaseName}`)
   // exec(`git checkout ${mergeInto}`);
   await git.checkout(`${mergeInto}`)
   // exec(`git merge ${argv.release}/${argv.releaseName}`);
   await git.merge([`${argv.release}/${argv.releaseName}`])
 
+  const tags = argv.tags ? { '--tags': null } : {}
+
   switch (argv.push) {
     case 'always':
       // exec(`git push --tags origin ${mergeInto}`);
-      await git.push('origin', `${mergeInto}`, { '--tags': null })
+      await git.push('origin', `${mergeInto}`, tags)
       break
     case 'never':
       console.log(
@@ -52,7 +54,7 @@ async function handleFinish (argv: { [key: string]: any }) {
     case 'ask':
       if (await ask(`Do you want to push to ${mergeInto}?`)) {
         // exec(`git push --tags origin ${mergeInto}`);
-        await git.push('origin', `${mergeInto}`, { '--tags': null })
+        await git.push('origin', `${mergeInto}`, tags)
       }
       break
   }
