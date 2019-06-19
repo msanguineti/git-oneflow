@@ -33,15 +33,15 @@ export default {
 
       console.log(JSON.stringify(jsonValues, null, 2))
 
-      if (!argv.dryRun) {
-        if (argv.defaultValues || (await askConfirmationBeforeWrite())) {
-          if (writeConfigFile({ data: jsonValues })) {
-            console.log(success('Initialisation done!'))
-          } else {
-            console.error(error('Cannot write config file!'))
-          }
+      // if (!argv.dryRun) {
+      if (argv.defaultValues || (await askConfirmationBeforeWrite())) {
+        if (writeConfigFile({ data: jsonValues })) {
+          console.log(success('Initialisation done!'))
+        } else {
+          console.error(error('Cannot write config file!'))
         }
       }
+      // }
     } catch (err) {
       console.error(error(err))
     }
