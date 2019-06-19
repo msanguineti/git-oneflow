@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.4"></a>
+## [0.5.4](https://github.com/msanguineti/git-oneflow/compare/0.5.3...0.5.4) (2019-06-19)
+
+
+### Bug Fixes
+
+* another build fix for the build process ([bf10cec](https://github.com/msanguineti/git-oneflow/commit/bf10cec))
+
+
+
 <a name="0.5.3"></a>
 ## [0.5.3](https://github.com/msanguineti/git-oneflow/compare/0.5.2...0.5.3) (2019-06-19)
 
