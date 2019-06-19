@@ -31,10 +31,10 @@ var argv = yargs
   .command(feature)
   .command(release)
   .command(hotfix)
-  .option('x', {
-    alias: 'dry-run',
-    description: 'Show what the command would do'
-  })
+  // .option('x', {
+  //   alias: 'dry-run',
+  //   description: 'Show what the command would do'
+  // })
   // .demandCommand(1, chalk.red.bold('Please, choose a command'))
   .help()
   .alias('h', 'help').argv
