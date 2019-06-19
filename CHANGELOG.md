@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.2"></a>
+## [0.5.2](https://github.com/msanguineti/git-oneflow/compare/0.5.1...0.5.2) (2019-06-19)
+
+
+### Bug Fixes
+
+* **build:** build cli not staged ([1523e5a](https://github.com/msanguineti/git-oneflow/commit/1523e5a))
+
+
+
 <a name="0.5.1"></a>
 ## [0.5.1](https://github.com/msanguineti/git-oneflow/compare/0.5.0...0.5.1) (2019-06-19)
 
