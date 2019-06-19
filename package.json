@@ -13,12 +13,12 @@
     "pretest": "run-s typecheck format lint",
     "test": "jest",
     "clean": "rimraf bin",
+    "prebuild": "run-s test clean",
     "build": "rollup -c",
     "format": "prettier --write **/*.ts",
     "lint": "standard **/*.ts --fix",
     "watch": "rollup -c --watch",
     "typecheck": "tsc",
-    "prerelease": "run-s clean build test",
     "release": "standard-version -t"
   },
   "repository": {
