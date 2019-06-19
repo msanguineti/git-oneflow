@@ -14,11 +14,14 @@
     "test": "jest",
     "clean": "rimraf bin",
     "prebuild": "run-s test clean",
-    "build": "rollup -c",
+    "build": "run-s rollup addbuild",
+    "rollup": "rollup -c",
+    "addbuild": "git add .",
     "format": "prettier --write **/*.ts",
     "lint": "standard **/*.ts --fix",
     "watch": "rollup -c --watch",
     "typecheck": "tsc",
+    "prerelease": "build",
     "release": "standard-version -t"
   },
   "repository": {
@@ -97,10 +100,10 @@
     "*.ts": [
       "prettier --write",
       "standard *.ts --fix",
-      "git add"
+      "git add ."
     ],
     "*.js": [
-      "git add"
+      "git add ."
     ]
   }
 }
