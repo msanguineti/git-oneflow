@@ -98,6 +98,9 @@
       "prettier --write",
       "standard *.ts --fix",
       "git add"
+    ],
+    "*.js": [
+      "git add"
     ]
   }
 }
