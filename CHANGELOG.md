@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/msanguineti/git-oneflow/compare/0.4.0...0.5.0) (2019-06-19)
+
+
+### Features
+
+* removed dry-run option ([917a326](https://github.com/msanguineti/git-oneflow/commit/917a326))
+
+
+### BREAKING CHANGES
+
+* removed dry-run option from the cli commands
+
+
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/msanguineti/git-oneflow/compare/v0.2.5...v0.4.0) (2019-06-14)
 
