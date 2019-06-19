@@ -62,7 +62,7 @@ async function handleFinish (argv: { [key: string]: any }) {
     // exec(`git checkout master`);
     await git.checkout('master')
     // exec(`git merge --ff-only ${argv.releaseName}`);
-    await git.merge(['--ff-only', `${argv.releaseName}`])
+    await git.merge(['--ff-only', `${argv.release}/${argv.releaseName}`])
   }
   switch (argv.deleteBranch) {
     case 'always':
