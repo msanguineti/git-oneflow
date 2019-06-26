@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import sh from 'shelljs'
+import { exec, test, sed, ShellString } from 'shelljs'
 import findUp from 'find-up'
 // import { error, info } from './utils/text'
 import { extname } from 'path'
@@ -44,14 +44,14 @@ export function getDefaultConfigValues (): ConfigValues {
 }
 
 export function loadConfigFile (configFile?: string): ConfigValues {
-  if (!configFile || !sh.test('-f', configFile)) {
+  if (!configFile || !test('-f', configFile)) {
     return defaultConfigValues
   }
 
   const configValues =
     getFileExt(configFile) === '.js'
       ? require(configFile)
-      : JSON.parse(sh.sed(/(\/\*[\w\W]+\*\/|(\/\/.*))/g, '', configFile))
+      : JSON.parse(sed(/(\/\*[\w\W]+\*\/|(\/\/.*))/g, '', configFile))
 
   if (sanityCheck(configValues)) {
     return { ...defaultConfigValues, ...configValues }
@@ -98,7 +98,7 @@ export function writeConfigFile ({
     }
   }
 
-  sh.ShellString(toWrite).to(file)
+  ShellString(toWrite).to(file)
   // console.log(`Values written to: ${info(file)}`)
   return true
 }
@@ -156,7 +156,7 @@ function sanityCheck (configValues: ConfigValues): boolean {
 
 function checkGitRefFormat (value: string): boolean {
   return (
-    sh.exec(`git check-ref-format "${value}"`, {
+    exec(`git check-ref-format "${value}"`, {
       silent: true
     }).code === 0
   )

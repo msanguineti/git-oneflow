@@ -8,9 +8,10 @@
 // import { exec } from 'shelljs'
 import { info } from '../../utils/text'
 import inquirer from 'inquirer'
-import simplegit from 'simple-git/promise'
+// import simplegit from 'simple-git/promise'
+import { exec } from 'shelljs'
 
-const git = simplegit()
+// const git = simplegit()
 
 export default {
   command: 'finish <hotfixName>',
@@ -28,21 +29,22 @@ export default {
 async function handleFinish (argv: { [key: string]: any }) {
   const mergeInto = argv.usedev ? argv.development : argv.main
 
-  // exec(`git checkout ${argv.hotfix}/${argv.hotfixName}`);
-  await git.checkout(`${argv.hotfix}/${argv.hotfixName}`)
-  // exec(`git tag ${argv.hotfixName}`);
+  exec(`git checkout ${argv.hotfix}/${argv.hotfixName}`)
+  // await git.checkout(`${argv.hotfix}/${argv.hotfixName}`)
+
   if (argv.tags) {
-    await git.addTag(`${argv.hotfixName}`)
+    // await git.addTag(`${argv.hotfixName}`)
+    exec(`git tag ${argv.hotfixName}`)
   }
-  // exec(`git checkout ${mergeInto}`);
-  await git.checkout(`${mergeInto}`)
-  // exec(`git merge ${argv.hotfix}/${argv.hotfixName}`);
-  await git.merge([`${argv.hotfix}/${argv.hotfixName}`])
+  exec(`git checkout ${mergeInto}`)
+  // await git.checkout(`${mergeInto}`)
+  exec(`git merge ${argv.hotfix}/${argv.hotfixName}`)
+  // await git.merge([`${argv.hotfix}/${argv.hotfixName}`])
   const tags = argv.tags ? { '--tags': null } : {}
   switch (argv.push) {
     case 'always':
-      // exec(`git push --tags origin ${mergeInto}`);
-      await git.push('origin', `${mergeInto}`, tags)
+      exec(`git push ${tags} origin ${mergeInto}`)
+      // await git.push('origin', `${mergeInto}`, tags)
       break
     case 'never':
       console.log(
@@ -53,16 +55,16 @@ async function handleFinish (argv: { [key: string]: any }) {
       break
     case 'ask':
       if (await ask(`Do you want to push to ${mergeInto}?`)) {
-        // exec(`git push --tags origin ${mergeInto}`);
-        await git.push('origin', `${mergeInto}`, tags)
+        exec(`git push ${tags} origin ${mergeInto}`)
+        // await git.push('origin', `${mergeInto}`, tags)
       }
       break
   }
   if (argv.usedev) {
-    // exec(`git checkout master`);
-    await git.checkout('master')
-    // exec(`git merge --ff-only ${argv.hotfixName}`);
-    await git.merge(['--ff-only', `${argv.hotfix}/${argv.hotfixName}`])
+    exec(`git checkout master`)
+    // await git.checkout('master')
+    exec(`git merge --ff-only ${argv.hotfixName}`)
+    // await git.merge(['--ff-only', `${argv.hotfix}/${argv.hotfixName}`])
   }
   switch (argv.deleteBranch) {
     case 'always':
@@ -83,17 +85,15 @@ async function handleFinish (argv: { [key: string]: any }) {
 }
 
 async function deleteBranch (argv: { [key: string]: any }) {
-  // exec(`git branch -d ${argv.hotfix}/${argv.hotfixName}`)
-  await git.deleteLocalBranch(`${argv.hotfix}/${argv.hotfixName}`)
-  // exec(`git push origin :${argv.hotfix}/${argv.hotfixName}`)
+  exec(`git branch -d ${argv.hotfix}/${argv.hotfixName}`)
+  // await git.deleteLocalBranch(`${argv.hotfix}/${argv.hotfixName}`)
   if (
     await ask(
-      `Do you want to delete on origin branch ${argv.hotfix}/${
-        argv.hotfixName
-      }?`
+      `Do you want to delete on origin branch ${argv.hotfix}/${argv.hotfixName}?`
     )
   ) {
-    await git.push('origin', `:${argv.hotfix}/${argv.hotfixName}`)
+    // await git.push('origin', `:${argv.hotfix}/${argv.hotfixName}`)
+    exec(`git push origin :${argv.hotfix}/${argv.hotfixName}`)
   }
 }
 

@@ -6,7 +6,7 @@
  */
 
 import yargs from 'yargs'
-import sh from 'shelljs'
+import { which } from 'shelljs'
 import init from './cmds/init'
 import { loadConfigValues } from './core'
 import feature from './cmds/feature'
@@ -16,7 +16,7 @@ import hotfix from './cmds/hotfix'
 
 import pkg from '../package.json'
 
-if (!sh.which('git')) {
+if (!which('git')) {
   console.error("Sorry, git-OneFlow requires git... it's in the name")
   process.exit(1)
 }

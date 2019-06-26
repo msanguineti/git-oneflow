@@ -11,10 +11,11 @@
 // eslint-disable-next-line
 import { ConfigValues } from '../../core'
 import inquirer from 'inquirer'
-import simplegit from 'simple-git/promise'
+// import simplegit from 'simple-git/promise'
 import { spawnSync } from 'child_process'
+import { exec } from 'shelljs'
 
-const git = simplegit()
+// const git = simplegit()
 
 export default {
   command: 'finish <featureBranch> [options]',
@@ -41,8 +42,8 @@ async function handleFinish (argv: ConfigValues, mergeInto: string) {
     await rebaseStep(argv, mergeInto)
   }
 
-  // exec(`git checkout ${mergeInto}`)
-  await git.checkout(`${mergeInto}`)
+  exec(`git checkout ${mergeInto}`)
+  // await git.checkout(`${mergeInto}`)
 
   let strategy = '--no-ff'
   if (argv.integration === 2) {
@@ -53,27 +54,29 @@ async function handleFinish (argv: ConfigValues, mergeInto: string) {
   //   exec(`git merge --no-ff ${argv.feature}/${argv.featureBranch}`)
   // }
 
-  await git.merge([strategy, `${argv.feature}/${argv.featureBranch}`])
+  exec(`git merge ${strategy} ${argv.feature}/${argv.featureBranch}`)
+
+  // await git.merge([strategy, `${argv.feature}/${argv.featureBranch}`])
 
   switch (argv.push) {
     case 'always':
-      // exec(`git push origin ${mergeInto}`)
-      await git.push('origin', `${mergeInto}`)
+      exec(`git push origin ${mergeInto}`)
+      // await git.push('origin', `${mergeInto}`)
       break
     case 'never':
       break
     case 'ask':
       if (await ask(`Do you want to push to ${mergeInto}?`)) {
-        // exec(`git push origin ${mergeInto}`)
-        await git.push('origin', `${mergeInto}`)
+        exec(`git push origin ${mergeInto}`)
+        // await git.push('origin', `${mergeInto}`)
       }
       break
   }
 
   switch (argv.deleteBranch) {
     case 'always':
-      // exec(`git branch -d ${argv.feature}/${argv.featureBranch}`)
-      await git.deleteLocalBranch(`${argv.feature}/${argv.featureBranch}`)
+      exec(`git branch -d ${argv.feature}/${argv.featureBranch}`)
+      // await git.deleteLocalBranch(`${argv.feature}/${argv.featureBranch}`)
       break
     case 'never':
       break
@@ -83,16 +86,16 @@ async function handleFinish (argv: ConfigValues, mergeInto: string) {
           `Do you want to delete branch ${argv.feature}/${argv.featureBranch}?`
         )
       ) {
-        // exec(`git branch -d ${argv.feature}/${argv.featureBranch}`)
-        await git.deleteLocalBranch(`${argv.feature}/${argv.featureBranch}`)
+        exec(`git branch -d ${argv.feature}/${argv.featureBranch}`)
+        // await git.deleteLocalBranch(`${argv.feature}/${argv.featureBranch}`)
       }
       break
   }
 }
 
 async function rebaseStep (argv: ConfigValues, mergeInto: string) {
-  // exec(`git checkout ${argv.feature}/${argv.featureBranch}`)
-  await git.checkout(`${argv.feature}/${argv.featureBranch}`)
+  exec(`git checkout ${argv.feature}/${argv.featureBranch}`)
+  // await git.checkout(`${argv.feature}/${argv.featureBranch}`)
   switch (argv.interactive) {
     case 'always':
       // exec(`git rebase -i ${mergeInto}`)
@@ -102,8 +105,8 @@ async function rebaseStep (argv: ConfigValues, mergeInto: string) {
       })
       break
     case 'never':
-      // exec(`git rebase ${mergeInto}`)
-      await git.rebase([`${mergeInto}`])
+      exec(`git rebase ${mergeInto}`)
+      // await git.rebase([`${mergeInto}`])
       break
     case 'ask':
       if (await ask('Do you want to use rebase interactively?')) {
@@ -113,8 +116,8 @@ async function rebaseStep (argv: ConfigValues, mergeInto: string) {
           stdio: 'inherit'
         })
       } else {
-        // exec(`git rebase ${mergeInto}`)
-        await git.rebase([`${mergeInto}`])
+        exec(`git rebase ${mergeInto}`)
+        // await git.rebase([`${mergeInto}`])
       }
   }
 }
