@@ -4,11 +4,11 @@
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
-// import { exec } from 'shelljs'
+import { exec } from 'shelljs'
 import { isValidBranchName } from '../../core'
-import simplegit from 'simple-git/promise'
+// import simplegit from 'simple-git/promise'
 
-const git = simplegit()
+// const git = simplegit()
 
 export default {
   command: 'start <featureBranch>',
@@ -18,15 +18,15 @@ export default {
     const branchOff = argv.usedev ? argv.development : argv.main
 
     if (isValidBranchName(argv.featureBranch)) {
-      // exec(`git checkout -b ${argv.feature}/${argv.featureBranch} ${branchOff}`)
-      try {
-        return git.checkoutBranch(
-          `${argv.feature}/${argv.featureBranch}`,
-          `${branchOff}`
-        )
-      } catch (err) {
-        throw err
-      }
+      exec(`git checkout -b ${argv.feature}/${argv.featureBranch} ${branchOff}`)
+      // try {
+      //   return git.checkoutBranch(
+      //     `${argv.feature}/${argv.featureBranch}`,
+      //     `${branchOff}`
+      //   )
+      // } catch (err) {
+      //   throw err
+      // }
     }
   }
 }

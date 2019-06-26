@@ -22,7 +22,7 @@ const plugins = [
   resolve({ extensions }),
   cjs(),
   babel({ extensions, include: ['src/**/*'] }),
-  terser({ output: { beautify: false, preamble: preamble } })
+  terser({ output: { beautify: true, preamble: preamble } })
 ]
 
 const output = {
@@ -36,9 +36,9 @@ export default {
   // Specify here external modules which you don't want to include in your bundle (for instance: 'lodash', 'moment' etc.)
   // https://rollupjs.org/guide/en#external-e-external
   external: [
-    'simple-git/promise',
+    // 'simple-git/promise',
     'shelljs',
-    'commander',
+    // 'commander',
     'inquirer',
     'chalk',
     'yargs',
