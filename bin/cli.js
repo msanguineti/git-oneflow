@@ -477,7 +477,7 @@ var release = {
     handler: function(e) {}
 }, start$2 = {
     command: "start <hotfixName> <from>",
-    desc: "Start a new hotfix.\n<hotfixName> should be something like `2.3.1`.\n<from> should be a branch (e.g. develop) or a commit (e.g. 9af345)",
+    desc: "Start a new hotfix.\n<hotfixName> should be something like `2.3.1`.\n<from> should be a branch (e.g. develop), a tag (e.g. 2.3.0) or a commit (e.g. 9af345)",
     builder: e => {},
     handler: e => {
         isValidBranchName(e.hotfixName) && shelljs.exec(`git checkout -b ${e.hotfix}/${e.hotfixName} ${e.from}`);
