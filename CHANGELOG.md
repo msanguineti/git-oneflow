@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.7.3](https://github.com/msanguineti/git-oneflow/compare/v0.7.2...v0.7.3) (2019-07-05)
+
+
+### Bug Fixes
+
+* avoid pulling whole package.json ([c6f466d](https://github.com/msanguineti/git-oneflow/commit/c6f466d))
+
+
+
 ### 0.7.2 (2019-07-05)
 
 
