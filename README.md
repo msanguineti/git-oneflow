@@ -1,13 +1,26 @@
-# git-OneFlow
+# git-OneFlow <!-- omit in toc -->
 
 ![npm](https://img.shields.io/npm/v/git-oneflow.svg) ![Travis (.org)](https://img.shields.io/travis/msanguineti/git-oneflow.svg) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![Greenkeeper badge](https://badges.greenkeeper.io/msanguineti/git-oneflow.svg)](https://greenkeeper.io/)
 
 CLI tools implementing the *OneFlow* git branching model.
 
-## Disclaimer
+## Documentation <!-- omit in toc -->
 
-Do ***NOT*** use this in production, yet. Far from ready.
-
+- [Introduction](#Introduction)
+- [Description](#Description)
+- [Installation](#Installation)
+- [Usage](#Usage)
+- [Configuration](#Configuration)
+  - [Defaults](#Defaults)
+    - [One main branch](#One-main-branch)
+    - [Feature branches](#Feature-branches)
+    - [Release/Hotfix branches](#ReleaseHotfix-branches)
+      - [Tags](#Tags)
+  - [Customisation](#Customisation)
+    - [Options](#Options)
+- [Changelog](#Changelog)
+- [License & Disclaimer](#License--Disclaimer)
+  
 ## Introduction
 
 OneFlow is a git branching model proposed by [Adam Ruka](https://github.com/skinny85) as an [alternative to GitFlow](https://www.endoflineblog.com/gitflow-considered-harmful).
@@ -23,25 +36,11 @@ In [this article](https://www.endoflineblog.com/oneflow-a-git-branching-model-an
 
 For a good overview of why you should _and_ when you shouldn't use rebase read [this](https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril)
 
-## Documentation
-
-- [git-OneFlow](#git-oneflow)
-  - [Disclaimer](#disclaimer)
-  - [Introduction](#introduction)
-  - [Documentation](#documentation)
-  - [Description](#description)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [Configuration](#configuration)
-    - [Examples](#examples)
-  - [Changelog](#changelog)
-  - [License](#license)
-
 ## Description
 
 I have simply put together some CLI commands to leverage the OneFlow model.
 
-I have remained strictly faithful to how Adam defines the worlflow without adding anything fancy (yet). This means that, by default, *****git-OneFlow***** works with one main branch only (`master`) and new features are rebased. Check the [initialisation](#initialisation) section.
+I have remained strictly faithful to how Adam defines the worlflow without adding anything fancy (yet). This means that, by default, ***git-OneFlow*** works with one main branch only (`master`) and new features are rebased. Check the [initialisation](#initialisation) section.
 
 Of course, one-size-fits-all does not always work, therefore, I have implemented all the feature integration options described in the article and both the _one main branch_ and _main and development branches_ models.
 
@@ -70,17 +69,19 @@ gof --help
 
 `gof` is a convenient alias for the overly verbose and long to type `git-oneflow`.
 
-### Configuration
+## Configuration
 
-***git-OneFlow*** comes with some defaults which faithfully mirror Adam Ruka recommendations. These defaults are:
+***git-OneFlow*** comes with some defaults which faithfully mirror Adam Ruka recommendations.
 
-***One main branch***
+### Defaults
+
+#### One main branch
 
 `master`
 
-***Features***
+#### Feature branches
 
-_Feature branches stem from `feature`:_
+Feature branches stem from `feature`:
 
 ```sh
 $ gof feature start my-feature
@@ -88,7 +89,7 @@ $ gof feature start my-feature
 $ git checkout -b feature/my-feature
 ```
 
-_Finishing a feature is done by rebasing:_
+Finishing a feature is done by rebasing:
 
 ```sh
 $ gof feature finish my-feature
@@ -101,9 +102,9 @@ $ git push origin master
 $ git branch -d feature/my-feature
 ```
 
-***Releases / Hotfixes***
+#### Release/Hotfix branches
 
-_Releases and hotfixes share the same workflow:_ (just substitute `hotfix` for `release` in the following examples)
+Releases and hotfixes share the same workflow: (just substitute `hotfix` for `release` in the following examples)
 
 ```sh
 $ gof release start 2.3.0
@@ -124,14 +125,41 @@ $ git push --tags origin master
 $ git branch -d release/2.3.0
 ```
 
-_Tags_
+Using the above commands, release (and hotfix) branches will stem from the current branch. Hopefully this is `master`, but even so, this might not be desirable. Therefore, the `start` command takes an extra optional parameter which defines where the release (or hotfix) should stem from.
 
-Automatic tagging when releasing or hotfixing might not be needed. One case would be if something like `standard version` is used, which tags releases based on some commit conventions. Therefore, there's an `init` option called `tags` which is `true` by default. Setting it to false, commits are not tagged and tags are not pushed.
+```sh
+$ gof release start 2.3.0 09f76a3
+# equivalent to...
+$ git checkout -b release/2.3.0 09f76a3
+```
 
-***Customisation***
+The above command will start a release from commit `09f76a3`.
+
+##### Tags
+
+Automatic tagging creation when releasing or hotfixing might not be needed. One case would be if something like `standard version` is used, which tags releases based on some commit conventions. Therefore, there's a configuration option named `tags` which is `true` by default. Setting it to `false` will not create tags and also tags won't be pushed.
+
+```sh
+# do work, commit, test, build, ...
+$ npm run release
+# standard version does its magic
+# some tag is created
+$ gof release finish my-release
+# equivalent to...
+$ git checkout master
+$ git merge release/my-release
+$ git push origin master
+$ git branch -d release/my-release
+# now push --follow-tags origin && npm publish
+```
+
+_It is up to the user to manage tagging._
+
+### Customisation
 
 ```sh
 $ gof init
+...
 ```
 
 `init` starts an interactive session that allows for customising the configuration of ***git-OneFlow***
@@ -149,7 +177,7 @@ By default, ***git-OneFlow*** checks for a config file [`gof.config.js`, `.gofrc
 }
 ```
 
-***Options***
+#### Options
 
 `main`: name of the main (production) branch (default `master`)
 
@@ -173,14 +201,12 @@ By default, ***git-OneFlow*** checks for a config file [`gof.config.js`, `.gofrc
 
 `tags`: whether to automatically tag releases and hotfixes (default: `true`)
 
-### Examples
-
-TODO - add examples
+When an option is set to `ask`, the user will be prompted to choose an action when appropriate.
 
 ## Changelog
 
 See [CHANGELOG](./CHANGELOG.md) for latest changes.
 
-## License
+## License & Disclaimer
 
 ***git-OneFlow*** is released under the MIT License. See [LICENSE](./LICENSE) for more details.
