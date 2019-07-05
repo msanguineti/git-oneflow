@@ -14,7 +14,7 @@ import { basename } from 'path'
 import release from './cmds/release'
 import hotfix from './cmds/hotfix'
 
-import pkg from '../package.json'
+import { name } from '../package.json'
 
 if (!which('git')) {
   console.error("Sorry, git-OneFlow requires git... it's in the name")
@@ -22,7 +22,7 @@ if (!which('git')) {
 }
 
 var argv = yargs
-  .scriptName(pkg.name)
+  .scriptName(name)
   .version()
   .alias('v', 'version')
   .config(loadConfigValues())

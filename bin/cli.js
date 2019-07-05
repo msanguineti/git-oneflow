@@ -547,95 +547,11 @@ var hotfix = {
         return e.command(start$2).command(finish$2);
     },
     handler: function(e) {}
-}, name = "git-oneflow", version = "0.6.1", description = "CLI tooling implementing GIT OneFlow branching model", bin = {
-    gof: "bin/cli.js",
-    "git-oneflow": "bin/cli.js"
-}, files = [ "bin/**/*" ], scripts = {
-    pretest: "run-s typecheck format lint",
-    test: "jest",
-    clean: "rimraf bin",
-    prebuild: "run-s test clean",
-    build: "rollup -c",
-    format: "prettier --write **/*.ts",
-    lint: "standard **/*.ts --fix",
-    watch: "rollup -c --watch",
-    typecheck: "tsc",
-    release: "standard-version -t"
-}, repository = {
-    type: "git",
-    url: "git+https://github.com/msanguineti/git-oneflow.git"
-}, keywords = [ "git", "oneflow", "branching", "model", "Adam", "Ruka" ], author = "Mirco Sanguineti", license = "MIT", bugs = {
-    url: "https://github.com/msanguineti/git-oneflow/issues"
-}, homepage = "https://github.com/msanguineti/git-oneflow#readme", devDependencies = {
-    "@babel/core": "^7.4.5",
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@babel/preset-env": "^7.4.5",
-    "@babel/preset-typescript": "^7.3.3",
-    "@commitlint/cli": "^8.0.0",
-    "@commitlint/config-conventional": "^8.0.0",
-    "@types/find-up": "^2.1.1",
-    "@types/inquirer": "^6.0.3",
-    "@types/jest": "^24.0.14",
-    "@types/shelljs": "^0.8.5",
-    "@typescript-eslint/eslint-plugin": "^1.10.2",
-    "@typescript-eslint/parser": "^1.10.2",
-    husky: "^2.4.1",
-    jest: "^24.8.0",
-    "lint-staged": "^8.2.0",
-    "npm-run-all": "^4.1.5",
-    prettier: "^1.18.2",
-    rollup: "^1.15.2",
-    "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-commonjs": "^10.0.0",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.0.2",
-    "rollup-plugin-terser": "^5.0.0",
-    standard: "^12.0.1",
-    "standard-version": "^6.0.1",
-    typescript: "^3.5.1"
-}, dependencies = {
-    chalk: "^2.4.2",
-    "find-up": "^4.0.0",
-    inquirer: "^6.3.1",
-    shelljs: "^0.8.3",
-    yargs: "^13.2.4"
-}, standard = {
-    parser: "@typescript-eslint/parser",
-    plugins: [ "@typescript-eslint" ],
-    env: [ "jest" ]
-}, prettier = {
-    semi: !1,
-    singleQuote: !0
-}, husky = {
-    hooks: {
-        "pre-commit": "lint-staged"
-    }
-}, pkg = {
-    name: name,
-    version: version,
-    description: description,
-    bin: bin,
-    files: files,
-    scripts: scripts,
-    repository: repository,
-    keywords: keywords,
-    author: author,
-    license: license,
-    bugs: bugs,
-    homepage: homepage,
-    devDependencies: devDependencies,
-    dependencies: dependencies,
-    standard: standard,
-    prettier: prettier,
-    husky: husky,
-    "lint-staged": {
-        "*.ts": [ "prettier --write", "standard *.ts --fix", "git add" ]
-    }
-};
+}, name = "git-oneflow";
 
 shelljs.which("git") || (console.error("Sorry, git-OneFlow requires git... it's in the name"), 
 process.exit(1));
 
-var argv = yargs.scriptName(pkg.name).version().alias("v", "version").config(loadConfigValues()).pkgConf("git-oneflow").command(init).command(feature).command(release).command(hotfix).help().alias("h", "help").argv;
+var argv = yargs.scriptName(name).version().alias("v", "version").config(loadConfigValues()).pkgConf("git-oneflow").command(init).command(feature).command(release).command(hotfix).help().alias("h", "help").argv;
 
 argv._.length <= 0 && console.log(`Try ${path.basename(process.argv[1])} --help`);
