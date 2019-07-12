@@ -18,11 +18,7 @@ export default {
   desc: 'Finishes a hotfix.',
   builder: (yargs: any) => {},
   handler: async (argv: { [key: string]: any }) => {
-    try {
-      return handleFinish(argv)
-    } catch (err) {
-      throw err
-    }
+    return handleFinish(argv)
   }
 }
 
