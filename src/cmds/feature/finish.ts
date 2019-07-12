@@ -29,11 +29,7 @@ export default {
   },
   handler: (argv: { [key: string]: any }) => {
     const mergeInto = argv.usedev ? argv.development : argv.main
-    try {
-      return handleFinish(argv, mergeInto)
-    } catch (err) {
-      throw err
-    }
+    return handleFinish(argv, mergeInto)
   }
 }
 
