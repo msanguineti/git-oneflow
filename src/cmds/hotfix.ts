@@ -5,11 +5,11 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { StartHotfix } from './hotfix/start'
-import { FinishHotfix } from './hotfix/finish'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
-import { CommandModule, Argv } from 'yargs'
+import { Argv, CommandModule } from 'yargs'
+import { FinishHotfix } from './hotfix/finish'
+import { StartHotfix } from './hotfix/start'
 
 export class Hotfix implements CommandModule {
   public command: string = 'hotfix <command>'

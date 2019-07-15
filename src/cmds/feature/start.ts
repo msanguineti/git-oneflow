@@ -5,10 +5,10 @@
  * https://opensource.org/licenses/MIT
  */
 import { exec } from 'shelljs'
-import { isValidBranchName } from '../../core'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
 import { Arguments, CommandModule } from 'yargs'
+import { isValidBranchName } from '../../core'
 
 export class StartFeature implements CommandModule {
   public command: string = 'start <featureBranch>'

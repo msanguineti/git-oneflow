@@ -5,10 +5,9 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { exec, test, sed, ShellString } from 'shelljs'
 import findUp from 'find-up'
-// import { error, info } from './utils/text'
 import { extname } from 'path'
+import { exec, sed, ShellString, test } from 'shelljs'
 
 export type ConfigValues = { [key: string]: string | number | boolean }
 

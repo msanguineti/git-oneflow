@@ -5,12 +5,12 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { success, error } from '../utils/text'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
-import { prompt, Question, Answers } from 'inquirer'
-import { CommandModule, Arguments } from 'yargs'
-import { isValidBranchName, writeConfigFile, ConfigValues } from '../core'
+import { Answers, prompt, Question } from 'inquirer'
+import { Arguments, CommandModule } from 'yargs'
+import { ConfigValues, isValidBranchName, writeConfigFile } from '../core'
+import { error, success } from '../utils/text'
 
 export class Init implements CommandModule {
   public command: string = 'init [options]'

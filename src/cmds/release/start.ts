@@ -5,11 +5,11 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { isValidBranchName } from '../../core'
 import { exec } from 'shelljs'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
-import { CommandModule, Arguments } from 'yargs'
+import { Arguments, CommandModule } from 'yargs'
+import { isValidBranchName } from '../../core'
 
 export class StartRelease implements CommandModule {
   public command: string = 'start <releaseName> <from>'

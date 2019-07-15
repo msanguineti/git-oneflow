@@ -8,8 +8,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
 import { Argv, CommandModule } from 'yargs'
-import { StartFeature } from './feature/start'
 import { FinishFeature } from './feature/finish'
+import { StartFeature } from './feature/start'
 
 export class Feature implements CommandModule {
   public command: string = 'feature <command>'

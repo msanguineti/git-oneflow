@@ -5,11 +5,11 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { StartRelease } from './release/start'
-import { FinishRelease } from './release/finish'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
-import { CommandModule, Argv } from 'yargs'
+import { Argv, CommandModule } from 'yargs'
+import { FinishRelease } from './release/finish'
+import { StartRelease } from './release/start'
 
 export class Release implements CommandModule {
   public command: string = 'release <command>'

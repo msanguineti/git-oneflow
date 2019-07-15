@@ -5,12 +5,12 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { info } from '../../utils/text'
 import { prompt } from 'inquirer'
 import { exec } from 'shelljs'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
-import { CommandModule, Arguments } from 'yargs'
+import { Arguments, CommandModule } from 'yargs'
+import { info } from '../../utils/text'
 
 // const git = simplegit()
 

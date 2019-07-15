@@ -5,12 +5,12 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { prompt } from 'inquirer'
 import { spawnSync } from 'child_process'
+import { prompt } from 'inquirer'
 import { exec } from 'shelljs'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
-import { CommandModule, Argv, Arguments } from 'yargs'
+import { Arguments, Argv, CommandModule } from 'yargs'
 import { isValidBranchName } from '../../core'
 
 export class FinishFeature implements CommandModule {
