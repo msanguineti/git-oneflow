@@ -11,9 +11,9 @@ import { isValidBranchName } from '../../core'
 import { Arguments, CommandModule } from 'yargs'
 
 export class StartFeature implements CommandModule {
-  public command = 'start <featureBranch>'
+  public command: string = 'start <featureBranch>'
 
-  public describe = 'Start a new feature'
+  public describe: string = 'Start a new feature'
 
   public handler = (argv: Arguments) => {
     const branchOff = argv.usedev ? argv.development : argv.main

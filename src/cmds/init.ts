@@ -214,7 +214,7 @@ const generateQuestions = (argv: Arguments): Question[] => {
   ]
 }
 
-async function askConfirmationBeforeWrite () {
+const askConfirmationBeforeWrite = async (): Promise<boolean> => {
   const ans: { write: boolean } = await prompt([
     {
       type: 'confirm',

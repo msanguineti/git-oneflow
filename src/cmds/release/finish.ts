@@ -13,11 +13,11 @@ import { exec } from 'shelljs'
 import { CommandModule, Arguments } from 'yargs'
 
 export class FinishRelease implements CommandModule {
-  public command = 'finish <releaseName>'
+  public command: string = 'finish <releaseName>'
 
-  public describe = 'Finishes a release.'
+  public describe: string = 'Finishes a release.'
 
-  public handler = (argv: Arguments) => {
+  public handler = (argv: Arguments): Promise<void> => {
     return handleFinish(argv)
   }
 }

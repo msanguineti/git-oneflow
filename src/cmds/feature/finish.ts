@@ -14,11 +14,11 @@ import { CommandModule, Argv, Arguments } from 'yargs'
 import { isValidBranchName } from '../../core'
 
 export class FinishFeature implements CommandModule {
-  public command = 'finish <featureBranch> [options]'
+  public command: string = 'finish <featureBranch> [options]'
 
-  public describe = 'Finish a feature'
+  public describe: string = 'Finish a feature'
 
-  public builder = (yargs: Argv) => {
+  public builder = (yargs: Argv): Argv => {
     return yargs.option('i', {
       alias: 'interactive',
       describe:
@@ -32,7 +32,10 @@ export class FinishFeature implements CommandModule {
   }
 }
 
-async function handleFinish (argv: Arguments, mergeInto: string | unknown) {
+const handleFinish = async (
+  argv: Arguments,
+  mergeInto: string | unknown
+): Promise<void> => {
   if (argv.integration !== 2) {
     await rebaseStep(argv, mergeInto)
   }
@@ -77,7 +80,10 @@ async function handleFinish (argv: Arguments, mergeInto: string | unknown) {
   }
 }
 
-async function rebaseStep (argv: Arguments, mergeInto: string | unknown) {
+const rebaseStep = async (
+  argv: Arguments,
+  mergeInto: string | unknown
+): Promise<void> => {
   exec(`git checkout ${argv.feature}/${argv.featureBranch}`)
   switch (argv.interactive) {
     case 'always':
@@ -99,7 +105,7 @@ async function rebaseStep (argv: Arguments, mergeInto: string | unknown) {
   }
 }
 
-async function ask (question: string) {
+const ask = async (question: string): Promise<string> => {
   const answer: { accept: string } = await prompt([
     {
       type: 'confirm',
