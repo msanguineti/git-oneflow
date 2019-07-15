@@ -11,8 +11,6 @@ import { exec } from 'shelljs'
 /* eslint-enable @typescript-eslint/no-unused-vars */
 import { Arguments, CommandModule } from 'yargs'
 
-// const git = simplegit()
-
 export class StartHotfix implements CommandModule {
   public command: string = 'start <hotfixName> <from>'
 

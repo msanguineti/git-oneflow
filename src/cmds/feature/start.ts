@@ -18,7 +18,10 @@ export class StartFeature implements CommandModule {
   public handler = (argv: Arguments) => {
     const branchOff = argv.usedev ? argv.development : argv.main
 
-    if (isValidBranchName(argv.featureBranch)) {
+    if (
+      isValidBranchName(argv.featureBranch) &&
+      (branchOff ? isValidBranchName(branchOff) : true)
+    ) {
       exec(`git checkout -b ${argv.feature}/${argv.featureBranch} ${branchOff}`)
     }
   }
