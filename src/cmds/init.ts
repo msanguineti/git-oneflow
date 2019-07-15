@@ -16,7 +16,6 @@ import {
   getDefaultConfigValues
 } from '../core'
 import { error, success, info } from '../utils/text'
-import { exit } from 'shelljs'
 
 export class Init implements CommandModule {
   public command: string = 'init [options]'
