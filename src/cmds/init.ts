@@ -8,7 +8,7 @@
 import { success, error } from '../utils/text'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
-import { prompt, Question } from 'inquirer'
+import { prompt, Question, Answers } from 'inquirer'
 import { CommandModule, Arguments } from 'yargs'
 import { isValidBranchName, writeConfigFile, ConfigValues } from '../core'
 
@@ -61,7 +61,7 @@ const generateQuestions = (argv: Arguments): Question[] => {
       type: 'input',
       message: 'Development branch:',
       default: (argv.development as string) || 'develop',
-      when: function (answers: { [key: string]: any }) {
+      when: (answers: Answers) => {
         return answers.usedev
       },
       validate: (value: string) => {
@@ -155,7 +155,7 @@ const generateQuestions = (argv: Arguments): Question[] => {
           value: 'ask'
         }
       ],
-      when: function (answers: { [key: string]: any }) {
+      when: (answers: Answers) => {
         return answers.integration !== 2
       }
     },
