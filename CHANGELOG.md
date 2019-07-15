@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.7.6](https://github.com/msanguineti/git-oneflow/compare/v0.7.5...v0.7.6) (2019-07-15)
+
+
+### Bug Fixes
+
+* arrow funcs everywhere possible ([831bd8c](https://github.com/msanguineti/git-oneflow/commit/831bd8c))
+* better type-safety ([13f678c](https://github.com/msanguineti/git-oneflow/commit/13f678c))
+* better typedef ([737e0ec](https://github.com/msanguineti/git-oneflow/commit/737e0ec))
+* class properties properly marked ([b41d5d7](https://github.com/msanguineti/git-oneflow/commit/b41d5d7))
+* no default exports ([9153b20](https://github.com/msanguineti/git-oneflow/commit/9153b20))
+
+
+
 ### [0.7.5](https://github.com/msanguineti/git-oneflow/compare/v0.7.4...v0.7.5) (2019-07-15)
 
 
