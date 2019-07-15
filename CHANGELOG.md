@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.7.5](https://github.com/msanguineti/git-oneflow/compare/v0.7.4...v0.7.5) (2019-07-15)
+
+
+### Bug Fixes
+
+* export classes for commands ([b9d3e75](https://github.com/msanguineti/git-oneflow/commit/b9d3e75))
+
+
+### Build System
+
+* **deps:** bump lodash.template from 4.4.0 to 4.5.0 ([#14](https://github.com/msanguineti/git-oneflow/issues/14)) ([95c320d](https://github.com/msanguineti/git-oneflow/commit/95c320d))
+
+
+
 ### [0.7.4](https://github.com/msanguineti/git-oneflow/compare/v0.7.3...v0.7.4) (2019-07-05)
 
 
