@@ -8,26 +8,43 @@
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
 import { Answers, prompt, Question } from 'inquirer'
-import { Arguments, CommandModule } from 'yargs'
-import { ConfigValues, isValidBranchName, writeConfigFile } from '../core'
-import { error, success } from '../utils/text'
+import { Arguments, CommandModule, Argv } from 'yargs'
+import {
+  ConfigValues,
+  isValidBranchName,
+  writeConfigFile,
+  getDefaultConfigValues
+} from '../core'
+import { error, success, info } from '../utils/text'
 
 export class Init implements CommandModule {
   public command: string = 'init [options]'
 
   public describe: string = 'Generate a config file'
 
+  public builder = (yargs: Argv): Argv => {
+    return yargs.option('d', {
+      alias: 'defaultValues',
+      describe: 'Generates default value file. Overwrites old values'
+    })
+  }
+
   public handler = async (argv: Arguments): Promise<void> => {
     try {
-      const jsonValues: ConfigValues = await prompt(generateQuestions(argv))
+      if (argv.defaultValues) {
+        writeConfigFile({ data: getDefaultConfigValues() })
+        console.log(info('Config file created: gof.config.js'))
+      } else {
+        const jsonValues: ConfigValues = await prompt(generateQuestions(argv))
 
-      console.log(JSON.stringify(jsonValues, null, 2))
+        console.log(JSON.stringify(jsonValues, null, 2))
 
-      if (await askConfirmationBeforeWrite()) {
-        if (writeConfigFile({ data: jsonValues })) {
-          console.log(success('Initialisation done!'))
-        } else {
-          console.error(error('Cannot write config file!'))
+        if (await askConfirmationBeforeWrite()) {
+          if (writeConfigFile({ data: jsonValues })) {
+            console.log(success('Initialisation done!'))
+          } else {
+            console.error(error('Cannot write config file!'))
+          }
         }
       }
     } catch (err) {

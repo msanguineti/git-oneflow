@@ -24,7 +24,9 @@ function _defineProperty(e, a, t) {
     }) : e[a] = t, e;
 }
 
-const loadConfigFile = e => {
+const getDefaultConfigValues = () => ({
+    ...defaultConfigValues
+}), loadConfigFile = e => {
     if (!e || !shelljs.test("-f", e)) return defaultConfigValues;
     const a = ".js" === getFileExt(e) ? require(e) : JSON.parse(shelljs.sed(/(\/\*[\w\W]+\*\/|(\/\/.*))/g, "", e));
     return sanityCheck(a) ? {
@@ -296,12 +298,19 @@ class Hotfix {
 class Init {
     constructor() {
         _defineProperty(this, "command", "init [options]"), _defineProperty(this, "describe", "Generate a config file"), 
-        _defineProperty(this, "handler", async e => {
+        _defineProperty(this, "builder", e => e.option("d", {
+            alias: "defaultValues",
+            describe: "Generates default value file. Overwrites old values"
+        })), _defineProperty(this, "handler", async e => {
             try {
-                const a = await inquirer.prompt(generateQuestions(e));
-                console.log(JSON.stringify(a, null, 2)), await askConfirmationBeforeWrite() && (writeConfigFile({
-                    data: a
-                }) ? console.log(success("Initialisation done!")) : console.error(error("Cannot write config file!")));
+                if (e.defaultValues) writeConfigFile({
+                    data: getDefaultConfigValues()
+                }), console.log(info("Config file created: gof.config.js")); else {
+                    const a = await inquirer.prompt(generateQuestions(e));
+                    console.log(JSON.stringify(a, null, 2)), await askConfirmationBeforeWrite() && (writeConfigFile({
+                        data: a
+                    }) ? console.log(success("Initialisation done!")) : console.error(error("Cannot write config file!")));
+                }
             } catch (e) {
                 console.error(error(e));
             }
