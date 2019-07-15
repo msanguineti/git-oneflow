@@ -12,13 +12,13 @@ import { exec } from 'shelljs'
 import { CommandModule, Arguments } from 'yargs'
 
 export class StartRelease implements CommandModule {
-  command = 'start <releaseName> <from>'
+  public command = 'start <releaseName> <from>'
 
-  describe = `Start a new release.
+  public describe = `Start a new release.
   <releaseName> should be something like \`2.3.0\`.
   <from> should be a branch (e.g. develop) or a commit (e.g. 9af345)`
 
-  handler = (argv: Arguments) => {
+  public handler = (argv: Arguments) => {
     if (
       isValidBranchName(argv.releaseName) &&
       (argv.from ? isValidBranchName(argv.from) : true)

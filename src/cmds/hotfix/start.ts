@@ -14,14 +14,13 @@ import { Arguments, CommandModule } from 'yargs'
 // const git = simplegit()
 
 export class StartHotfix implements CommandModule {
-  command = 'start <hotfixName> <from>'
+  public command = 'start <hotfixName> <from>'
 
-  describe = `Start a new hotfix.
+  public describe = `Start a new hotfix.
   <hotfixName> should be something like \`2.3.1\`.
   <from> should be a branch (e.g. develop), a tag (e.g. 2.3.0) or a commit (e.g. 9af345)`
 
-  // builder: (yargs: any) => {},
-  handler = (argv: Arguments) => {
+  public handler = (argv: Arguments) => {
     if (
       isValidBranchName(argv.hotfixName) &&
       (argv.from ? isValidBranchName(argv.from) : true)

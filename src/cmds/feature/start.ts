@@ -11,11 +11,11 @@ import { isValidBranchName } from '../../core'
 import { Arguments, CommandModule } from 'yargs'
 
 export class StartFeature implements CommandModule {
-  command = 'start <featureBranch>'
+  public command = 'start <featureBranch>'
 
-  describe = 'Start a new feature'
+  public describe = 'Start a new feature'
 
-  handler = async (argv: Arguments) => {
+  public handler = async (argv: Arguments) => {
     const branchOff = argv.usedev ? argv.development : argv.main
 
     if (isValidBranchName(argv.featureBranch)) {

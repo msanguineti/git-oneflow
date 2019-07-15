@@ -12,13 +12,13 @@ import { FinishRelease } from './release/finish'
 import { CommandModule, Argv } from 'yargs'
 
 export class Release implements CommandModule {
-  command = 'release <command>'
+  public command = 'release <command>'
 
-  desc = 'Manage starting and finishing releases.'
+  public describe = 'Manage starting and finishing releases.'
 
-  builder = function (yargs: Argv) {
+  public builder = function (yargs: Argv) {
     return yargs.command(new StartRelease()).command(new FinishRelease())
   }
 
-  handler = () => {}
+  public handler = () => {}
 }

@@ -15,12 +15,11 @@ import { CommandModule, Arguments } from 'yargs'
 // const git = simplegit()
 
 export class FinishHotfix implements CommandModule {
-  command = 'finish <hotfixName>'
+  public command = 'finish <hotfixName>'
 
-  describe = 'Finishes a hotfix.'
+  public describe = 'Finishes a hotfix.'
 
-  // builder: (yargs: any) => {},
-  handler = async (argv: Arguments) => {
+  public handler = async (argv: Arguments) => {
     return handleFinish(argv)
   }
 }

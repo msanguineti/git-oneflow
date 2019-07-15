@@ -14,11 +14,11 @@ import { CommandModule, Argv, Arguments } from 'yargs'
 import { ConfigValues, isValidBranchName } from '../../core'
 
 export class FinishFeature implements CommandModule {
-  command = 'finish <featureBranch> [options]'
+  public command = 'finish <featureBranch> [options]'
 
-  describe = 'Finish a feature'
+  public describe = 'Finish a feature'
 
-  builder = (yargs: Argv) => {
+  public builder = (yargs: Argv) => {
     return yargs.option('i', {
       alias: 'interactive',
       describe:
@@ -26,7 +26,7 @@ export class FinishFeature implements CommandModule {
     })
   }
 
-  handler = (argv: Arguments) => {
+  public handler = (argv: Arguments) => {
     const mergeInto = argv.usedev ? argv.development : argv.main
     if (isValidBranchName(mergeInto)) return handleFinish(argv, mergeInto)
   }

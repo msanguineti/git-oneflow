@@ -18,19 +18,11 @@ import { success, error } from '../utils/text'
 import { CommandModule, Arguments } from 'yargs'
 
 export class Init implements CommandModule {
-  command = 'init [options]'
+  public command = 'init [options]'
 
-  describe = 'Generate a config file'
+  public describe = 'Generate a config file'
 
-  // builder = (yargs: Argv) => {
-  //   return yargs.option('y', {
-  //     alias: 'default-values',
-  //     describe: `Auto-generate config file using default values.
-  //     This WILL overwrite existing values!`
-  //   })
-  // }
-
-  handler = async (argv: Arguments) => {
+  public handler = async (argv: Arguments) => {
     try {
       const jsonValues = await inquirer.prompt(generateQuestions(argv))
 
