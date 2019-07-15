@@ -15,7 +15,7 @@ export class StartFeature implements CommandModule {
 
   public describe = 'Start a new feature'
 
-  public handler = async (argv: Arguments) => {
+  public handler = (argv: Arguments) => {
     const branchOff = argv.usedev ? argv.development : argv.main
 
     if (isValidBranchName(argv.featureBranch)) {

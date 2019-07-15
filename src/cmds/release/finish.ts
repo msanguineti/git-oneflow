@@ -17,12 +17,12 @@ export class FinishRelease implements CommandModule {
 
   public describe = 'Finishes a release.'
 
-  public handler = async (argv: Arguments) => {
+  public handler = (argv: Arguments) => {
     return handleFinish(argv)
   }
 }
 
-async function handleFinish (argv: { [key: string]: any }) {
+const handleFinish = async (argv: { [key: string]: any }) => {
   const mergeInto = argv.usedev ? argv.development : argv.main
 
   exec(`git checkout ${argv.release}/${argv.releaseName}`)
@@ -79,7 +79,7 @@ async function handleFinish (argv: { [key: string]: any }) {
   }
 }
 
-async function deleteBranch (argv: { [key: string]: any }) {
+const deleteBranch = async (argv: { [key: string]: any }) => {
   exec(`git branch -d ${argv.release}/${argv.releaseName}`)
   // await git.deleteLocalBranch(`${argv.release}/${argv.releaseName}`)
   if (
@@ -92,7 +92,7 @@ async function deleteBranch (argv: { [key: string]: any }) {
   }
 }
 
-async function ask (question: string) {
+const ask = async (question: string) => {
   const answer: { accept: string } = await inquirer.prompt([
     {
       type: 'confirm',

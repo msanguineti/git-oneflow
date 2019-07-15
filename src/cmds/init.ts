@@ -41,7 +41,7 @@ export class Init implements CommandModule {
   }
 }
 
-function generateQuestions (argv: { [key: string]: any }): any {
+const generateQuestions = (argv: { [key: string]: any }): any => {
   return [
     {
       name: 'main',

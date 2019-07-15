@@ -39,11 +39,11 @@ export type ConfigValues = { [key: string]: any }
  *
  * @returns {ConfigValues} the default config values
  */
-export function getDefaultConfigValues (): ConfigValues {
+export const getDefaultConfigValues = (): ConfigValues => {
   return { ...defaultConfigValues }
 }
 
-export function loadConfigFile (configFile?: string): ConfigValues {
+export const loadConfigFile = (configFile?: string): ConfigValues => {
   if (!configFile || !test('-f', configFile)) {
     return defaultConfigValues
   }
@@ -60,19 +60,19 @@ export function loadConfigFile (configFile?: string): ConfigValues {
   }
 }
 
-export function loadConfigValues (): ConfigValues {
+export const loadConfigValues = (): ConfigValues => {
   const configFile = findUp.sync(defaultConfigFileNames) || undefined
 
   return loadConfigFile(configFile)
 }
 
-export function writeConfigFile ({
+export const writeConfigFile = ({
   file = defaultConfigFileName,
   data = defaultConfigValues
 }: {
   file?: string
   data?: any
-}): boolean {
+}): boolean => {
   let toWrite: string
 
   if (!sanityCheck(data)) return false
@@ -103,15 +103,15 @@ export function writeConfigFile ({
   return true
 }
 
-export function isValidBranchName (branchName: string | unknown): boolean {
+export const isValidBranchName = (branchName: string | unknown): boolean => {
   return checkGitRefFormat(`refs/heads/${branchName}`)
 }
 
-export function isValidTagName (tagName: string): boolean {
+export const isValidTagName = (tagName: string): boolean => {
   return checkGitRefFormat(`refs/tags/${tagName}`)
 }
 
-function sanityCheck (configValues: ConfigValues): boolean {
+const sanityCheck = (configValues: ConfigValues): boolean => {
   for (const key in configValues) {
     const element = configValues[key]
     switch (key) {
@@ -154,7 +154,7 @@ function sanityCheck (configValues: ConfigValues): boolean {
   return true
 }
 
-function checkGitRefFormat (value: string): boolean {
+const checkGitRefFormat = (value: string): boolean => {
   return (
     exec(`git check-ref-format "${value}"`, {
       silent: true
@@ -186,7 +186,7 @@ const defaultConfigFileNames: string[] = [
 
 // const supportedExtensions = ['.js', '.json']
 
-function getCommentFor (key: string): string {
+const getCommentFor = (key: string): string => {
   switch (key) {
     case 'main': {
       return 'Main (production) branch name. Default `master`'
@@ -227,11 +227,11 @@ function getCommentFor (key: string): string {
   }
 }
 
-function getFileExt (configFile: string) {
+const getFileExt = (configFile: string) => {
   return extname(configFile)
 }
 
-function generateCommentedValues (configValues: ConfigValues) {
+const generateCommentedValues = (configValues: ConfigValues) => {
   const output: string[] = []
   for (const key in configValues) {
     // if (configValues.hasOwnProperty(key)) {

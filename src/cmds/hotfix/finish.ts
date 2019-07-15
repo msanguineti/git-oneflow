@@ -19,12 +19,12 @@ export class FinishHotfix implements CommandModule {
 
   public describe = 'Finishes a hotfix.'
 
-  public handler = async (argv: Arguments) => {
+  public handler = (argv: Arguments) => {
     return handleFinish(argv)
   }
 }
 
-async function handleFinish (argv: { [key: string]: any }) {
+const handleFinish = async (argv: { [key: string]: any }) => {
   const mergeInto = argv.usedev ? argv.development : argv.main
 
   exec(`git checkout ${argv.hotfix}/${argv.hotfixName}`)
@@ -74,7 +74,7 @@ async function handleFinish (argv: { [key: string]: any }) {
   }
 }
 
-async function deleteBranch (argv: { [key: string]: any }) {
+const deleteBranch = async (argv: { [key: string]: any }) => {
   exec(`git branch -d ${argv.hotfix}/${argv.hotfixName}`)
   if (
     await ask(
@@ -85,7 +85,7 @@ async function deleteBranch (argv: { [key: string]: any }) {
   }
 }
 
-async function ask (question: string) {
+const ask = async (question: string) => {
   const answer: { accept: string } = await inquirer.prompt([
     {
       type: 'confirm',
