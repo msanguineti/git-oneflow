@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.8.0](https://github.com/msanguineti/git-oneflow/compare/v0.7.8...v0.8.0) (2019-07-15)
+
+
+### Bug Fixes
+
+* remove extra import ([3409889](https://github.com/msanguineti/git-oneflow/commit/3409889))
+
+
+### Features
+
+* create default values file ([7c81380](https://github.com/msanguineti/git-oneflow/commit/7c81380))
+
+
+
 ### [0.7.8](https://github.com/msanguineti/git-oneflow/compare/v0.7.7...v0.7.8) (2019-07-15)
 
 
