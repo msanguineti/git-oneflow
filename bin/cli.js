@@ -542,7 +542,7 @@ class Hotfix {
     }
 }
 
-shelljs.which("git") && (console.error("Sorry, git-OneFlow requires git... it's in the name"), 
+shelljs.which("git") || (console.error(error("Sorry, git-OneFlow requires git... it's in the name")), 
 process.exit(1));
 
 const argv = yargs.scriptName(name).version().alias("v", "version").config(loadConfigValues()).pkgConf("git-oneflow").command(new Init()).command(new Feature()).command(new Release()).command(new Hotfix()).help().alias("h", "help").argv;
