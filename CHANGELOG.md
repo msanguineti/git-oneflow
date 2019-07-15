@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.7.7](https://github.com/msanguineti/git-oneflow/compare/v0.7.6...v0.7.7) (2019-07-15)
+
+
+### Bug Fixes
+
+* branch name sanity check ([cd9fbca](https://github.com/msanguineti/git-oneflow/commit/cd9fbca))
+* more typedef ([0abf48b](https://github.com/msanguineti/git-oneflow/commit/0abf48b))
+* no any as type declaration ([94357f9](https://github.com/msanguineti/git-oneflow/commit/94357f9))
+
+
+
 ### [0.7.6](https://github.com/msanguineti/git-oneflow/compare/v0.7.5...v0.7.6) (2019-07-15)
 
 
@@ -221,4 +232,3 @@ All notable changes to this project will be documented in this file. See [standa
 * **command:** release command start and finish ([c168ee2](https://github.com/msanguineti/git-oneflow/commit/c168ee2))
 * **feature:** oneflow feature start finish ([d8a264b](https://github.com/msanguineti/git-oneflow/commit/d8a264b))
 * **init:** tool initialisation ([8247b7f](https://github.com/msanguineti/git-oneflow/commit/8247b7f))
-* 

@@ -5,12 +5,12 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { success, error } from '../utils/text'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
-import { prompt, Question } from 'inquirer'
-import { CommandModule, Arguments } from 'yargs'
-import { isValidBranchName, writeConfigFile, ConfigValues } from '../core'
+import { Answers, prompt, Question } from 'inquirer'
+import { Arguments, CommandModule } from 'yargs'
+import { ConfigValues, isValidBranchName, writeConfigFile } from '../core'
+import { error, success } from '../utils/text'
 
 export class Init implements CommandModule {
   public command: string = 'init [options]'
@@ -39,10 +39,10 @@ export class Init implements CommandModule {
 const generateQuestions = (argv: Arguments): Question[] => {
   return [
     {
+      default: (argv.main as string) || 'master',
+      message: 'Main (production) branch:',
       name: 'main',
       type: 'input',
-      message: 'Main (production) branch:',
-      default: (argv.main as string) || 'master',
       validate: (value: string) => {
         return (
           isValidBranchName(value) ||
@@ -51,31 +51,31 @@ const generateQuestions = (argv: Arguments): Question[] => {
       }
     },
     {
-      name: 'usedev',
-      type: 'confirm',
       default: (argv.usedev as boolean) || false,
-      message: 'Do you use a development branch?'
+      message: 'Do you use a development branch?',
+      name: 'usedev',
+      type: 'confirm'
     },
     {
+      default: (argv.development as string) || 'develop',
+      message: 'Development branch:',
       name: 'development',
       type: 'input',
-      message: 'Development branch:',
-      default: (argv.development as string) || 'develop',
-      when: function (answers: { [key: string]: any }) {
-        return answers.usedev
-      },
       validate: (value: string) => {
         return (
           isValidBranchName(value) ||
           'Please, choose a valid name for the branch'
         )
+      },
+      when: (answers: Answers) => {
+        return answers.usedev
       }
     },
     {
+      default: (argv.feature as string) || 'feature',
+      message: 'Feature branch:',
       name: 'feature',
       type: 'input',
-      message: 'Feature branch:',
-      default: (argv.feature as string) || 'feature',
       validate: (value: string) => {
         return (
           isValidBranchName(value) ||
@@ -84,10 +84,10 @@ const generateQuestions = (argv: Arguments): Question[] => {
       }
     },
     {
+      default: (argv.release as string) || 'release',
+      message: 'Release branch:',
       name: 'release',
       type: 'input',
-      message: 'Release branch:',
-      default: (argv.release as string) || 'release',
       validate: (value: string) => {
         return (
           isValidBranchName(value) ||
@@ -96,10 +96,10 @@ const generateQuestions = (argv: Arguments): Question[] => {
       }
     },
     {
+      default: (argv.hotfix as string) || 'hotfix',
+      message: 'Hotfix branch:',
       name: 'hotfix',
       type: 'input',
-      message: 'Hotfix branch:',
-      default: (argv.hotfix as string) || 'hotfix',
       validate: (value: string) => {
         return (
           isValidBranchName(value) ||
@@ -108,36 +108,32 @@ const generateQuestions = (argv: Arguments): Question[] => {
       }
     },
     {
-      type: 'list',
-      name: 'integration',
-      message: 'Which feature branch integration method do you want to use?',
-      default: (argv.integration as number) - 1 || 1,
       choices: [
         {
           name:
             'Integrate feature branch with main/development using rebase (rebase -> merge --ff-only).',
-          value: 1,
-          short: 'rebase'
+          short: 'rebase',
+          value: 1
         },
         {
           name:
             'Feature is merged in main/development à la GitFlow (merge --no-ff).',
-          value: 2,
-          short: 'merge --no-ff'
+          short: 'merge --no-ff',
+          value: 2
         },
         {
           name:
             'Mix the previous two: rebase and merge (rebase -> merge --no-ff).',
-          value: 3,
-          short: 'rebase + merge --no-ff'
+          short: 'rebase + merge --no-ff',
+          value: 3
         }
-      ]
+      ],
+      default: (argv.integration as number) - 1 || 1,
+      message: 'Which feature branch integration method do you want to use?',
+      name: 'integration',
+      type: 'list'
     },
     {
-      name: 'interactive',
-      type: 'expand',
-      message: 'Do you want to use rebase interactively (rebase -i)?',
-      default: (argv.interactive as string) || 'always',
       choices: [
         {
           key: 'y',
@@ -155,15 +151,38 @@ const generateQuestions = (argv: Arguments): Question[] => {
           value: 'ask'
         }
       ],
-      when: function (answers: { [key: string]: any }) {
+      default: (argv.interactive as string) || 'always',
+      message: 'Do you want to use rebase interactively (rebase -i)?',
+      name: 'interactive',
+      type: 'expand',
+      when: (answers: Answers) => {
         return answers.integration !== 2
       }
     },
     {
-      name: 'push',
-      type: 'expand',
+      choices: [
+        {
+          key: 'y',
+          name: 'Always',
+          value: 'always'
+        },
+        {
+          key: 'n',
+          name: 'Never',
+          value: 'never'
+        },
+        {
+          key: 'a',
+          name: 'Ask me every time',
+          value: 'ask'
+        }
+      ],
+      default: (argv.push as string) || 'always',
       message: 'Do you want to push to origin after merging?',
-      default: (argv.push as string) || 'always',
+      name: 'push',
+      type: 'expand'
+    },
+    {
       choices: [
         {
           key: 'y',
@@ -180,46 +199,27 @@ const generateQuestions = (argv: Arguments): Question[] => {
           name: 'Ask me every time',
           value: 'ask'
         }
-      ]
-    },
-    {
-      name: 'delete',
-      type: 'expand',
+      ],
+      default: (argv.push as string) || 'always',
       message: 'Do you want to delete working branch after merging?',
-      default: (argv.push as string) || 'always',
-      choices: [
-        {
-          key: 'y',
-          name: 'Always',
-          value: 'always'
-        },
-        {
-          key: 'n',
-          name: 'Never',
-          value: 'never'
-        },
-        {
-          key: 'a',
-          name: 'Ask me every time',
-          value: 'ask'
-        }
-      ]
+      name: 'delete',
+      type: 'expand'
     },
     {
-      name: 'tags',
-      type: 'confirm',
       default: (argv.usedev as boolean) || true,
-      message: 'Do you want automatic tagging of releases/hotfixes?'
+      message: 'Do you want automatic tagging of releases/hotfixes?',
+      name: 'tags',
+      type: 'confirm'
     }
   ]
 }
 
-async function askConfirmationBeforeWrite () {
+const askConfirmationBeforeWrite = async (): Promise<boolean> => {
   const ans: { write: boolean } = await prompt([
     {
-      type: 'confirm',
+      message: 'Write to config file?',
       name: 'write',
-      message: 'Write to config file?'
+      type: 'confirm'
     }
   ])
   return ans.write

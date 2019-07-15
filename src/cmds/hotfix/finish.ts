@@ -5,26 +5,26 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { info } from '../../utils/text'
 import { prompt } from 'inquirer'
 import { exec } from 'shelljs'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
-import { CommandModule, Arguments } from 'yargs'
+import { Arguments, CommandModule } from 'yargs'
+import { info } from '../../utils/text'
 
 // const git = simplegit()
 
 export class FinishHotfix implements CommandModule {
-  public command = 'finish <hotfixName>'
+  public command: string = 'finish <hotfixName>'
 
-  public describe = 'Finishes a hotfix.'
+  public describe: string = 'Finishes a hotfix.'
 
-  public handler = (argv: Arguments) => {
+  public handler = (argv: Arguments): Promise<void> => {
     return handleFinish(argv)
   }
 }
 
-const handleFinish = async (argv: Arguments) => {
+const handleFinish = async (argv: Arguments): Promise<void> => {
   const mergeInto = argv.usedev ? argv.development : argv.main
 
   exec(`git checkout ${argv.hotfix}/${argv.hotfixName}`)
@@ -74,7 +74,7 @@ const handleFinish = async (argv: Arguments) => {
   }
 }
 
-const deleteBranch = async (argv: Arguments) => {
+const deleteBranch = async (argv: Arguments): Promise<void> => {
   exec(`git branch -d ${argv.hotfix}/${argv.hotfixName}`)
   if (
     await ask(
@@ -85,12 +85,12 @@ const deleteBranch = async (argv: Arguments) => {
   }
 }
 
-const ask = async (question: string) => {
+const ask = async (question: string): Promise<string> => {
   const answer: { accept: string } = await prompt([
     {
-      type: 'confirm',
+      message: question,
       name: 'accept',
-      message: question
+      type: 'confirm'
     }
   ])
   return answer.accept

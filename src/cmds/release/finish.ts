@@ -5,19 +5,19 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { info } from '../../utils/text'
 import { prompt } from 'inquirer'
 import { exec } from 'shelljs'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
-import { CommandModule, Arguments } from 'yargs'
+import { Arguments, CommandModule } from 'yargs'
+import { info } from '../../utils/text'
 
 export class FinishRelease implements CommandModule {
-  public command = 'finish <releaseName>'
+  public command: string = 'finish <releaseName>'
 
-  public describe = 'Finishes a release.'
+  public describe: string = 'Finishes a release.'
 
-  public handler = (argv: Arguments) => {
+  public handler = (argv: Arguments): Promise<void> => {
     return handleFinish(argv)
   }
 }
@@ -95,9 +95,9 @@ const deleteBranch = async (argv: Arguments) => {
 const ask = async (question: string) => {
   const answer: { accept: string } = await prompt([
     {
-      type: 'confirm',
+      message: question,
       name: 'accept',
-      message: question
+      type: 'confirm'
     }
   ])
   return answer.accept

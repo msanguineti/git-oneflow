@@ -5,10 +5,9 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { exec, test, sed, ShellString } from 'shelljs'
 import findUp from 'find-up'
-// import { error, info } from './utils/text'
 import { extname } from 'path'
+import { exec, sed, ShellString, test } from 'shelljs'
 
 export type ConfigValues = { [key: string]: string | number | boolean }
 
@@ -163,17 +162,17 @@ const checkGitRefFormat = (value: string): boolean => {
 }
 
 const defaultConfigValues: ConfigValues = {
-  main: 'master',
-  usedev: false,
+  delete: 'always',
   development: 'develop',
   feature: 'feature',
-  release: 'release',
   hotfix: 'hotfix',
   integration: 1,
   interactive: 'always',
+  main: 'master',
   push: 'always',
-  delete: 'always',
-  tags: true
+  release: 'release',
+  tags: true,
+  usedev: false
 }
 
 const defaultConfigFileName: string = 'gof.config.js'
