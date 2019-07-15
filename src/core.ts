@@ -10,7 +10,7 @@ import findUp from 'find-up'
 // import { error, info } from './utils/text'
 import { extname } from 'path'
 
-export type ConfigValues = { [key: string]: any }
+export type ConfigValues = { [key: string]: string | number | boolean }
 
 /**
  * Returns the default config values of the application
@@ -71,7 +71,7 @@ export const writeConfigFile = ({
   data = defaultConfigValues
 }: {
   file?: string
-  data?: any
+  data?: ConfigValues
 }): boolean => {
   let toWrite: string
 

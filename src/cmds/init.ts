@@ -6,16 +6,12 @@
  */
 
 import inquirer from 'inquirer'
-import {
-  isValidBranchName,
-  writeConfigFile
-  // ConfigValues
-} from '../core'
 
 import { success, error } from '../utils/text'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
 import { CommandModule, Arguments } from 'yargs'
+import { isValidBranchName, writeConfigFile, ConfigValues } from '../core'
 
 export class Init implements CommandModule {
   public command = 'init [options]'
@@ -24,7 +20,9 @@ export class Init implements CommandModule {
 
   public handler = async (argv: Arguments) => {
     try {
-      const jsonValues = await inquirer.prompt(generateQuestions(argv))
+      const jsonValues: ConfigValues = await inquirer.prompt(
+        generateQuestions(argv)
+      )
 
       console.log(JSON.stringify(jsonValues, null, 2))
 
@@ -41,7 +39,7 @@ export class Init implements CommandModule {
   }
 }
 
-const generateQuestions = (argv: { [key: string]: any }): any => {
+const generateQuestions = (argv: Arguments): any => {
   return [
     {
       name: 'main',
@@ -116,7 +114,7 @@ const generateQuestions = (argv: { [key: string]: any }): any => {
       type: 'list',
       name: 'integration',
       message: 'Which feature branch integration method do you want to use?',
-      default: argv.integration - 1 || 1,
+      default: argv.integration || 1,
       choices: [
         {
           name:

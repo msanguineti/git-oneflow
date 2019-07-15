@@ -11,7 +11,7 @@ import { exec } from 'shelljs'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
 import { CommandModule, Argv, Arguments } from 'yargs'
-import { ConfigValues, isValidBranchName } from '../../core'
+import { isValidBranchName } from '../../core'
 
 export class FinishFeature implements CommandModule {
   public command = 'finish <featureBranch> [options]'
@@ -32,7 +32,7 @@ export class FinishFeature implements CommandModule {
   }
 }
 
-async function handleFinish (argv: ConfigValues, mergeInto: string | unknown) {
+async function handleFinish (argv: Arguments, mergeInto: string | unknown) {
   if (argv.integration !== 2) {
     await rebaseStep(argv, mergeInto)
   }
@@ -77,7 +77,7 @@ async function handleFinish (argv: ConfigValues, mergeInto: string | unknown) {
   }
 }
 
-async function rebaseStep (argv: ConfigValues, mergeInto: string | unknown) {
+async function rebaseStep (argv: Arguments, mergeInto: string | unknown) {
   exec(`git checkout ${argv.feature}/${argv.featureBranch}`)
   switch (argv.interactive) {
     case 'always':

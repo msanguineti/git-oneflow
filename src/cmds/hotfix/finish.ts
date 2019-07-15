@@ -24,7 +24,7 @@ export class FinishHotfix implements CommandModule {
   }
 }
 
-const handleFinish = async (argv: { [key: string]: any }) => {
+const handleFinish = async (argv: Arguments) => {
   const mergeInto = argv.usedev ? argv.development : argv.main
 
   exec(`git checkout ${argv.hotfix}/${argv.hotfixName}`)
@@ -74,7 +74,7 @@ const handleFinish = async (argv: { [key: string]: any }) => {
   }
 }
 
-const deleteBranch = async (argv: { [key: string]: any }) => {
+const deleteBranch = async (argv: Arguments) => {
   exec(`git branch -d ${argv.hotfix}/${argv.hotfixName}`)
   if (
     await ask(
