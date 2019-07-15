@@ -12,7 +12,7 @@ import { exec } from 'shelljs'
 /* eslint-enable @typescript-eslint/no-unused-vars */
 import { CommandModule, Arguments } from 'yargs'
 
-export default class FinishRelease implements CommandModule {
+export class FinishRelease implements CommandModule {
   command = 'finish <releaseName>'
 
   desc = 'Finishes a release.'

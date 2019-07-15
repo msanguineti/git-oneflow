@@ -13,7 +13,7 @@ import { Arguments, CommandModule } from 'yargs'
 
 // const git = simplegit()
 
-export default class StartHotfix implements CommandModule {
+export class StartHotfix implements CommandModule {
   command = 'start <hotfixName> <from>'
 
   describe = `Start a new hotfix.

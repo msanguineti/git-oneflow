@@ -5,13 +5,13 @@
  * https://opensource.org/licenses/MIT
  */
 
-import StartRelease from './release/start'
-import FinishRelease from './release/finish'
+import { StartRelease } from './release/start'
+import { FinishRelease } from './release/finish'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
 import { CommandModule, Argv } from 'yargs'
 
-export default class Release implements CommandModule {
+export class Release implements CommandModule {
   command = 'release <command>'
 
   desc = 'Manage starting and finishing releases.'

@@ -13,7 +13,7 @@ import { exec } from 'shelljs'
 import { CommandModule, Argv, Arguments } from 'yargs'
 import { ConfigValues, isValidBranchName } from '../../core'
 
-export default class FinishFeature implements CommandModule {
+export class FinishFeature implements CommandModule {
   command = 'finish <featureBranch> [options]'
 
   describe = 'Finish a feature'

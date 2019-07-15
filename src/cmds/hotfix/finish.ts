@@ -14,7 +14,7 @@ import { CommandModule, Arguments } from 'yargs'
 
 // const git = simplegit()
 
-export default class FinishHotfix implements CommandModule {
+export class FinishHotfix implements CommandModule {
   command = 'finish <hotfixName>'
 
   describe = 'Finishes a hotfix.'

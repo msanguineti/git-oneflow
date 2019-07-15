@@ -10,7 +10,7 @@ import { isValidBranchName } from '../../core'
 /* eslint-enable @typescript-eslint/no-unused-vars */
 import { Arguments, CommandModule } from 'yargs'
 
-export default class StartFeature implements CommandModule {
+export class StartFeature implements CommandModule {
   command = 'start <featureBranch>'
 
   describe = 'Start a new feature'

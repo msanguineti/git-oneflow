@@ -17,7 +17,7 @@ import { success, error } from '../utils/text'
 /* eslint-enable @typescript-eslint/no-unused-vars */
 import { CommandModule, Arguments } from 'yargs'
 
-export default class Init implements CommandModule {
+export class Init implements CommandModule {
   command = 'init [options]'
 
   describe = 'Generate a config file'

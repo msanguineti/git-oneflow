@@ -11,7 +11,7 @@ import { exec } from 'shelljs'
 /* eslint-enable @typescript-eslint/no-unused-vars */
 import { CommandModule, Arguments } from 'yargs'
 
-export default class StartRelease implements CommandModule {
+export class StartRelease implements CommandModule {
   command = 'start <releaseName> <from>'
 
   describe = `Start a new release.
