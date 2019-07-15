@@ -13,9 +13,9 @@ function _interopDefault(e) {
     return e && "object" == typeof e && "default" in e ? e.default : e;
 }
 
-var yargs = _interopDefault(require("yargs")), shelljs = require("shelljs"), findUp = _interopDefault(require("find-up")), path = require("path"), inquirer = _interopDefault(require("inquirer")), child_process = require("child_process"), chalk = _interopDefault(require("chalk"));
+var yargs = _interopDefault(require("yargs")), shelljs = require("shelljs"), findUp = _interopDefault(require("find-up")), path = require("path"), inquirer = require("inquirer"), child_process = require("child_process"), chalk = _interopDefault(require("chalk"));
 
-function loadConfigFile(e) {
+const loadConfigFile = e => {
     if (!e || !shelljs.test("-f", e)) return defaultConfigValues;
     const a = ".js" === getFileExt(e) ? require(e) : JSON.parse(shelljs.sed(/(\/\*[\w\W]+\*\/|(\/\/.*))/g, "", e));
     return sanityCheck(a) ? {
@@ -24,13 +24,10 @@ function loadConfigFile(e) {
     } : {
         ...defaultConfigValues
     };
-}
-
-function loadConfigValues() {
-    return loadConfigFile(findUp.sync(defaultConfigFileNames) || void 0);
-}
-
-function writeConfigFile({file: e = defaultConfigFileName, data: a = defaultConfigValues}) {
+}, loadConfigValues = () => {
+    const e = findUp.sync(defaultConfigFileNames) || void 0;
+    return loadConfigFile(e);
+}, writeConfigFile = ({file: e = defaultConfigFileName, data: a = defaultConfigValues}) => {
     let t;
     if (!sanityCheck(a)) return !1;
     switch (getFileExt(e)) {
@@ -46,13 +43,7 @@ function writeConfigFile({file: e = defaultConfigFileName, data: a = defaultConf
         return !1;
     }
     return shelljs.ShellString(t).to(e), !0;
-}
-
-function isValidBranchName(e) {
-    return checkGitRefFormat(`refs/heads/${e}`);
-}
-
-function sanityCheck(e) {
+}, isValidBranchName = e => checkGitRefFormat(`refs/heads/${e}`), sanityCheck = e => {
     for (const a in e) {
         const t = e[a];
         switch (a) {
@@ -83,15 +74,9 @@ function sanityCheck(e) {
         }
     }
     return !0;
-}
-
-function checkGitRefFormat(e) {
-    return 0 === shelljs.exec(`git check-ref-format "${e}"`, {
-        silent: !0
-    }).code;
-}
-
-const defaultConfigValues = {
+}, checkGitRefFormat = e => 0 === shelljs.exec(`git check-ref-format "${e}"`, {
+    silent: !0
+}).code, defaultConfigValues = {
     main: "master",
     usedev: !1,
     development: "develop",
@@ -103,9 +88,7 @@ const defaultConfigValues = {
     push: "always",
     delete: "always",
     tags: !0
-}, defaultConfigFileName = "gof.config.js", defaultConfigFileNames = [ defaultConfigFileName, ".gofrc.js", ".gofrc.json" ];
-
-function getCommentFor(e) {
+}, defaultConfigFileName = "gof.config.js", defaultConfigFileNames = [ defaultConfigFileName, ".gofrc.js", ".gofrc.json" ], getCommentFor = e => {
     switch (e) {
       case "main":
         return "Main (production) branch name. Default `master`";
@@ -143,20 +126,14 @@ function getCommentFor(e) {
       default:
         return "";
     }
-}
-
-function getFileExt(e) {
-    return path.extname(e);
-}
-
-function generateCommentedValues(e) {
+}, getFileExt = e => path.extname(e), generateCommentedValues = e => {
     const a = [];
     for (const t in e) {
-        const n = "string" == typeof e[t] ? `"${e[t]}"` : e[t];
-        a.push(`\t/** ${getCommentFor(t)} */\n\t${t}: ${n},`);
+        const r = "string" == typeof e[t] ? `"${e[t]}"` : e[t];
+        a.push(`\t/** ${getCommentFor(t)} */\n\t${t}: ${r},`);
     }
     return a;
-}
+};
 
 var name = "git-oneflow";
 
@@ -172,7 +149,7 @@ function _defineProperty(e, a, t) {
 class StartFeature {
     constructor() {
         _defineProperty(this, "command", "start <featureBranch>"), _defineProperty(this, "describe", "Start a new feature"), 
-        _defineProperty(this, "handler", async e => {
+        _defineProperty(this, "handler", e => {
             const a = e.usedev ? e.development : e.main;
             isValidBranchName(e.featureBranch) && shelljs.exec(`git checkout -b ${e.feature}/${e.featureBranch} ${a}`);
         });
@@ -273,127 +250,125 @@ class Init {
     }
 }
 
-function generateQuestions(e) {
-    return [ {
-        name: "main",
-        type: "input",
-        message: "Main (production) branch:",
-        default: e.main || "master",
-        validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
+const generateQuestions = e => [ {
+    name: "main",
+    type: "input",
+    message: "Main (production) branch:",
+    default: e.main || "master",
+    validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
+}, {
+    name: "usedev",
+    type: "confirm",
+    default: e.usedev || !1,
+    message: "Do you use a development branch?"
+}, {
+    name: "development",
+    type: "input",
+    message: "Development branch:",
+    default: e.development || "develop",
+    when: function(e) {
+        return e.usedev;
+    },
+    validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
+}, {
+    name: "feature",
+    type: "input",
+    message: "Feature branch:",
+    default: e.feature || "feature",
+    validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
+}, {
+    name: "release",
+    type: "input",
+    message: "Release branch:",
+    default: e.release || "release",
+    validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
+}, {
+    name: "hotfix",
+    type: "input",
+    message: "Hotfix branch:",
+    default: e.hotfix || "hotfix",
+    validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
+}, {
+    type: "list",
+    name: "integration",
+    message: "Which feature branch integration method do you want to use?",
+    default: e.integration - 1 || 1,
+    choices: [ {
+        name: "Integrate feature branch with main/development using rebase (rebase -> merge --ff-only).",
+        value: 1,
+        short: "rebase"
     }, {
-        name: "usedev",
-        type: "confirm",
-        default: e.usedev || !1,
-        message: "Do you use a development branch?"
+        name: "Feature is merged in main/development à la GitFlow (merge --no-ff).",
+        value: 2,
+        short: "merge --no-ff"
     }, {
-        name: "development",
-        type: "input",
-        message: "Development branch:",
-        default: e.development || "develop",
-        when: function(e) {
-            return e.usedev;
-        },
-        validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
+        name: "Mix the previous two: rebase and merge (rebase -> merge --no-ff).",
+        value: 3,
+        short: "rebase + merge --no-ff"
+    } ]
+}, {
+    name: "interactive",
+    type: "expand",
+    message: "Do you want to use rebase interactively (rebase -i)?",
+    default: e.interactive || "always",
+    choices: [ {
+        key: "y",
+        name: "Always",
+        value: "always"
     }, {
-        name: "feature",
-        type: "input",
-        message: "Feature branch:",
-        default: e.feature || "feature",
-        validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
+        key: "n",
+        name: "Never",
+        value: "never"
     }, {
-        name: "release",
-        type: "input",
-        message: "Release branch:",
-        default: e.release || "release",
-        validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
+        key: "a",
+        name: "Ask me every time",
+        value: "ask"
+    } ],
+    when: function(e) {
+        return 2 !== e.integration;
+    }
+}, {
+    name: "push",
+    type: "expand",
+    message: "Do you want to push to origin after merging?",
+    default: e.push || "always",
+    choices: [ {
+        key: "y",
+        name: "Always",
+        value: "always"
     }, {
-        name: "hotfix",
-        type: "input",
-        message: "Hotfix branch:",
-        default: e.hotfix || "hotfix",
-        validate: e => isValidBranchName(e) || "Please, choose a valid name for the branch"
+        key: "n",
+        name: "Never",
+        value: "never"
     }, {
-        type: "list",
-        name: "integration",
-        message: "Which feature branch integration method do you want to use?",
-        default: e.integration - 1 || 1,
-        choices: [ {
-            name: "Integrate feature branch with main/development using rebase (rebase -> merge --ff-only).",
-            value: 1,
-            short: "rebase"
-        }, {
-            name: "Feature is merged in main/development à la GitFlow (merge --no-ff).",
-            value: 2,
-            short: "merge --no-ff"
-        }, {
-            name: "Mix the previous two: rebase and merge (rebase -> merge --no-ff).",
-            value: 3,
-            short: "rebase + merge --no-ff"
-        } ]
+        key: "a",
+        name: "Ask me every time",
+        value: "ask"
+    } ]
+}, {
+    name: "delete",
+    type: "expand",
+    message: "Do you want to delete working branch after merging?",
+    default: e.push || "always",
+    choices: [ {
+        key: "y",
+        name: "Always",
+        value: "always"
     }, {
-        name: "interactive",
-        type: "expand",
-        message: "Do you want to use rebase interactively (rebase -i)?",
-        default: e.interactive || "always",
-        choices: [ {
-            key: "y",
-            name: "Always",
-            value: "always"
-        }, {
-            key: "n",
-            name: "Never",
-            value: "never"
-        }, {
-            key: "a",
-            name: "Ask me every time",
-            value: "ask"
-        } ],
-        when: function(e) {
-            return 2 !== e.integration;
-        }
+        key: "n",
+        name: "Never",
+        value: "never"
     }, {
-        name: "push",
-        type: "expand",
-        message: "Do you want to push to origin after merging?",
-        default: e.push || "always",
-        choices: [ {
-            key: "y",
-            name: "Always",
-            value: "always"
-        }, {
-            key: "n",
-            name: "Never",
-            value: "never"
-        }, {
-            key: "a",
-            name: "Ask me every time",
-            value: "ask"
-        } ]
-    }, {
-        name: "delete",
-        type: "expand",
-        message: "Do you want to delete working branch after merging?",
-        default: e.push || "always",
-        choices: [ {
-            key: "y",
-            name: "Always",
-            value: "always"
-        }, {
-            key: "n",
-            name: "Never",
-            value: "never"
-        }, {
-            key: "a",
-            name: "Ask me every time",
-            value: "ask"
-        } ]
-    }, {
-        name: "tags",
-        type: "confirm",
-        default: e.usedev || !0,
-        message: "Do you want automatic tagging of releases/hotfixes?"
-    } ];
-}
+        key: "a",
+        name: "Ask me every time",
+        value: "ask"
+    } ]
+}, {
+    name: "tags",
+    type: "confirm",
+    default: e.usedev || !0,
+    message: "Do you want automatic tagging of releases/hotfixes?"
+} ];
 
 async function askConfirmationBeforeWrite() {
     return (await inquirer.prompt([ {
@@ -414,12 +389,12 @@ class StartRelease {
 
 class FinishRelease {
     constructor() {
-        _defineProperty(this, "command", "finish <releaseName>"), _defineProperty(this, "desc", "Finishes a release."), 
-        _defineProperty(this, "handler", async e => handleFinish$1(e));
+        _defineProperty(this, "command", "finish <releaseName>"), _defineProperty(this, "describe", "Finishes a release."), 
+        _defineProperty(this, "handler", e => handleFinish$1(e));
     }
 }
 
-async function handleFinish$1(e) {
+const handleFinish$1 = async e => {
     const a = e.usedev ? e.development : e.main;
     shelljs.exec(`git checkout ${e.release}/${e.releaseName}`), e.tags && shelljs.exec(`git tag ${e.releaseName}`), 
     shelljs.exec(`git checkout ${a}`), shelljs.exec(`git merge ${e.release}/${e.releaseName}`);
@@ -450,26 +425,21 @@ async function handleFinish$1(e) {
       case "ask":
         await ask$1(`Do you want to delete branch ${e.release}/${e.releaseName}?`) && await deleteBranch(e);
     }
-}
-
-async function deleteBranch(e) {
+}, deleteBranch = async e => {
     shelljs.exec(`git branch -d ${e.release}/${e.releaseName}`), await ask$1(`Do you want to delete on origin branch ${e.release}/${e.releaseName}?`) && shelljs.exec(`git push origin :${e.release}/${e.releaseName}`);
-}
-
-async function ask$1(e) {
+}, ask$1 = async e => {
     return (await inquirer.prompt([ {
         type: "confirm",
         name: "accept",
         message: e
     } ])).accept;
-}
+};
 
 class Release {
     constructor() {
-        _defineProperty(this, "command", "release <command>"), _defineProperty(this, "desc", "Manage starting and finishing releases."), 
-        _defineProperty(this, "builder", function(e) {
-            return e.command(new StartRelease()).command(new FinishRelease());
-        }), _defineProperty(this, "handler", () => {});
+        _defineProperty(this, "command", "release <command>"), _defineProperty(this, "describe", "Manage starting and finishing releases."), 
+        _defineProperty(this, "builder", e => e.command(new StartRelease()).command(new FinishRelease())), 
+        _defineProperty(this, "handler", () => {});
     }
 }
 
@@ -485,11 +455,11 @@ class StartHotfix {
 class FinishHotfix {
     constructor() {
         _defineProperty(this, "command", "finish <hotfixName>"), _defineProperty(this, "describe", "Finishes a hotfix."), 
-        _defineProperty(this, "handler", async e => handleFinish$2(e));
+        _defineProperty(this, "handler", e => handleFinish$2(e));
     }
 }
 
-async function handleFinish$2(e) {
+const handleFinish$2 = async e => {
     const a = e.usedev ? e.development : e.main;
     shelljs.exec(`git checkout ${e.hotfix}/${e.hotfixName}`), e.tags && shelljs.exec(`git tag ${e.hotfixName}`), 
     shelljs.exec(`git checkout ${a}`), shelljs.exec(`git merge ${e.hotfix}/${e.hotfixName}`);
@@ -520,19 +490,15 @@ async function handleFinish$2(e) {
       case "ask":
         await ask$2(`Do you want to delete branch ${e.hotfix}/${e.hotfixName}?`) && await deleteBranch$1(e);
     }
-}
-
-async function deleteBranch$1(e) {
+}, deleteBranch$1 = async e => {
     shelljs.exec(`git branch -d ${e.hotfix}/${e.hotfixName}`), await ask$2(`Do you want to delete on origin branch ${e.hotfix}/${e.hotfixName}?`) && shelljs.exec(`git push origin :${e.hotfix}/${e.hotfixName}`);
-}
-
-async function ask$2(e) {
+}, ask$2 = async e => {
     return (await inquirer.prompt([ {
         type: "confirm",
         name: "accept",
         message: e
     } ])).accept;
-}
+};
 
 class Hotfix {
     constructor() {
