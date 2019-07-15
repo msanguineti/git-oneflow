@@ -5,14 +5,20 @@
  * https://opensource.org/licenses/MIT
  */
 
-import start from './feature/start'
-import finish from './feature/finish'
+/* eslint-disable no-unused-vars */
+/* eslint-enable @typescript-eslint/no-unused-vars */
+import { Argv, CommandModule } from 'yargs'
+import StartFeature from './feature/start'
+import FinishFeature from './feature/finish'
 
-export default {
-  command: 'feature <command>',
-  desc: 'Manage starting and finishing features',
-  builder: function (yargs: any) {
-    return yargs.command(start).command(finish)
-  },
-  handler: function (argv: { [key: string]: any }) {}
+export default class Feature implements CommandModule {
+  command = 'feature <command>'
+
+  describe = 'Manage starting and finishing features'
+
+  builder = (yargs: Argv) => {
+    return yargs.command(new StartFeature()).command(new FinishFeature())
+  }
+
+  handler = () => {}
 }

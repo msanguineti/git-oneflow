@@ -40,7 +40,7 @@ export type ConfigValues = { [key: string]: any }
  * @returns {ConfigValues} the default config values
  */
 export function getDefaultConfigValues (): ConfigValues {
-  return { ...defaultConfigValues, ...loadConfigValues() }
+  return { ...defaultConfigValues }
 }
 
 export function loadConfigFile (configFile?: string): ConfigValues {
@@ -103,7 +103,7 @@ export function writeConfigFile ({
   return true
 }
 
-export function isValidBranchName (branchName: string): boolean {
+export function isValidBranchName (branchName: string | unknown): boolean {
   return checkGitRefFormat(`refs/heads/${branchName}`)
 }
 

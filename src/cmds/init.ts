@@ -8,40 +8,41 @@
 import inquirer from 'inquirer'
 import {
   isValidBranchName,
-  writeConfigFile,
-  getDefaultConfigValues
+  writeConfigFile
   // ConfigValues
 } from '../core'
 
 import { success, error } from '../utils/text'
+/* eslint-disable no-unused-vars */
+/* eslint-enable @typescript-eslint/no-unused-vars */
+import { CommandModule, Arguments } from 'yargs'
 
-export default {
-  command: 'init [options]',
-  desc: 'Generate a config file',
-  builder: (yargs: any) => {
-    return yargs.option('y', {
-      alias: 'default-values',
-      describe:
-        'Auto-generate config file using default values. These values WILL NOT overwrite existing values!'
-    })
-  },
-  handler: async function (argv: { [key: string]: any }) {
+export default class Init implements CommandModule {
+  command = 'init [options]'
+
+  describe = 'Generate a config file'
+
+  // builder = (yargs: Argv) => {
+  //   return yargs.option('y', {
+  //     alias: 'default-values',
+  //     describe: `Auto-generate config file using default values.
+  //     This WILL overwrite existing values!`
+  //   })
+  // }
+
+  handler = async (argv: Arguments) => {
     try {
-      const jsonValues = argv.defaultValues
-        ? getDefaultConfigValues()
-        : await inquirer.prompt(generateQuestions(argv))
+      const jsonValues = await inquirer.prompt(generateQuestions(argv))
 
       console.log(JSON.stringify(jsonValues, null, 2))
 
-      // if (!argv.dryRun) {
-      if (argv.defaultValues || (await askConfirmationBeforeWrite())) {
+      if (await askConfirmationBeforeWrite()) {
         if (writeConfigFile({ data: jsonValues })) {
           console.log(success('Initialisation done!'))
         } else {
           console.error(error('Cannot write config file!'))
         }
       }
-      // }
     } catch (err) {
       console.error(error(err))
     }

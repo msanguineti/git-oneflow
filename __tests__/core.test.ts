@@ -62,7 +62,7 @@ describe('testing core functionalities', () => {
     test('config value from file is wrong, revert to defaults', () => {
       sh.ShellString(
         `{
-        "development": "asldk  /.. ,./3"
+      "development": "asldk  /.. ,./3"
       }`
       ).to(tempConfigFile)
 

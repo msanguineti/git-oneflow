@@ -6,28 +6,27 @@
  */
 
 import { isValidBranchName } from '../../core'
-// import { exec } from 'shelljs'
-// import simplegit from 'simple-git/promise'
 import { exec } from 'shelljs'
+/* eslint-disable no-unused-vars */
+/* eslint-enable @typescript-eslint/no-unused-vars */
+import { Arguments, CommandModule } from 'yargs'
 
 // const git = simplegit()
 
-export default {
-  command: 'start <hotfixName> <from>',
-  desc:
-    'Start a new hotfix.\n<hotfixName> should be something like `2.3.1`.\n<from> should be a branch (e.g. develop), a tag (e.g. 2.3.0) or a commit (e.g. 9af345)',
-  builder: (yargs: any) => {},
-  handler: (argv: { [key: string]: any }) => {
-    if (isValidBranchName(argv.hotfixName)) {
+export default class StartHotfix implements CommandModule {
+  command = 'start <hotfixName> <from>'
+
+  describe = `Start a new hotfix.
+  <hotfixName> should be something like \`2.3.1\`.
+  <from> should be a branch (e.g. develop), a tag (e.g. 2.3.0) or a commit (e.g. 9af345)`
+
+  // builder: (yargs: any) => {},
+  handler = (argv: Arguments) => {
+    if (
+      isValidBranchName(argv.hotfixName) &&
+      (argv.from ? isValidBranchName(argv.from) : true)
+    ) {
       exec(`git checkout -b ${argv.hotfix}/${argv.hotfixName} ${argv.from}`)
-      // try {
-      //   return git.checkoutBranch(
-      //     `${argv.hotfix}/${argv.hotfixName}`,
-      //     `${argv.from}`
-      //   )
-      // } catch (err) {
-      //   throw err
-      // }
     }
   }
 }

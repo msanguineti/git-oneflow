@@ -7,26 +7,23 @@
 
 import { isValidBranchName } from '../../core'
 import { exec } from 'shelljs'
-// import simplegit from 'simple-git/promise'
+/* eslint-disable no-unused-vars */
+/* eslint-enable @typescript-eslint/no-unused-vars */
+import { CommandModule, Arguments } from 'yargs'
 
-// const git = simplegit()
+export default class StartRelease implements CommandModule {
+  command = 'start <releaseName> <from>'
 
-export default {
-  command: 'start <releaseName> <from>',
-  desc:
-    'Start a new release.\n<releaseName> should be something like `2.3.0`.\n<from> should be a branch (e.g. develop) or a commit (e.g. 9af345)',
-  builder: (yargs: any) => {},
-  handler: (argv: { [key: string]: any }) => {
-    if (isValidBranchName(argv.releaseName)) {
+  describe = `Start a new release.
+  <releaseName> should be something like \`2.3.0\`.
+  <from> should be a branch (e.g. develop) or a commit (e.g. 9af345)`
+
+  handler = (argv: Arguments) => {
+    if (
+      isValidBranchName(argv.releaseName) &&
+      (argv.from ? isValidBranchName(argv.from) : true)
+    ) {
       exec(`git checkout -b ${argv.release}/${argv.releaseName} ${argv.from}`)
-      // try {
-      //   return git.checkoutBranch(
-      //     `${argv.release}/${argv.releaseName}`,
-      //     `${argv.from}`
-      //   )
-      // } catch (err) {
-      //   throw err
-      // }
     }
   }
 }

@@ -5,14 +5,20 @@
  * https://opensource.org/licenses/MIT
  */
 
-import start from './hotfix/start'
-import finish from './hotfix/finish'
+import StartHotfix from './hotfix/start'
+import FinishHotfix from './hotfix/finish'
+/* eslint-disable no-unused-vars */
+/* eslint-enable @typescript-eslint/no-unused-vars */
+import { CommandModule, Argv } from 'yargs'
 
-export default {
-  command: 'hotfix <command>',
-  desc: 'Manage starting and finishing hotfixes.',
-  builder: function (yargs: any) {
-    return yargs.command(start).command(finish)
-  },
-  handler: function (argv: { [key: string]: any }) {}
+export default class Hotfix implements CommandModule {
+  command = 'hotfix <command>'
+
+  describe = 'Manage starting and finishing hotfixes.'
+
+  builder = (yargs: Argv) => {
+    return yargs.command(new StartHotfix()).command(new FinishHotfix())
+  }
+
+  handler = () => {}
 }

@@ -7,38 +7,33 @@
 
 import yargs from 'yargs'
 import { which } from 'shelljs'
-import init from './cmds/init'
 import { loadConfigValues } from './core'
-import feature from './cmds/feature'
 import { basename } from 'path'
-import release from './cmds/release'
-import hotfix from './cmds/hotfix'
-
 import { name } from '../package.json'
+import Feature from './cmds/feature'
+import Init from './cmds/init'
+import Release from './cmds/release'
+import Hotfix from './cmds/hotfix'
+import { warning, error } from './utils/text'
 
 if (!which('git')) {
-  console.error("Sorry, git-OneFlow requires git... it's in the name")
+  console.error(error("Sorry, git-OneFlow requires git... it's in the name"))
   process.exit(1)
 }
 
-var argv = yargs
+const argv = yargs
   .scriptName(name)
   .version()
   .alias('v', 'version')
   .config(loadConfigValues())
   .pkgConf('git-oneflow')
-  .command(init)
-  .command(feature)
-  .command(release)
-  .command(hotfix)
-  // .option('x', {
-  //   alias: 'dry-run',
-  //   description: 'Show what the command would do'
-  // })
-  // .demandCommand(1, chalk.red.bold('Please, choose a command'))
+  .command(new Init())
+  .command(new Feature())
+  .command(new Release())
+  .command(new Hotfix())
   .help()
   .alias('h', 'help').argv
 
 if (argv['_'].length <= 0) {
-  console.log(`Try ${basename(process.argv[1])} --help`)
+  console.log(warning(`Try ${basename(process.argv[1])} --help`))
 }

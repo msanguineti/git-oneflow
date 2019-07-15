@@ -6,27 +6,20 @@
  */
 import { exec } from 'shelljs'
 import { isValidBranchName } from '../../core'
-// import simplegit from 'simple-git/promise'
+/* eslint-disable no-unused-vars */
+/* eslint-enable @typescript-eslint/no-unused-vars */
+import { Arguments, CommandModule } from 'yargs'
 
-// const git = simplegit()
+export default class StartFeature implements CommandModule {
+  command = 'start <featureBranch>'
 
-export default {
-  command: 'start <featureBranch>',
-  desc: 'Start a new feature',
-  builder: (yargs: any) => {},
-  handler: async (argv: { [key: string]: any }) => {
+  describe = 'Start a new feature'
+
+  handler = async (argv: Arguments) => {
     const branchOff = argv.usedev ? argv.development : argv.main
 
     if (isValidBranchName(argv.featureBranch)) {
       exec(`git checkout -b ${argv.feature}/${argv.featureBranch} ${branchOff}`)
-      // try {
-      //   return git.checkoutBranch(
-      //     `${argv.feature}/${argv.featureBranch}`,
-      //     `${branchOff}`
-      //   )
-      // } catch (err) {
-      //   throw err
-      // }
     }
   }
 }
