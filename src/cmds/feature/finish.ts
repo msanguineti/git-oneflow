@@ -108,9 +108,9 @@ const rebaseStep = async (
 const ask = async (question: string): Promise<string> => {
   const answer: { accept: string } = await prompt([
     {
-      type: 'confirm',
+      message: question,
       name: 'accept',
-      message: question
+      type: 'confirm'
     }
   ])
   return answer.accept

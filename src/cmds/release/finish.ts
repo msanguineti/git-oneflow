@@ -95,9 +95,9 @@ const deleteBranch = async (argv: Arguments) => {
 const ask = async (question: string) => {
   const answer: { accept: string } = await prompt([
     {
-      type: 'confirm',
+      message: question,
       name: 'accept',
-      message: question
+      type: 'confirm'
     }
   ])
   return answer.accept

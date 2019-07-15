@@ -162,17 +162,17 @@ const checkGitRefFormat = (value: string): boolean => {
 }
 
 const defaultConfigValues: ConfigValues = {
-  main: 'master',
-  usedev: false,
+  delete: 'always',
   development: 'develop',
   feature: 'feature',
-  release: 'release',
   hotfix: 'hotfix',
   integration: 1,
   interactive: 'always',
+  main: 'master',
   push: 'always',
-  delete: 'always',
-  tags: true
+  release: 'release',
+  tags: true,
+  usedev: false
 }
 
 const defaultConfigFileName: string = 'gof.config.js'
