@@ -6,7 +6,7 @@
  */
 
 import { info } from '../../utils/text'
-import inquirer from 'inquirer'
+import { prompt } from 'inquirer'
 import { exec } from 'shelljs'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
@@ -22,7 +22,7 @@ export class FinishRelease implements CommandModule {
   }
 }
 
-const handleFinish = async (argv: { [key: string]: any }) => {
+const handleFinish = async (argv: Arguments) => {
   const mergeInto = argv.usedev ? argv.development : argv.main
 
   exec(`git checkout ${argv.release}/${argv.releaseName}`)
@@ -79,7 +79,7 @@ const handleFinish = async (argv: { [key: string]: any }) => {
   }
 }
 
-const deleteBranch = async (argv: { [key: string]: any }) => {
+const deleteBranch = async (argv: Arguments) => {
   exec(`git branch -d ${argv.release}/${argv.releaseName}`)
   // await git.deleteLocalBranch(`${argv.release}/${argv.releaseName}`)
   if (
@@ -93,7 +93,7 @@ const deleteBranch = async (argv: { [key: string]: any }) => {
 }
 
 const ask = async (question: string) => {
-  const answer: { accept: string } = await inquirer.prompt([
+  const answer: { accept: string } = await prompt([
     {
       type: 'confirm',
       name: 'accept',

@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import inquirer from 'inquirer'
+import { prompt } from 'inquirer'
 import { spawnSync } from 'child_process'
 import { exec } from 'shelljs'
 /* eslint-disable no-unused-vars */
@@ -100,7 +100,7 @@ async function rebaseStep (argv: Arguments, mergeInto: string | unknown) {
 }
 
 async function ask (question: string) {
-  const answer: { accept: string } = await inquirer.prompt([
+  const answer: { accept: string } = await prompt([
     {
       type: 'confirm',
       name: 'accept',

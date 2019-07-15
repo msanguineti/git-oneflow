@@ -6,7 +6,7 @@
  */
 
 import { info } from '../../utils/text'
-import inquirer from 'inquirer'
+import { prompt } from 'inquirer'
 import { exec } from 'shelljs'
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
@@ -86,7 +86,7 @@ const deleteBranch = async (argv: Arguments) => {
 }
 
 const ask = async (question: string) => {
-  const answer: { accept: string } = await inquirer.prompt([
+  const answer: { accept: string } = await prompt([
     {
       type: 'confirm',
       name: 'accept',

@@ -12,13 +12,13 @@ import { FinishHotfix } from './hotfix/finish'
 import { CommandModule, Argv } from 'yargs'
 
 export class Hotfix implements CommandModule {
-  public command = 'hotfix <command>'
+  public command: string = 'hotfix <command>'
 
-  public describe = 'Manage starting and finishing hotfixes.'
+  public describe: string = 'Manage starting and finishing hotfixes.'
 
-  public builder = (yargs: Argv) => {
+  public builder = (yargs: Argv): Argv => {
     return yargs.command(new StartHotfix()).command(new FinishHotfix())
   }
 
-  public handler = () => {}
+  public handler = (): void => {}
 }
