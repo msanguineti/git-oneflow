@@ -53,7 +53,7 @@ const handleFinish = async (argv: Arguments): Promise<void> => {
       break
   }
   if (argv.usedev) {
-    exec(`git checkout master`)
+    exec(`git checkout ${argv.main}`)
     exec(`git merge --ff-only ${argv.hotfixName}`)
   }
   switch (argv.deleteBranch) {

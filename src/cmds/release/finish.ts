@@ -56,7 +56,7 @@ const handleFinish = async (argv: Arguments) => {
       break
   }
   if (argv.usedev) {
-    exec(`git checkout master`)
+    exec(`git checkout ${argv.main}`)
     // await git.checkout('master')
     exec(`git merge --ff-only ${argv.release}/${argv.releaseName}`)
     // await git.merge(['--ff-only', `${argv.release}/${argv.releaseName}`])
