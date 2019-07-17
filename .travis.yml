@@ -3,16 +3,10 @@ language: node_js
 node_js:
   - "lts/*"
   - "node"
-
-os:
-  - linux
-  - osx
-  - windows
   
 branches:
   only:
     - master
-    - greenkeper/
     - /^greenkeeper/.*$/
 
 cache:
