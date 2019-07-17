@@ -26,20 +26,15 @@ const handleFinish = async (argv: Arguments) => {
   const mergeInto = argv.usedev ? argv.development : argv.main
 
   exec(`git checkout ${argv.release}/${argv.releaseName}`)
-  // await git.checkout(`${argv.release}/${argv.releaseName}`)
   if (argv.tags) exec(`git tag ${argv.releaseName}`)
-  // if (argv.tags) await git.addTag(`${argv.releaseName}`)
   exec(`git checkout ${mergeInto}`)
-  // await git.checkout(`${mergeInto}`)
   exec(`git merge ${argv.release}/${argv.releaseName}`)
-  // await git.merge([`${argv.release}/${argv.releaseName}`])
 
   const tags = argv.tags ? { '--tags': null } : {}
 
   switch (argv.push) {
     case 'always':
       exec(`git push ${tags} origin ${mergeInto}`)
-      // await git.push('origin', `${mergeInto}`, tags)
       break
     case 'never':
       console.log(
@@ -51,15 +46,12 @@ const handleFinish = async (argv: Arguments) => {
     case 'ask':
       if (await ask(`Do you want to push to ${mergeInto}?`)) {
         exec(`git push ${tags} origin ${mergeInto}`)
-        // await git.push('origin', `${mergeInto}`, tags)
       }
       break
   }
   if (argv.usedev) {
     exec(`git checkout ${argv.main}`)
-    // await git.checkout('master')
     exec(`git merge --ff-only ${argv.release}/${argv.releaseName}`)
-    // await git.merge(['--ff-only', `${argv.release}/${argv.releaseName}`])
   }
   switch (argv.deleteBranch) {
     case 'always':
@@ -81,13 +73,11 @@ const handleFinish = async (argv: Arguments) => {
 
 const deleteBranch = async (argv: Arguments) => {
   exec(`git branch -d ${argv.release}/${argv.releaseName}`)
-  // await git.deleteLocalBranch(`${argv.release}/${argv.releaseName}`)
   if (
     await ask(
       `Do you want to delete on origin branch ${argv.release}/${argv.releaseName}?`
     )
   ) {
-    // await git.push('origin', `:${argv.release}/${argv.releaseName}`)
     exec(`git push origin :${argv.release}/${argv.releaseName}`)
   }
 }
