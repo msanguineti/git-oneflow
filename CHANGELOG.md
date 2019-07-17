@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.1](https://github.com/msanguineti/git-oneflow/compare/v0.8.0...v0.8.1) (2019-07-17)
+
+
+### Bug Fixes
+
+* close issue [#22](https://github.com/msanguineti/git-oneflow/issues/22) ([fc5399e](https://github.com/msanguineti/git-oneflow/commit/fc5399e))
+
+
+
 ## [0.8.0](https://github.com/msanguineti/git-oneflow/compare/v0.7.8...v0.8.0) (2019-07-15)
 
 

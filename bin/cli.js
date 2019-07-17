@@ -256,7 +256,7 @@ const handleFinish$1 = async e => {
       case "ask":
         await ask$1(`Do you want to push to ${a}?`) && shelljs.exec(`git push ${t} origin ${a}`);
     }
-    switch (e.usedev && (shelljs.exec("git checkout master"), shelljs.exec(`git merge --ff-only ${e.hotfixName}`)), 
+    switch (e.usedev && (shelljs.exec(`git checkout ${e.main}`), shelljs.exec(`git merge --ff-only ${e.hotfixName}`)), 
     e.deleteBranch) {
       case "always":
         await deleteBranch(e);
@@ -466,7 +466,7 @@ const handleFinish$2 = async e => {
       case "ask":
         await ask$2(`Do you want to push to ${a}?`) && shelljs.exec(`git push ${t} origin ${a}`);
     }
-    switch (e.usedev && (shelljs.exec("git checkout master"), shelljs.exec(`git merge --ff-only ${e.release}/${e.releaseName}`)), 
+    switch (e.usedev && (shelljs.exec(`git checkout ${e.main}`), shelljs.exec(`git merge --ff-only ${e.release}/${e.releaseName}`)), 
     e.deleteBranch) {
       case "always":
         await deleteBranch$1(e);
