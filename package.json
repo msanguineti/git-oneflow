@@ -46,7 +46,7 @@
     "@babel/preset-typescript": "^7.3.3",
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
-    "@types/find-up": "^2.1.1",
+    "@types/find-up": "^4.0.0",
     "@types/inquirer": "^6.0.3",
     "@types/jest": "^24.0.15",
     "@types/shelljs": "^0.8.5",
