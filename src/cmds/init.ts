@@ -7,7 +7,7 @@
 
 /* eslint-disable no-unused-vars */
 /* eslint-enable @typescript-eslint/no-unused-vars */
-import { Answers, prompt, Question } from 'inquirer'
+import { Answers, prompt, QuestionCollection } from 'inquirer'
 import { Arguments, CommandModule, Argv } from 'yargs'
 import {
   ConfigValues,
@@ -53,7 +53,7 @@ export class Init implements CommandModule {
   }
 }
 
-const generateQuestions = (argv: Arguments): Question[] => {
+const generateQuestions = (argv: Arguments): QuestionCollection[] => {
   return [
     {
       default: (argv.main as string) || 'master',
