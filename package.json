@@ -72,7 +72,7 @@
     "find-up": "^4.1.0",
     "inquirer": "^6.5.0",
     "shelljs": "^0.8.3",
-    "yargs": "^13.3.0"
+    "yargs": "^14.0.0"
   },
   "standard": {
     "parser": "@typescript-eslint/parser",
