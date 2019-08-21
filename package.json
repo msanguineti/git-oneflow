@@ -63,7 +63,7 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.1.1",
-    "standard": "^13.0.2",
+    "standard": "^14.0.0",
     "standard-version": "^7.0.0",
     "typescript": "^3.5.3"
   },
