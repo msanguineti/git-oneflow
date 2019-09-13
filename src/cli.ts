@@ -34,6 +34,6 @@ const argv = yargs
   .help()
   .alias('h', 'help').argv
 
-if (argv['_'].length <= 0) {
+if (argv._.length <= 0) {
   console.log(warning(`Try ${basename(process.argv[1])} --help`))
 }
