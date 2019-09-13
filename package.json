@@ -16,7 +16,7 @@
     "prebuild": "run-s test clean",
     "build": "rollup -c",
     "format": "prettier --write **/*.ts",
-    "lint": "standard **/*.ts --fix",
+    "lint": "standard \"**/*.ts\" --fix",
     "watch": "rollup -c --watch",
     "typecheck": "tsc",
     "release": "standard-version"
