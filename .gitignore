@@ -64,3 +64,5 @@ typings/
 .vscode
 
 gof.config.js
+
+bin/
