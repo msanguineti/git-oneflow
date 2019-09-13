@@ -7,7 +7,7 @@
     "git-oneflow": "bin/cli.js"
   },
   "files": [
-    "bin/**/*"
+    "bin/cli.js"
   ],
   "scripts": {
     "pretest": "run-s typecheck format lint",
