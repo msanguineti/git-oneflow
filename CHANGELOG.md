@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.2](https://github.com/msanguineti/git-oneflow/compare/v0.8.1...v0.8.2) (2019-09-13)
+
+
+### Bug Fixes
+
+* missing double quotes from linter cmd ([fc3c523](https://github.com/msanguineti/git-oneflow/commit/fc3c523))
+* removed bin dir from repo ([270bf87](https://github.com/msanguineti/git-oneflow/commit/270bf87))
+* updated outdated packages ([51423a1](https://github.com/msanguineti/git-oneflow/commit/51423a1))
+
 ### [0.8.1](https://github.com/msanguineti/git-oneflow/compare/v0.8.0...v0.8.1) (2019-07-17)
 
 
