@@ -1,9 +1,9 @@
 language: node_js
-  
+
 node_js:
-  - "lts/*"
-  - "node"
-  
+  - 'lts/*'
+  - 'node'
+
 branches:
   only:
     - master
@@ -11,4 +11,4 @@ branches:
 
 cache:
   directories:
-    - "node_modules"
+    - 'node_modules'
