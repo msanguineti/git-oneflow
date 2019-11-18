@@ -50,7 +50,7 @@ export const getDefaultConfigValues = (): ConfigValues => {
  */
 export const loadConfigFile = (configFile?: string): ConfigValues => {
   if (!configFile || !test('-f', configFile)) {
-    return defaultConfigValues
+    throw new Error(`Cannot load configuration values from: ${configFile}`)
   }
 
   const configValues =
@@ -58,11 +58,8 @@ export const loadConfigFile = (configFile?: string): ConfigValues => {
       ? require(configFile)
       : JSON.parse(sed(/(\/\*[\w\W]+\*\/|(\/\/.*))/g, '', configFile))
 
-  if (sanityCheck(configValues)) {
-    return { ...defaultConfigValues, ...configValues }
-  } else {
-    return { ...defaultConfigValues }
-  }
+  sanityCheck(configValues)
+  return { ...defaultConfigValues, ...configValues }
 }
 
 /**
@@ -72,6 +69,8 @@ export const loadConfigFile = (configFile?: string): ConfigValues => {
  */
 export const loadConfigValues = (): ConfigValues => {
   const configFile = findUp.sync(defaultConfigFileNames) || undefined
+
+  if (!configFile) return defaultConfigValues
 
   return loadConfigFile(configFile)
 }
@@ -92,7 +91,7 @@ export const writeConfigFile = ({
 }): boolean => {
   let toWrite: string
 
-  if (!sanityCheck(data)) return false
+  sanityCheck(data)
 
   switch (getFileExt(file)) {
     case '.js':
@@ -139,17 +138,23 @@ const sanityCheck = (configValues: ConfigValues): boolean => {
         case 'release':
         case 'feature':
           if (!isValidBranchName(element)) {
-            return false
+            throw new Error(
+              `${key} branch name is invalid. Value found: ${element}`
+            )
           }
           break
         case 'usedev':
           if (typeof element !== 'boolean') {
-            return false
+            throw new Error(
+              `${key} has to be either 'true' or 'false'. Value found: ${element}`
+            )
           }
           break
         case 'integration':
           if (typeof element !== 'number' || (element < 1 || element > 3)) {
-            return false
+            throw new Error(
+              `${key} has to be a number >=1 and <=3. Value found: ${element}`
+            )
           }
           break
         case 'interactive':
@@ -159,12 +164,16 @@ const sanityCheck = (configValues: ConfigValues): boolean => {
             typeof element !== 'string' ||
             !element.match(/(ask|always|never)/)
           ) {
-            return false
+            throw new Error(
+              `${key} has to be either 'ask', 'always' or 'never'. Value found: ${element}`
+            )
           }
           break
         case 'tags':
           if (typeof element !== 'boolean') {
-            return false
+            throw new Error(
+              `${key} has to be either 'true' or 'false'. Value found: ${element}`
+            )
           }
           break
       }
@@ -200,7 +209,7 @@ const defaultConfigFileName: string = 'gof.config.js'
 const defaultConfigFileNames: string[] = [
   defaultConfigFileName,
   '.gofrc.js',
-  '.gofrc.json'
+  '.gofrc'
 ]
 
 // const supportedExtensions = ['.js', '.json']

@@ -9,6 +9,7 @@ import { prompt } from 'inquirer'
 import { exec } from 'shelljs'
 import { Arguments, CommandModule } from 'yargs'
 import { info } from '../../utils/text'
+import { loadConfigFile } from '../../core'
 
 export class FinishRelease implements CommandModule {
   public command: string = 'finish <releaseName>'
@@ -21,6 +22,8 @@ export class FinishRelease implements CommandModule {
 }
 
 const handleFinish = async (argv: Arguments) => {
+  if (argv.c) loadConfigFile(argv.c as string)
+
   const mergeInto = argv.usedev ? argv.development : argv.main
 
   exec(`git checkout ${argv.release}/${argv.releaseName}`)

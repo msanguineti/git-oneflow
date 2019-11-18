@@ -9,6 +9,7 @@ import { prompt } from 'inquirer'
 import { exec } from 'shelljs'
 import { Arguments, CommandModule } from 'yargs'
 import { info } from '../../utils/text'
+import { loadConfigFile } from '../../core'
 
 export class FinishHotfix implements CommandModule {
   public command: string = 'finish <hotfixName>'
@@ -16,6 +17,8 @@ export class FinishHotfix implements CommandModule {
   public describe: string = 'Finishes a hotfix.'
 
   public handler = (argv: Arguments): Promise<void> => {
+    if (argv.c) loadConfigFile(argv.c as string)
+
     return handleFinish(argv)
   }
 }

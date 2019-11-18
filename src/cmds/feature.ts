@@ -18,5 +18,5 @@ export class Feature implements CommandModule {
     return yargs.command(new StartFeature()).command(new FinishFeature())
   }
 
-  public handler = (): void => {}
+  public handler = () => {}
 }
