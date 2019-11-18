@@ -1,26 +1,26 @@
 # git-OneFlow <!-- omit in toc -->
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cf218c6295b74730baeb4395052d8f7f)](https://app.codacy.com/app/msanguineti/git-oneflow?utm_source=github.com&utm_medium=referral&utm_content=msanguineti/git-oneflow&utm_campaign=Badge_Grade_Settings)
-![npm](https://img.shields.io/npm/v/git-oneflow.svg) ![Travis (.org)](https://img.shields.io/travis/msanguineti/git-oneflow.svg) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![Greenkeeper badge](https://badges.greenkeeper.io/msanguineti/git-oneflow.svg)](https://greenkeeper.io/)
+[![npm](https://img.shields.io/npm/v/git-oneflow.svg)](https://www.npmjs.com/package/git-oneflow) ![Travis (.org)](https://img.shields.io/travis/msanguineti/git-oneflow.svg) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![Greenkeeper badge](https://badges.greenkeeper.io/msanguineti/git-oneflow.svg)](https://greenkeeper.io/)
 
 CLI tools implementing the *OneFlow* git branching model.
 
 ## Documentation <!-- omit in toc -->
 
-- [Introduction](#Introduction)
-- [Description](#Description)
-- [Installation](#Installation)
-- [Usage](#Usage)
-- [Configuration](#Configuration)
-  - [Defaults](#Defaults)
-    - [One main branch](#One-main-branch)
-    - [Feature branches](#Feature-branches)
-    - [Release/Hotfix branches](#ReleaseHotfix-branches)
-      - [Tags](#Tags)
-  - [Customisation](#Customisation)
-    - [Options](#Options)
-- [Changelog](#Changelog)
-- [License & Disclaimer](#License--Disclaimer)
+- [Introduction](#introduction)
+- [Description](#description)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+  - [Defaults](#defaults)
+    - [One main branch](#one-main-branch)
+    - [Feature branches](#feature-branches)
+    - [Release/Hotfix branches](#releasehotfix-branches)
+      - [Tags](#tags)
+  - [Customisation](#customisation)
+    - [Options](#options)
+- [Changelog](#changelog)
+- [License & Disclaimer](#license--disclaimer)
   
 ## Introduction
 
