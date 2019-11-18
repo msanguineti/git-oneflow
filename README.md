@@ -99,6 +99,8 @@ git push origin master
 git branch -d feature/my-feature
 ```
 
+The rebase step might be set to perform always, never or ask the user everytime. Also, passing the option `--overwrite-interactive` will make the step perform no matter the option set (see [Options](#options))
+
 #### Release/Hotfix branches
 
 Releases and hotfixes share the same workflow: (just substitute `hotfix` for `release` in the following examples)
@@ -169,15 +171,16 @@ By default, **_git-OneFlow_** checks for a config file (`gof.config.js`, `.gofrc
 ```js
 // package.json
 {
-  "git-oneflow": {
-    // options
+  "gof": {
+    "feature": "feat",
+    "delete": "ask"
   }
 }
 ```
 
 The `package.json` section takes precedence over any file.
 
-By passing `--config <fileName>` it is also possible to specify the config file to use.
+Passing `--config <fileName>` allows to specify the config file to use.
 
 #### Options
 
@@ -185,7 +188,7 @@ By passing `--config <fileName>` it is also possible to specify the config file 
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `main`        | name of the main (production) branch (default `master`)                                                                           |
 | `usedev`      | whether to use a development branch (default `false`)                                                                             |
-| `development` | the name of the development branch (default: `develop`)                                                                           |
+| `development` | the name of the development branch (default: `develop` iff `usedev` is `true`)                                                    |
 | `feature`     | name of the features branch (default `feature`)                                                                                   |
 | `release`     | name of the releases branch (default `release`)                                                                                   |
 | `hotfix`      | name of the hotfixes branch (default `hotfix`)                                                                                    |
@@ -196,6 +199,23 @@ By passing `--config <fileName>` it is also possible to specify the config file 
 | `tags`        | whether to automatically tag releases and hotfixes (default: `true`)                                                              |
 
 When an option is set to `ask`, the user will be prompted to choose an action when appropriate.
+
+`gof.config.js` with default values:
+
+```js
+module.exports = {
+  main: 'master',
+  usedev: false,
+  feature: 'feature',
+  release: 'release',
+  hotfix: 'hotfix',
+  integration: 1,
+  interactive: 'always',
+  push: 'always',
+  delete: 'always',
+  tags: true
+}
+```
 
 ## Changelog
 
