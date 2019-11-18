@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.9.0](https://github.com/msanguineti/git-oneflow/compare/v0.8.7...v0.9.0) (2019-11-18)
+
+### ⚠ BREAKING CHANGES
+
+- wrong parameters in config files now throw errors
+
+### Features
+
+- pass config file in CLI options ([956ae30](https://github.com/msanguineti/git-oneflow/commit/956ae30))
+
 ### [0.8.7](https://github.com/msanguineti/git-oneflow/compare/v0.8.6...v0.8.7) (2019-11-18)
 
 ### Bug Fixes
