@@ -15,7 +15,14 @@ export class Hotfix implements CommandModule {
   public describe: string = 'Manage starting and finishing hotfixes.'
 
   public builder = (yargs: Argv): Argv => {
-    return yargs.command(new StartHotfix()).command(new FinishHotfix())
+    return yargs
+      .option('c', {
+        alias: 'config',
+        type: 'string',
+        description: 'Config file to use'
+      })
+      .command(new StartHotfix())
+      .command(new FinishHotfix())
   }
 
   public handler = (): void => {}

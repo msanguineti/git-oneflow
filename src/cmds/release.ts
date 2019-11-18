@@ -15,7 +15,14 @@ export class Release implements CommandModule {
   public describe: string = 'Manage starting and finishing releases.'
 
   public builder = (yargs: Argv): Argv => {
-    return yargs.command(new StartRelease()).command(new FinishRelease())
+    return yargs
+      .option('c', {
+        alias: 'config',
+        type: 'string',
+        description: 'Config file to use'
+      })
+      .command(new StartRelease())
+      .command(new FinishRelease())
   }
 
   public handler = (): void => {}

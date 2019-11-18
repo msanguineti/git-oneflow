@@ -26,16 +26,10 @@ const argv = yargs
   .version()
   .alias('v', 'version')
   .config(loadConfigValues())
-  .pkgConf('git-oneflow')
   .command(new Init())
   .command(new Feature())
   .command(new Release())
   .command(new Hotfix())
-  .option('c', {
-    alias: 'config',
-    type: 'string',
-    description: 'Config file to use'
-  })
   .help()
   .alias('h', 'help').argv
 

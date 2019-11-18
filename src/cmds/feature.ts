@@ -15,7 +15,14 @@ export class Feature implements CommandModule {
   public describe: string = 'Manage starting and finishing features'
 
   public builder = (yargs: Argv): Argv => {
-    return yargs.command(new StartFeature()).command(new FinishFeature())
+    return yargs
+      .option('c', {
+        alias: 'config',
+        type: 'string',
+        description: 'Config file to use'
+      })
+      .command(new StartFeature())
+      .command(new FinishFeature())
   }
 
   public handler = () => {}
