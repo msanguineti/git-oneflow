@@ -6,7 +6,7 @@
  */
 import { exec } from 'shelljs'
 import { Arguments, CommandModule } from 'yargs'
-import { isValidBranchName } from '../../core'
+import { isValidBranchName, loadConfigFile } from '../../core'
 
 export class StartFeature implements CommandModule {
   public command: string = 'start <featureBranch>'
@@ -14,6 +14,8 @@ export class StartFeature implements CommandModule {
   public describe: string = 'Start a new feature'
 
   public handler = (argv: Arguments) => {
+    if (argv.c) loadConfigFile(argv.c as string)
+
     const branchOff = argv.usedev ? argv.development : argv.main
 
     if (

@@ -31,9 +31,13 @@ const argv = yargs
   .command(new Feature())
   .command(new Release())
   .command(new Hotfix())
+  .option('c', {
+    alias: 'config',
+    type: 'string',
+    description: 'Config file to use'
+  })
   .help()
   .alias('h', 'help').argv
 
-if (argv._.length <= 0) {
+if (argv._.length <= 0)
   console.log(warning(`Try ${basename(process.argv[1])} --help`))
-}

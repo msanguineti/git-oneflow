@@ -18,15 +18,11 @@ describe('testing core functionalities', () => {
       expect(defaults.integration).toEqual(1)
     })
 
-    test('load default values if no config files - part I', () => {
-      const defaults = core.loadConfigFile()
-
-      expect(defaults.main).toMatch('master')
-      expect(defaults.usedev).not.toBeTruthy()
-      expect(defaults.integration).toEqual(1)
+    test('throw if no config file is found', () => {
+      expect(() => core.loadConfigFile()).toThrow(/^Cannot load/)
     })
 
-    test('load default values if no config files - part II', () => {
+    test('load default values if no default config files are found', () => {
       const defaults = core.loadConfigValues()
 
       expect(defaults.main).toMatch('master')
@@ -66,10 +62,7 @@ describe('testing core functionalities', () => {
       }`
       ).to(tempConfigFile)
 
-      const defaults = core.loadConfigFile(tempConfigFile)
-
-      expect(defaults).toBeDefined()
-      expect(defaults.development).toMatch('develop')
+      expect(() => core.loadConfigFile(tempConfigFile)).toThrow(/^development/)
     })
 
     test('write to (and load from) .js file', () => {
@@ -95,27 +88,35 @@ describe('testing core functionalities', () => {
     })
 
     test('config value for a branch name is invalid', () => {
-      core.writeConfigFile({
-        data: { development: 'akn//&&svn...#k/' }
-      })
+      expect(() =>
+        core.writeConfigFile({
+          data: { development: 'akn//&&svn...#k/' }
+        })
+      ).toThrow(/^development/)
     })
 
     test('config value usedev is invalid', () => {
-      core.writeConfigFile({
-        data: { usedev: 'true' }
-      })
+      expect(() =>
+        core.writeConfigFile({
+          data: { usedev: 'true' }
+        })
+      ).toThrow(/^usedev/)
     })
 
     test('config value push is invalid', () => {
-      core.writeConfigFile({
-        data: { push: 'maybe' }
-      })
+      expect(() =>
+        core.writeConfigFile({
+          data: { push: 'maybe' }
+        })
+      ).toThrow(/^push/)
     })
 
     test('config value integration is invalid', () => {
-      core.writeConfigFile({
-        data: { integration: 4 }
-      })
+      expect(() =>
+        core.writeConfigFile({
+          data: { integration: 4 }
+        })
+      ).toThrow(/^integration/)
     })
   })
 

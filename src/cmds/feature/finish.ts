@@ -9,7 +9,7 @@ import { spawnSync } from 'child_process'
 import { prompt } from 'inquirer'
 import { exec } from 'shelljs'
 import { Arguments, Argv, CommandModule } from 'yargs'
-import { isValidBranchName } from '../../core'
+import { isValidBranchName, loadConfigFile } from '../../core'
 
 export class FinishFeature implements CommandModule {
   public command: string = 'finish <featureBranch> [options]'
@@ -25,6 +25,8 @@ export class FinishFeature implements CommandModule {
   }
 
   public handler = (argv: Arguments) => {
+    if (argv.c) loadConfigFile(argv.c as string)
+
     const mergeInto = argv.usedev ? argv.development : argv.main
     if (isValidBranchName(mergeInto)) return handleFinish(argv, mergeInto)
   }
