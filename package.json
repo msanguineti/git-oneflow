@@ -17,6 +17,7 @@
     "lint": "prettier-standard --lint",
     "watch": "rollup -c --watch",
     "typecheck": "tsc",
+    "prerelease": "npm run build",
     "release": "standard-version"
   },
   "repository": {
