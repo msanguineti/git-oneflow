@@ -66,7 +66,7 @@ export const loadConfigFile = (configFile?: string): ConfigValues => {
 }
 
 /**
- * Tries to laod configuration files defined in a file.abs
+ * Tries to load configuration files defined in a file
  *
  * @returns {ConfigValues} config values loaded from a file or default configuration values if there's no file.
  */
