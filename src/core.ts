@@ -130,42 +130,44 @@ export const isValidTagName = (tagName: string): boolean => {
 
 const sanityCheck = (configValues: ConfigValues): boolean => {
   for (const key in configValues) {
-    const element = configValues[key]
-    switch (key) {
-      case 'main':
-      case 'development':
-      case 'hotfix':
-      case 'release':
-      case 'feature':
-        if (!isValidBranchName(element)) {
-          return false
-        }
-        break
-      case 'usedev':
-        if (typeof element !== 'boolean') {
-          return false
-        }
-        break
-      case 'integration':
-        if (typeof element !== 'number' || (element < 1 || element > 3)) {
-          return false
-        }
-        break
-      case 'interactive':
-      case 'push':
-      case 'delete':
-        if (
-          typeof element !== 'string' ||
-          !element.match(/(ask|always|never)/)
-        ) {
-          return false
-        }
-        break
-      case 'tags':
-        if (typeof element !== 'boolean') {
-          return false
-        }
-        break
+    if (configValues.hasOwnProperty(key)) {
+      const element = configValues[key]
+      switch (key) {
+        case 'main':
+        case 'development':
+        case 'hotfix':
+        case 'release':
+        case 'feature':
+          if (!isValidBranchName(element)) {
+            return false
+          }
+          break
+        case 'usedev':
+          if (typeof element !== 'boolean') {
+            return false
+          }
+          break
+        case 'integration':
+          if (typeof element !== 'number' || (element < 1 || element > 3)) {
+            return false
+          }
+          break
+        case 'interactive':
+        case 'push':
+        case 'delete':
+          if (
+            typeof element !== 'string' ||
+            !element.match(/(ask|always|never)/)
+          ) {
+            return false
+          }
+          break
+        case 'tags':
+          if (typeof element !== 'boolean') {
+            return false
+          }
+          break
+      }
     }
   }
   return true
@@ -251,13 +253,13 @@ const getFileExt = (configFile: string) => {
 const generateCommentedValues = (configValues: ConfigValues) => {
   const output: string[] = []
   for (const key in configValues) {
-    // if (configValues.hasOwnProperty(key)) {
-    const element =
-      typeof configValues[key] === 'string'
-        ? `"${configValues[key]}"`
-        : configValues[key]
-    output.push(`\t/** ${getCommentFor(key)} */\n\t${key}: ${element},`)
-    // }
+    if (configValues.hasOwnProperty(key)) {
+      const element =
+        typeof configValues[key] === 'string'
+          ? `"${configValues[key]}"`
+          : configValues[key]
+      output.push(`\t/** ${getCommentFor(key)} */\n\t${key}: ${element},`)
+    }
   }
   return output
 }
