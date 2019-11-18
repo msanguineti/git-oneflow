@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.10.3](https://github.com/msanguineti/git-oneflow/compare/v0.10.2...v0.10.3) (2019-11-18)
+
+### Bug Fixes
+
+- upgrade packages ([2b2797e](https://github.com/msanguineti/git-oneflow/commit/2b2797e2645f483f9bd59f0e844d6a972206905d))
+
 ### [0.10.2](https://github.com/msanguineti/git-oneflow/compare/v0.10.1...v0.10.2) (2019-11-18)
 
 ### Bug Fixes
