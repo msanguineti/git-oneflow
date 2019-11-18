@@ -8,6 +8,9 @@
 import findUp from 'find-up'
 import { extname } from 'path'
 import { exec, sed, ShellString, test } from 'shelljs'
+import { error, info } from './utils/text'
+
+const gof = require('../package.json').gof
 
 export type ConfigValues = { [key: string]: string | number | boolean }
 
@@ -50,7 +53,7 @@ export const getDefaultConfigValues = (): ConfigValues => {
  */
 export const loadConfigFile = (configFile?: string): ConfigValues => {
   if (!configFile || !test('-f', configFile)) {
-    throw new Error(`Cannot load configuration values from: ${configFile}`)
+    throw `Cannot load configuration values from: ${info(configFile)}`
   }
 
   const configValues =
@@ -68,6 +71,10 @@ export const loadConfigFile = (configFile?: string): ConfigValues => {
  * @returns {ConfigValues} config values loaded from a file or default configuration values if there's no file.
  */
 export const loadConfigValues = (): ConfigValues => {
+  if (gof) {
+    sanityCheck(gof)
+    return gof
+  }
   const configFile = findUp.sync(defaultConfigFileNames) || undefined
 
   if (!configFile) return defaultConfigValues
@@ -127,6 +134,38 @@ export const isValidTagName = (tagName: string): boolean => {
   return checkGitRefFormat(`refs/tags/${tagName}`)
 }
 
+const validateMultipleChoiceOption = (element: string, key: string) => {
+  if (typeof element !== 'string' || !element.match(/^(ask|always|never)$/)) {
+    throw `${info(
+      key
+    )} has to be either 'ask', 'always' or 'never'. Value found: ${error(
+      element
+    )}`
+  }
+}
+
+const validateIntegrationOption = (element: number, key: string) => {
+  if (typeof element !== 'number' || (element < 1 || element > 3)) {
+    throw `${info(key)} has to be a number >=1 and <=3. Value found: ${error(
+      element
+    )}`
+  }
+}
+
+const validateBooleanOption = (element: boolean, key: string) => {
+  if (typeof element !== 'boolean') {
+    throw `${info(
+      key
+    )} has to be either 'true' or 'false'. Value found: ${error(element)}`
+  }
+}
+
+const validateBranchName = (element: string, key: string) => {
+  if (!isValidBranchName(element)) {
+    throw `${info(key)} branch name is invalid. Value found: ${error(element)}`
+  }
+}
+
 const sanityCheck = (configValues: ConfigValues): boolean => {
   for (const key in configValues) {
     if (configValues.hasOwnProperty(key)) {
@@ -137,45 +176,24 @@ const sanityCheck = (configValues: ConfigValues): boolean => {
         case 'hotfix':
         case 'release':
         case 'feature':
-          if (!isValidBranchName(element)) {
-            throw new Error(
-              `${key} branch name is invalid. Value found: ${element}`
-            )
-          }
+          validateBranchName(element as string, key)
           break
         case 'usedev':
-          if (typeof element !== 'boolean') {
-            throw new Error(
-              `${key} has to be either 'true' or 'false'. Value found: ${element}`
-            )
-          }
+          validateBooleanOption(element as boolean, key)
           break
         case 'integration':
-          if (typeof element !== 'number' || (element < 1 || element > 3)) {
-            throw new Error(
-              `${key} has to be a number >=1 and <=3. Value found: ${element}`
-            )
-          }
+          validateIntegrationOption(element as number, key)
           break
         case 'interactive':
         case 'push':
         case 'delete':
-          if (
-            typeof element !== 'string' ||
-            !element.match(/(ask|always|never)/)
-          ) {
-            throw new Error(
-              `${key} has to be either 'ask', 'always' or 'never'. Value found: ${element}`
-            )
-          }
+          validateMultipleChoiceOption(element as string, key)
           break
         case 'tags':
-          if (typeof element !== 'boolean') {
-            throw new Error(
-              `${key} has to be either 'true' or 'false'. Value found: ${element}`
-            )
-          }
+          validateBooleanOption(element as boolean, key)
           break
+        default:
+          throw `Unknown option ${error(key)} found in configuration`
       }
     }
   }

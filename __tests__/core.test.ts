@@ -19,7 +19,7 @@ describe('testing core functionalities', () => {
     })
 
     test('throw if no config file is found', () => {
-      expect(() => core.loadConfigFile()).toThrow(/^Cannot load/)
+      expect(() => core.loadConfigFile()).toThrow(/Cannot load/)
     })
 
     test('load default values if no default config files are found', () => {
@@ -42,7 +42,7 @@ describe('testing core functionalities', () => {
 
       core.writeConfigFile({
         file: tempConfigFile,
-        data: { test: 'test value' }
+        data: { hotfix: 'hotfix' }
       })
 
       expect(sh.test('-f', tempConfigFile)).toBeTruthy()
@@ -52,17 +52,17 @@ describe('testing core functionalities', () => {
       const defaults = core.loadConfigFile(tempConfigFile)
 
       expect(defaults).toBeDefined()
-      expect(defaults.test).toMatch('test value')
+      expect(defaults.hotfix).toMatch('hotfix')
     })
 
-    test('config value from file is wrong, revert to defaults', () => {
+    test('throw because config value from file is wrong', () => {
       sh.ShellString(
         `{
       "development": "asldk  /.. ,./3"
       }`
       ).to(tempConfigFile)
 
-      expect(() => core.loadConfigFile(tempConfigFile)).toThrow(/^development/)
+      expect(() => core.loadConfigFile(tempConfigFile)).toThrow(/development/)
     })
 
     test('write to (and load from) .js file', () => {
@@ -70,7 +70,7 @@ describe('testing core functionalities', () => {
 
       core.writeConfigFile({
         file: jsFile,
-        data: { development: 'develop', test: true }
+        data: { development: 'develop', tags: false }
       })
 
       expect(sh.test('-f', jsFile)).toBeTruthy()
@@ -78,7 +78,7 @@ describe('testing core functionalities', () => {
       const jsObject = core.loadConfigFile(jsFile)
 
       expect(jsObject.development).toMatch('develop')
-      expect(jsObject.test).toBeTruthy()
+      expect(jsObject.tags).toBeFalsy()
     })
 
     test('attempt to write to wrong file type', () => {
@@ -92,7 +92,7 @@ describe('testing core functionalities', () => {
         core.writeConfigFile({
           data: { development: 'akn//&&svn...#k/' }
         })
-      ).toThrow(/^development/)
+      ).toThrow(/development/)
     })
 
     test('config value usedev is invalid', () => {
@@ -100,7 +100,7 @@ describe('testing core functionalities', () => {
         core.writeConfigFile({
           data: { usedev: 'true' }
         })
-      ).toThrow(/^usedev/)
+      ).toThrow(/usedev/)
     })
 
     test('config value push is invalid', () => {
@@ -108,7 +108,7 @@ describe('testing core functionalities', () => {
         core.writeConfigFile({
           data: { push: 'maybe' }
         })
-      ).toThrow(/^push/)
+      ).toThrow(/push/)
     })
 
     test('config value integration is invalid', () => {
@@ -116,7 +116,7 @@ describe('testing core functionalities', () => {
         core.writeConfigFile({
           data: { integration: 4 }
         })
-      ).toThrow(/^integration/)
+      ).toThrow(/integration/)
     })
   })
 
