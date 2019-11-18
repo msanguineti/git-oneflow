@@ -53,7 +53,9 @@ export const getDefaultConfigValues = (): ConfigValues => {
  */
 export const loadConfigFile = (configFile?: string): ConfigValues => {
   if (!configFile || !test('-f', configFile)) {
-    throw `Cannot load configuration values from: ${info(configFile)}`
+    throw new Error(
+      `Cannot load configuration values from: ${info(configFile)}`
+    )
   }
 
   const configValues =
@@ -136,33 +138,41 @@ export const isValidTagName = (tagName: string): boolean => {
 
 const validateMultipleChoiceOption = (element: string, key: string) => {
   if (typeof element !== 'string' || !element.match(/^(ask|always|never)$/)) {
-    throw `${info(
-      key
-    )} has to be either 'ask', 'always' or 'never'. Value found: ${error(
-      element
-    )}`
+    throw new Error(
+      `${info(
+        key
+      )} has to be either 'ask', 'always' or 'never'. Value found: ${error(
+        element
+      )}`
+    )
   }
 }
 
 const validateIntegrationOption = (element: number, key: string) => {
   if (typeof element !== 'number' || (element < 1 || element > 3)) {
-    throw `${info(key)} has to be a number >=1 and <=3. Value found: ${error(
-      element
-    )}`
+    throw new Error(
+      `${info(key)} has to be a number >=1 and <=3. Value found: ${error(
+        element
+      )}`
+    )
   }
 }
 
 const validateBooleanOption = (element: boolean, key: string) => {
   if (typeof element !== 'boolean') {
-    throw `${info(
-      key
-    )} has to be either 'true' or 'false'. Value found: ${error(element)}`
+    throw new Error(
+      `${info(key)} has to be either 'true' or 'false'. Value found: ${error(
+        element
+      )}`
+    )
   }
 }
 
 const validateBranchName = (element: string, key: string) => {
   if (!isValidBranchName(element)) {
-    throw `${info(key)} branch name is invalid. Value found: ${error(element)}`
+    throw new Error(
+      `${info(key)} branch name is invalid. Value found: ${error(element)}`
+    )
   }
 }
 
@@ -193,7 +203,7 @@ const sanityCheck = (configValues: ConfigValues): boolean => {
           validateBooleanOption(element as boolean, key)
           break
         default:
-          throw `Unknown option ${error(key)} found in configuration`
+          throw new Error(`Unknown option ${error(key)} found in configuration`)
       }
     }
   }
