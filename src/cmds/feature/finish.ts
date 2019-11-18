@@ -17,10 +17,9 @@ export class FinishFeature implements CommandModule {
   public describe: string = 'Finish a feature'
 
   public builder = (yargs: Argv): Argv => {
-    return yargs.option('i', {
-      alias: 'interactive',
-      describe:
-        'Rebase using `rebase -i`. It applies only if `integration` option is set to 1 or 3'
+    return yargs.option('o', {
+      alias: 'overwrite-interactive',
+      describe: 'Rebase using `rebase -i`. (Only for strategy 1 and 3)'
     })
   }
 
@@ -85,23 +84,24 @@ const rebaseStep = async (
   mergeInto: string | unknown
 ): Promise<void> => {
   exec(`git checkout ${argv.feature}/${argv.featureBranch}`)
-  switch (argv.interactive) {
-    case 'always':
-      spawnSync('git', ['rebase', '-i', `${mergeInto}`], {
-        stdio: 'inherit'
-      })
-      break
-    case 'never':
-      exec(`git rebase ${mergeInto}`)
-      break
-    case 'ask':
-      if (await ask('Do you want to use rebase interactively?')) {
-        spawnSync('git', ['rebase', '-i', `${mergeInto}`], {
-          stdio: 'inherit'
-        })
-      } else {
+
+  if (argv['overwrite-interactive']) {
+    rebaseInteractively(mergeInto)
+  } else {
+    switch (argv.interactive) {
+      case 'always':
+        rebaseInteractively(mergeInto)
+        break
+      case 'never':
         exec(`git rebase ${mergeInto}`)
-      }
+        break
+      case 'ask':
+        if (await ask('Do you want to use rebase interactively?')) {
+          rebaseInteractively(mergeInto)
+        } else {
+          exec(`git rebase ${mergeInto}`)
+        }
+    }
   }
 }
 
@@ -114,4 +114,7 @@ const ask = async (question: string): Promise<string> => {
     }
   ])
   return answer.accept
+}
+function rebaseInteractively (mergeInto: unknown) {
+  spawnSync('git', ['rebase', '-i', `${mergeInto}`], { stdio: 'inherit' })
 }
