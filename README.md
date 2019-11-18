@@ -40,6 +40,7 @@ Fun facts:
     - [Release/Hotfix branches](#releasehotfix-branches)
       - [Tags](#tags)
   - [Customisation](#customisation)
+    - [Configuration files](#configuration-files)
     - [Options](#options)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
@@ -161,7 +162,9 @@ gof init
 
 This creates a `gof.config.js` file with the chosen configuration options.
 
-By default, **_git-OneFlow_** checks for a config file [`gof.config.js`, `.gofrc.json` or `.gofrc.js`], or a dedicated `git-oneflow` section in `package.json`
+#### Configuration files
+
+By default, **_git-OneFlow_** checks for a config file (`gof.config.js`, `.gofrc` or `.gofrc.js`), or a dedicated `git-oneflow` section in `package.json`
 
 ```js
 // package.json
@@ -171,6 +174,10 @@ By default, **_git-OneFlow_** checks for a config file [`gof.config.js`, `.gofrc
   }
 }
 ```
+
+The `package.json` section takes precedence over any file.
+
+By passing `--config <fileName>` it is also possible to specify the config file to use.
 
 #### Options
 
