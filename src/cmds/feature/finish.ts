@@ -8,8 +8,6 @@
 import { spawnSync } from 'child_process'
 import { prompt } from 'inquirer'
 import { exec } from 'shelljs'
-/* eslint-disable no-unused-vars */
-/* eslint-enable @typescript-eslint/no-unused-vars */
 import { Arguments, Argv, CommandModule } from 'yargs'
 import { isValidBranchName } from '../../core'
 

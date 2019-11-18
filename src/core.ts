@@ -42,6 +42,12 @@ export const getDefaultConfigValues = (): ConfigValues => {
   return { ...defaultConfigValues }
 }
 
+/**
+ * Load a specific configuration file
+ *
+ * @param configFile name of configuration file to load
+ * @returns {ConfigValues} the loaded config values
+ */
 export const loadConfigFile = (configFile?: string): ConfigValues => {
   if (!configFile || !test('-f', configFile)) {
     return defaultConfigValues
@@ -59,12 +65,24 @@ export const loadConfigFile = (configFile?: string): ConfigValues => {
   }
 }
 
+/**
+ * Tries to laod configuration files defined in a file.abs
+ *
+ * @returns {ConfigValues} config values loaded from a file or default configuration values if there's no file.
+ */
 export const loadConfigValues = (): ConfigValues => {
   const configFile = findUp.sync(defaultConfigFileNames) || undefined
 
   return loadConfigFile(configFile)
 }
 
+/**
+ * Writes configuration values to a file.
+ *
+ * @param file the file name to save configuration values to
+ * @param data the configuration values
+ * @returns {boolean} `true` if the config file was created, `false` otherwise.
+ */
 export const writeConfigFile = ({
   file = defaultConfigFileName,
   data = defaultConfigValues

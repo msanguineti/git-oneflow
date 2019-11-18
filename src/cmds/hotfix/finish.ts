@@ -7,12 +7,8 @@
 
 import { prompt } from 'inquirer'
 import { exec } from 'shelljs'
-/* eslint-disable no-unused-vars */
-/* eslint-enable @typescript-eslint/no-unused-vars */
 import { Arguments, CommandModule } from 'yargs'
 import { info } from '../../utils/text'
-
-// const git = simplegit()
 
 export class FinishHotfix implements CommandModule {
   public command: string = 'finish <hotfixName>'
@@ -78,7 +74,9 @@ const deleteBranch = async (argv: Arguments): Promise<void> => {
   exec(`git branch -d ${argv.hotfix}/${argv.hotfixName}`)
   if (
     await ask(
-      `Do you want to delete on origin branch ${argv.hotfix}/${argv.hotfixName}?`
+      `Do you want to delete on origin branch ${argv.hotfix}/${
+        argv.hotfixName
+      }?`
     )
   ) {
     exec(`git push origin :${argv.hotfix}/${argv.hotfixName}`)

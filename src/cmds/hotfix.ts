@@ -5,8 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-/* eslint-disable no-unused-vars */
-/* eslint-enable @typescript-eslint/no-unused-vars */
 import { Argv, CommandModule } from 'yargs'
 import { FinishHotfix } from './hotfix/finish'
 import { StartHotfix } from './hotfix/start'

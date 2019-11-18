@@ -7,8 +7,6 @@
 
 import { prompt } from 'inquirer'
 import { exec } from 'shelljs'
-/* eslint-disable no-unused-vars */
-/* eslint-enable @typescript-eslint/no-unused-vars */
 import { Arguments, CommandModule } from 'yargs'
 import { info } from '../../utils/text'
 
@@ -75,7 +73,9 @@ const deleteBranch = async (argv: Arguments) => {
   exec(`git branch -d ${argv.release}/${argv.releaseName}`)
   if (
     await ask(
-      `Do you want to delete on origin branch ${argv.release}/${argv.releaseName}?`
+      `Do you want to delete on origin branch ${argv.release}/${
+        argv.releaseName
+      }?`
     )
   ) {
     exec(`git push origin :${argv.release}/${argv.releaseName}`)

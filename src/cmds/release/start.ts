@@ -6,8 +6,6 @@
  */
 
 import { exec } from 'shelljs'
-/* eslint-disable no-unused-vars */
-/* eslint-enable @typescript-eslint/no-unused-vars */
 import { Arguments, CommandModule } from 'yargs'
 import { isValidBranchName } from '../../core'
 

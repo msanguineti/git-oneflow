@@ -5,8 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-/* eslint-disable no-unused-vars */
-/* eslint-enable @typescript-eslint/no-unused-vars */
 import { Answers, prompt, QuestionCollection } from 'inquirer'
 import { Arguments, CommandModule, Argv } from 'yargs'
 import {
@@ -53,77 +51,87 @@ export class Init implements CommandModule {
   }
 }
 
+const inputBranchName = (
+  dFault: string,
+  message: string,
+  name: string,
+  when?: Function
+): Answers => {
+  return {
+    default: dFault,
+    message,
+    name,
+    type: 'input',
+    validate: (value: string) => {
+      return (
+        isValidBranchName(value) || 'Please, choose a valid name for the branch'
+      )
+    },
+    when
+  }
+}
+
+const expandAnswer = (
+  dFault: string,
+  message: string,
+  name: string,
+  choices: { key: string; name: string; value: string }[],
+  when?: Function
+) => {
+  return {
+    choices,
+    default: dFault,
+    message,
+    name,
+    type: 'expand',
+    when
+  }
+}
+
+const confirmAnswer = (dFault: boolean, message: string, name: string) => {
+  return {
+    default: dFault,
+    message,
+    name,
+    type: 'confirm'
+  }
+}
+
 const generateQuestions = (argv: Arguments): QuestionCollection[] => {
   return [
-    {
-      default: (argv.main as string) || 'master',
-      message: 'Main (production) branch:',
-      name: 'main',
-      type: 'input',
-      validate: (value: string) => {
-        return (
-          isValidBranchName(value) ||
-          'Please, choose a valid name for the branch'
-        )
-      }
-    },
-    {
-      default: (argv.usedev as boolean) || false,
-      message: 'Do you use a development branch?',
-      name: 'usedev',
-      type: 'confirm'
-    },
-    {
-      default: (argv.development as string) || 'develop',
-      message: 'Development branch:',
-      name: 'development',
-      type: 'input',
-      validate: (value: string) => {
-        return (
-          isValidBranchName(value) ||
-          'Please, choose a valid name for the branch'
-        )
-      },
-      when: (answers: Answers) => {
+    inputBranchName(
+      (argv.main as string) || 'master',
+      'Main (production) branch:',
+      'main'
+    ),
+    confirmAnswer(
+      (argv.usedev as boolean) || false,
+      'Do you use a development branch?',
+      'usedev'
+    ),
+    inputBranchName(
+      (argv.development as string) || 'develop',
+      'Development branch:',
+      'development',
+      (answers: Answers) => {
         return answers.usedev
       }
-    },
-    {
-      default: (argv.feature as string) || 'feature',
-      message: 'Feature branch:',
-      name: 'feature',
-      type: 'input',
-      validate: (value: string) => {
-        return (
-          isValidBranchName(value) ||
-          'Please, choose a valid name for the branch'
-        )
-      }
-    },
-    {
-      default: (argv.release as string) || 'release',
-      message: 'Release branch:',
-      name: 'release',
-      type: 'input',
-      validate: (value: string) => {
-        return (
-          isValidBranchName(value) ||
-          'Please, choose a valid name for the branch'
-        )
-      }
-    },
-    {
-      default: (argv.hotfix as string) || 'hotfix',
-      message: 'Hotfix branch:',
-      name: 'hotfix',
-      type: 'input',
-      validate: (value: string) => {
-        return (
-          isValidBranchName(value) ||
-          'Please, choose a valid name for the branch'
-        )
-      }
-    },
+    ),
+    inputBranchName(
+      (argv.feature as string) || 'feature',
+      'Feature branch:',
+      'feature'
+    ),
+    inputBranchName(
+      (argv.release as string) || 'release',
+      'Release branch:',
+      'release'
+    ),
+    inputBranchName(
+      (argv.hotfix as string) || 'hotfix',
+      'Hotfix branch:',
+      'hotfix'
+    ),
     {
       choices: [
         {
@@ -150,8 +158,12 @@ const generateQuestions = (argv: Arguments): QuestionCollection[] => {
       name: 'integration',
       type: 'list'
     },
-    {
-      choices: [
+
+    expandAnswer(
+      (argv.interactive as string) || 'always',
+      'Do you want to use rebase interactively (rebase -i)?',
+      'interactive',
+      [
         {
           key: 'y',
           name: 'Always',
@@ -168,16 +180,16 @@ const generateQuestions = (argv: Arguments): QuestionCollection[] => {
           value: 'ask'
         }
       ],
-      default: (argv.interactive as string) || 'always',
-      message: 'Do you want to use rebase interactively (rebase -i)?',
-      name: 'interactive',
-      type: 'expand',
-      when: (answers: Answers) => {
+      (answers: Answers) => {
         return answers.integration !== 2
       }
-    },
-    {
-      choices: [
+    ),
+
+    expandAnswer(
+      (argv.push as string) || 'always',
+      'Do you want to push to origin after merging?',
+      'push',
+      [
         {
           key: 'y',
           name: 'Always',
@@ -193,14 +205,13 @@ const generateQuestions = (argv: Arguments): QuestionCollection[] => {
           name: 'Ask me every time',
           value: 'ask'
         }
-      ],
-      default: (argv.push as string) || 'always',
-      message: 'Do you want to push to origin after merging?',
-      name: 'push',
-      type: 'expand'
-    },
-    {
-      choices: [
+      ]
+    ),
+    expandAnswer(
+      (argv.push as string) || 'always',
+      'Do you want to delete working branch after merging?',
+      'delete',
+      [
         {
           key: 'y',
           name: 'Always',
@@ -216,18 +227,13 @@ const generateQuestions = (argv: Arguments): QuestionCollection[] => {
           name: 'Ask me every time',
           value: 'ask'
         }
-      ],
-      default: (argv.push as string) || 'always',
-      message: 'Do you want to delete working branch after merging?',
-      name: 'delete',
-      type: 'expand'
-    },
-    {
-      default: (argv.usedev as boolean) || true,
-      message: 'Do you want automatic tagging of releases/hotfixes?',
-      name: 'tags',
-      type: 'confirm'
-    }
+      ]
+    ),
+    confirmAnswer(
+      (argv.usedev as boolean) || true,
+      'Do you want automatic tagging of releases/hotfixes?',
+      'tags'
+    )
   ]
 }
 
