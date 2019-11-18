@@ -31,7 +31,7 @@ export class Init implements CommandModule {
     try {
       if (argv.defaultValues) {
         writeConfigFile({ data: getDefaultConfigValues() })
-        console.log(info('Config file created: gof.config.js'))
+        console.log('Config file created:', info('gof.config.js'))
       } else {
         const jsonValues: ConfigValues = await prompt(generateQuestions(argv))
 
