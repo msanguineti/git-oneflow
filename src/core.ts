@@ -149,7 +149,7 @@ const validateMultipleChoiceOption = (element: string, key: string) => {
 }
 
 const validateIntegrationOption = (element: number, key: string) => {
-  if (typeof element !== 'number' || (element < 1 || element > 3)) {
+  if (typeof element !== 'number' || element < 1 || element > 3) {
     throw new Error(
       `${info(key)} has to be a number >=1 and <=3. Value found: ${error(
         element

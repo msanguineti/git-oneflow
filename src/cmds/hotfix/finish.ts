@@ -77,9 +77,7 @@ const deleteBranch = async (argv: Arguments): Promise<void> => {
   exec(`git branch -d ${argv.hotfix}/${argv.hotfixName}`)
   if (
     await ask(
-      `Do you want to delete on origin branch ${argv.hotfix}/${
-        argv.hotfixName
-      }?`
+      `Do you want to delete on origin branch ${argv.hotfix}/${argv.hotfixName}?`
     )
   ) {
     exec(`git push origin :${argv.hotfix}/${argv.hotfixName}`)

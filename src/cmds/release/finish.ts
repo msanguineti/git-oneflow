@@ -76,9 +76,7 @@ const deleteBranch = async (argv: Arguments) => {
   exec(`git branch -d ${argv.release}/${argv.releaseName}`)
   if (
     await ask(
-      `Do you want to delete on origin branch ${argv.release}/${
-        argv.releaseName
-      }?`
+      `Do you want to delete on origin branch ${argv.release}/${argv.releaseName}?`
     )
   ) {
     exec(`git push origin :${argv.release}/${argv.releaseName}`)
