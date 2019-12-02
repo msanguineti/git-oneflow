@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { basename } from 'path'
 import { which } from 'shelljs'
 import yargs from 'yargs'
 import { name } from '../package.json'
@@ -26,6 +25,7 @@ const argv = yargs
   .version()
   .alias('v', 'version')
   .config(loadConfigValues())
+  .pkgConf('git-oneflow')
   .command(new Init())
   .command(new Feature())
   .command(new Release())
@@ -33,5 +33,4 @@ const argv = yargs
   .help()
   .alias('h', 'help').argv
 
-if (argv._.length <= 0)
-  console.log(warning(`Try ${basename(process.argv[1])} --help`))
+if (argv._.length <= 0) console.log(warning(`Try git-oneflow --help`))

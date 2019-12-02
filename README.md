@@ -171,16 +171,16 @@ By default, **_git-OneFlow_** checks for a config file (`gof.config.js`, `.gofrc
 ```js
 // package.json
 {
-  "gof": {
+  "git-oneflow": {
     "feature": "feat",
     "delete": "ask"
   }
 }
 ```
 
-The `package.json` section takes precedence over any file.
-
 Passing `--config <fileName>` allows to specify the config file to use.
+
+> The `package.json` section takes precedence over any file.
 
 #### Options
 

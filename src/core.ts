@@ -10,8 +10,6 @@ import { extname } from 'path'
 import { exec, sed, ShellString, test } from 'shelljs'
 import { error, info } from './utils/text'
 
-const gof = require('../package.json').gof
-
 export type ConfigValues = { [key: string]: string | number | boolean }
 
 /**
@@ -73,15 +71,9 @@ export const loadConfigFile = (configFile?: string): ConfigValues => {
  * @returns {ConfigValues} config values loaded from a file or default configuration values if there's no file.
  */
 export const loadConfigValues = (): ConfigValues => {
-  if (gof) {
-    sanityCheck(gof)
-    return gof
-  }
-  const configFile = findUp.sync(defaultConfigFileNames) || undefined
+  const configFile = findUp.sync(defaultConfigFileNames)
 
-  if (!configFile) return defaultConfigValues
-
-  return loadConfigFile(configFile)
+  return configFile ? loadConfigFile(configFile) : defaultConfigValues
 }
 
 /**
