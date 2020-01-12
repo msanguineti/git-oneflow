@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.10.7](https://github.com/msanguineti/git-oneflow/compare/v0.10.6...v0.10.7) (2020-01-12)
+
+### Bug Fixes
+
+- security advisory ([ed15ef9](https://github.com/msanguineti/git-oneflow/commit/ed15ef9055323967942bc98a2c11c5937fe5fae0))
+
 ### [0.10.6](https://github.com/msanguineti/git-oneflow/compare/v0.10.5...v0.10.6) (2019-12-02)
 
 ### Bug Fixes

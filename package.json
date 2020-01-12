@@ -1,6 +1,6 @@
 {
   "name": "git-oneflow",
-  "version": "0.10.6",
+  "version": "0.10.7",
   "description": "CLI tooling implementing GIT OneFlow branching model",
   "bin": {
     "gof": "bin/cli.js",
@@ -39,35 +39,35 @@
   },
   "homepage": "https://github.com/msanguineti/git-oneflow#readme",
   "devDependencies": {
-    "@babel/core": "^7.7.4",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/preset-env": "^7.7.4",
-    "@babel/preset-typescript": "^7.7.4",
-    "@commitlint/cli": "^8.2.0",
-    "@commitlint/config-conventional": "^8.2.0",
+    "@babel/core": "^7.8.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.0",
+    "@babel/preset-env": "^7.8.0",
+    "@babel/preset-typescript": "^7.8.0",
+    "@commitlint/cli": "^8.3.4",
+    "@commitlint/config-conventional": "^8.3.4",
     "@types/find-up": "^4.0.0",
     "@types/inquirer": "^6.5.0",
-    "@types/jest": "^24.0.23",
+    "@types/jest": "^24.0.25",
     "@types/shelljs": "^0.8.6",
-    "husky": "^4.0.3",
+    "husky": "^4.0.7",
     "jest": "^24.9.0",
     "lint-staged": "^9.5.0",
     "npm-run-all": "^4.1.5",
-    "prettier-standard": "^16.0.0",
-    "rollup": "^1.27.8",
+    "prettier-standard": "^16.1.0",
+    "rollup": "^1.29.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.2.0",
     "standard-version": "^7.0.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.4"
   },
   "dependencies": {
     "chalk": "^3.0.0",
     "find-up": "^4.1.0",
-    "inquirer": "^7.0.0",
+    "inquirer": "^7.0.3",
     "shelljs": "^0.8.3",
-    "yargs": "^15.0.2"
+    "yargs": "^15.1.0"
   }
 }
