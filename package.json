@@ -1,6 +1,6 @@
 {
   "name": "git-oneflow",
-  "version": "0.10.6",
+  "version": "0.10.7",
   "description": "CLI tooling implementing GIT OneFlow branching model",
   "bin": {
     "gof": "bin/cli.js",
