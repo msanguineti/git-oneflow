@@ -1,7 +1,8 @@
 # git-OneFlow <!-- omit in toc -->
 
 [![CodeFactor](https://www.codefactor.io/repository/github/msanguineti/git-oneflow/badge/master)](https://www.codefactor.io/repository/github/msanguineti/git-oneflow/overview/master)
-[![npm](https://img.shields.io/npm/v/git-oneflow.svg)](https://www.npmjs.com/package/git-oneflow) [![Travis (.org)](https://img.shields.io/travis/msanguineti/git-oneflow.svg)](https://travis-ci.org/msanguineti/git-oneflow) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![Greenkeeper badge](https://badges.greenkeeper.io/msanguineti/git-oneflow.svg)](https://greenkeeper.io/)
+[![npm](https://img.shields.io/npm/v/git-oneflow.svg)](https://www.npmjs.com/package/git-oneflow)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 > CLI tools implementing the _OneFlow_ git branching model.
 
