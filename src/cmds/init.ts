@@ -23,15 +23,15 @@ const expandAnswer = (
   when?: Function
 ): {
   choices: {
-    key: string;
-    name: string;
-    value: string;
-  }[];
-  default: string;
-  message: string;
-  name: string;
-  type: string;
-  when: Function | undefined;
+    key: string
+    name: string
+    value: string
+  }[]
+  default: string
+  message: string
+  name: string
+  type: string
+  when: Function | undefined
 } => {
   return {
     choices,
@@ -48,10 +48,10 @@ const confirmAnswer = (
   message: string,
   name: string
 ): {
-  default: boolean;
-  message: string;
-  name: string;
-  type: string;
+  default: boolean
+  message: string
+  name: string
+  type: string
 } => {
   return {
     default: dFault,

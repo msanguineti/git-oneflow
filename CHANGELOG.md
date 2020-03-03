@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.10.8](https://github.com/msanguineti/git-oneflow/compare/v0.10.7...v0.10.8) (2020-03-03)
+
+### Bug Fixes
+
+- lint-staged ([#51](https://github.com/msanguineti/git-oneflow/issues/51)) ([5d4a51f](https://github.com/msanguineti/git-oneflow/commit/5d4a51fca1ad4f8faeadfcbba0d8cd871a1bb7a8))
+
+### Misc
+
+- fix eslint - prettier interaction ([e584c1c](https://github.com/msanguineti/git-oneflow/commit/e584c1c6eabaefecca3a67ac98bbb3c2571283bd))
+- remove prettier-standard, add eslint and prettier ([bd42263](https://github.com/msanguineti/git-oneflow/commit/bd42263a154358038ef162b55e73542ddfdaa4b1))
+- richer changelogs ([ff3cf46](https://github.com/msanguineti/git-oneflow/commit/ff3cf4648c867a9dd7a188c5f795665f01dd5c02))
+- **deps:** bump inquirer from 7.0.3 to 7.0.4 ([56ecac8](https://github.com/msanguineti/git-oneflow/commit/56ecac8ca6bbf5f8510a51ffbe39401375f8df22))
+- **deps:** bump inquirer from 7.0.4 to 7.0.5 ([e00882f](https://github.com/msanguineti/git-oneflow/commit/e00882f8c32ae1ddb0fc3c2b27f5e63c23054162))
+- **deps-dev:** bump @babel/core from 7.8.0 to 7.8.4 ([e45c498](https://github.com/msanguineti/git-oneflow/commit/e45c498a15f0e3c9445f8ca054d7ed7a07983664))
+- **deps-dev:** bump @babel/core from 7.8.4 to 7.8.6 ([b0e3c3c](https://github.com/msanguineti/git-oneflow/commit/b0e3c3cf708f0dc7ddebc015a7e53c2d28510168))
+- **deps-dev:** bump @babel/plugin-proposal-class-properties ([beb5649](https://github.com/msanguineti/git-oneflow/commit/beb56499e02de94c5635cc0d8bd0c5c8c885deb4))
+- **deps-dev:** bump @babel/preset-env from 7.8.0 to 7.8.4 ([601d4d6](https://github.com/msanguineti/git-oneflow/commit/601d4d6dcc3c19206f944cdeb11f1ed326b34dc0))
+- **deps-dev:** bump @babel/preset-env from 7.8.4 to 7.8.6 ([23185c8](https://github.com/msanguineti/git-oneflow/commit/23185c8a71d34a252463465aa6ece20f05695544))
+- **deps-dev:** bump @babel/preset-typescript from 7.8.0 to 7.8.3 ([aeffcce](https://github.com/msanguineti/git-oneflow/commit/aeffcce3456c23a51d4cb1c32e23da6d2e0db8eb))
+- **deps-dev:** bump @commitlint/cli from 8.3.4 to 8.3.5 ([0e6d681](https://github.com/msanguineti/git-oneflow/commit/0e6d681f7bf35da7fee2e145ef404a519506667e))
+- **deps-dev:** bump @types/jest from 25.1.1 to 25.1.3 ([d980313](https://github.com/msanguineti/git-oneflow/commit/d9803136562afc4caddc5c165240a6277320ae79))
+- **deps-dev:** bump husky from 4.0.7 to 4.2.3 ([3548a51](https://github.com/msanguineti/git-oneflow/commit/3548a512d67b36b9f28ed0faff92ea2e45036dac))
+- **deps-dev:** bump jest from 24.9.0 to 25.1.0 ([c60d027](https://github.com/msanguineti/git-oneflow/commit/c60d0277b8b8fe23cfdf9a2aba1381a9ece505d6))
+- **deps-dev:** bump lint-staged from 10.0.7 to 10.0.8 ([5df7ee5](https://github.com/msanguineti/git-oneflow/commit/5df7ee51d077b4b815dddc0e703cc1456153a59b))
+- **deps-dev:** bump rollup from 1.31.0 to 1.31.1 ([61ba58b](https://github.com/msanguineti/git-oneflow/commit/61ba58b6fa3a80c58d68dbeea3069a04c954a2f9))
+- **deps-dev:** bump rollup from 1.31.1 to 1.32.0 ([e1fad30](https://github.com/msanguineti/git-oneflow/commit/e1fad30377b3e837203ffefd58dbe6579243dab8))
+- **deps-dev:** bump standard-version from 7.0.1 to 7.1.0 ([9401494](https://github.com/msanguineti/git-oneflow/commit/9401494b570421d48c84755a0e93f41114ad9b8b))
+- **deps-dev:** bump typescript from 3.7.4 to 3.8.2 ([ee16c12](https://github.com/msanguineti/git-oneflow/commit/ee16c124d318288126e44096bba2f89179661628))
+- **deps-dev:** bump typescript from 3.8.2 to 3.8.3 ([cb73239](https://github.com/msanguineti/git-oneflow/commit/cb732396b30a0ce59e68e90622f5d58bde7abc79))
+
 ### [0.10.7](https://github.com/msanguineti/git-oneflow/compare/v0.10.6...v0.10.7) (2020-01-12)
 
 ### Bug Fixes

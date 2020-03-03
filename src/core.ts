@@ -256,8 +256,8 @@ export const writeConfigFile = ({
   file = defaultConfigFileName,
   data = defaultConfigValues
 }: {
-  file?: string;
-  data?: ConfigValues;
+  file?: string
+  data?: ConfigValues
 }): boolean => {
   let toWrite: string
 
