@@ -15,39 +15,49 @@ import {
 } from '../core'
 import { error, success, info } from '../utils/text'
 
-export class Init implements CommandModule {
-  public command: string = 'init [options]'
-
-  public describe: string = 'Generate a config file'
-
-  public builder = (yargs: Argv): Argv => {
-    return yargs.option('d', {
-      alias: 'defaultValues',
-      describe: 'Generates default value file. Overwrites old values'
-    })
+const expandAnswer = (
+  dFault: string,
+  message: string,
+  name: string,
+  choices: { key: string; name: string; value: string }[],
+  when?: Function
+): {
+  choices: {
+    key: string;
+    name: string;
+    value: string;
+  }[];
+  default: string;
+  message: string;
+  name: string;
+  type: string;
+  when: Function | undefined;
+} => {
+  return {
+    choices,
+    default: dFault,
+    message,
+    name,
+    type: 'expand',
+    when
   }
+}
 
-  public handler = async (argv: Arguments): Promise<void> => {
-    try {
-      if (argv.defaultValues) {
-        writeConfigFile({ data: getDefaultConfigValues() })
-        console.log('Config file created:', info('gof.config.js'))
-      } else {
-        const jsonValues: ConfigValues = await prompt(generateQuestions(argv))
-
-        console.log(JSON.stringify(jsonValues, null, 2))
-
-        if (await askConfirmationBeforeWrite()) {
-          if (writeConfigFile({ data: jsonValues })) {
-            console.log(success('Initialisation done!'))
-          } else {
-            console.error(error('Cannot write config file!'))
-          }
-        }
-      }
-    } catch (err) {
-      console.error(error(err))
-    }
+const confirmAnswer = (
+  dFault: boolean,
+  message: string,
+  name: string
+): {
+  default: boolean;
+  message: string;
+  name: string;
+  type: string;
+} => {
+  return {
+    default: dFault,
+    message,
+    name,
+    type: 'confirm'
   }
 }
 
@@ -62,7 +72,7 @@ const inputBranchName = (
     message,
     name,
     type: 'input',
-    validate: (value: string) => {
+    validate: (value: string): boolean | string => {
       return (
         isValidBranchName(value) || 'Please, choose a valid name for the branch'
       )
@@ -71,33 +81,7 @@ const inputBranchName = (
   }
 }
 
-const expandAnswer = (
-  dFault: string,
-  message: string,
-  name: string,
-  choices: { key: string; name: string; value: string }[],
-  when?: Function
-) => {
-  return {
-    choices,
-    default: dFault,
-    message,
-    name,
-    type: 'expand',
-    when
-  }
-}
-
-const confirmAnswer = (dFault: boolean, message: string, name: string) => {
-  return {
-    default: dFault,
-    message,
-    name,
-    type: 'confirm'
-  }
-}
-
-const generateQuestions = (argv: Arguments): QuestionCollection[] => {
+const generateQuestions = (argv: Arguments): QuestionCollection<Answers>[] => {
   return [
     inputBranchName(
       (argv.main as string) || 'master',
@@ -246,4 +230,39 @@ const askConfirmationBeforeWrite = async (): Promise<boolean> => {
     }
   ])
   return ans.write
+}
+export class Init implements CommandModule {
+  public command = 'init [options]'
+
+  public describe = 'Generate a config file'
+
+  public builder = (yargs: Argv): Argv => {
+    return yargs.option('d', {
+      alias: 'defaultValues',
+      describe: 'Generates default value file. Overwrites old values'
+    })
+  }
+
+  public handler = async (argv: Arguments): Promise<void> => {
+    try {
+      if (argv.defaultValues) {
+        writeConfigFile({ data: getDefaultConfigValues() })
+        console.log('Config file created:', info('gof.config.js'))
+      } else {
+        const jsonValues: ConfigValues = await prompt(generateQuestions(argv))
+
+        console.log(JSON.stringify(jsonValues, null, 2))
+
+        if (await askConfirmationBeforeWrite()) {
+          if (writeConfigFile({ data: jsonValues })) {
+            console.log(success('Initialisation done!'))
+          } else {
+            console.error(error('Cannot write config file!'))
+          }
+        }
+      }
+    } catch (err) {
+      console.error(error(err))
+    }
+  }
 }

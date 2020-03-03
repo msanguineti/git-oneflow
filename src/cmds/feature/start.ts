@@ -9,11 +9,15 @@ import { Arguments, CommandModule } from 'yargs'
 import { isValidBranchName, loadConfigFile } from '../../core'
 
 export class StartFeature implements CommandModule {
-  public command: string = 'start <featureBranch>'
+  public command = 'start <featureBranch>'
 
-  public describe: string = 'Start a new feature'
+  public describe = 'Start a new feature'
 
-  public handler = (argv: Arguments) => {
+  public handler: (argv: {
+    [argName: string]: unknown
+    _: string[]
+    $0: string
+  }) => void = (argv: Arguments) => {
     if (argv.c) loadConfigFile(argv.c as string)
 
     const branchOff = argv.usedev ? argv.development : argv.main

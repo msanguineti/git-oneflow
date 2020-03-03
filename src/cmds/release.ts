@@ -10,9 +10,9 @@ import { FinishRelease } from './release/finish'
 import { StartRelease } from './release/start'
 
 export class Release implements CommandModule {
-  public command: string = 'release <command>'
+  public command = 'release <command>'
 
-  public describe: string = 'Manage starting and finishing releases.'
+  public describe = 'Manage starting and finishing releases.'
 
   public builder = (yargs: Argv): Argv => {
     return yargs
@@ -25,5 +25,7 @@ export class Release implements CommandModule {
       .command(new FinishRelease())
   }
 
-  public handler = (): void => {}
+  public handler = (): void => {
+    //do nothing
+  }
 }

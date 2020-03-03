@@ -12,6 +12,175 @@ import { error, info } from './utils/text'
 
 export type ConfigValues = { [key: string]: string | number | boolean }
 
+const defaultConfigValues: ConfigValues = {
+  delete: 'always',
+  development: 'develop',
+  feature: 'feature',
+  hotfix: 'hotfix',
+  integration: 1,
+  interactive: 'always',
+  main: 'master',
+  push: 'always',
+  release: 'release',
+  tags: true,
+  usedev: false
+}
+
+const validateMultipleChoiceOption = (element: string, key: string): void => {
+  if (typeof element !== 'string' || !element.match(/^(ask|always|never)$/)) {
+    throw new Error(
+      `${info(
+        key
+      )} has to be either 'ask', 'always' or 'never'. Value found: ${error(
+        element
+      )}`
+    )
+  }
+}
+
+const validateIntegrationOption = (element: number, key: string): void => {
+  if (typeof element !== 'number' || element < 1 || element > 3) {
+    throw new Error(
+      `${info(key)} has to be a number >=1 and <=3. Value found: ${error(
+        element
+      )}`
+    )
+  }
+}
+
+const validateBooleanOption = (element: boolean, key: string): void => {
+  if (typeof element !== 'boolean') {
+    throw new Error(
+      `${info(key)} has to be either 'true' or 'false'. Value found: ${error(
+        element
+      )}`
+    )
+  }
+}
+
+const checkGitRefFormat = (value: string): boolean => {
+  return (
+    exec(`git check-ref-format "${value}"`, {
+      silent: true
+    }).code === 0
+  )
+}
+
+export const isValidBranchName = (branchName: string | unknown): boolean => {
+  return checkGitRefFormat(`refs/heads/${branchName}`)
+}
+
+const validateBranchName = (element: string, key: string): void => {
+  if (!isValidBranchName(element)) {
+    throw new Error(
+      `${info(key)} branch name is invalid. Value found: ${error(element)}`
+    )
+  }
+}
+
+const sanityCheck = (configValues: ConfigValues): boolean => {
+  for (const key in configValues) {
+    if (Object.prototype.hasOwnProperty.call(configValues, key)) {
+      const element = configValues[key]
+      switch (key) {
+        case 'main':
+        case 'development':
+        case 'hotfix':
+        case 'release':
+        case 'feature':
+          validateBranchName(element as string, key)
+          break
+        case 'usedev':
+          validateBooleanOption(element as boolean, key)
+          break
+        case 'integration':
+          validateIntegrationOption(element as number, key)
+          break
+        case 'interactive':
+        case 'push':
+        case 'delete':
+          validateMultipleChoiceOption(element as string, key)
+          break
+        case 'tags':
+          validateBooleanOption(element as boolean, key)
+          break
+        default:
+          throw new Error(`Unknown option ${error(key)} found in configuration`)
+      }
+    }
+  }
+  return true
+}
+
+const defaultConfigFileName = 'gof.config.js'
+
+const defaultConfigFileNames: string[] = [
+  defaultConfigFileName,
+  '.gofrc.js',
+  '.gofrc'
+]
+
+// const supportedExtensions = ['.js', '.json']
+
+const getCommentFor = (key: string): string => {
+  switch (key) {
+    case 'main': {
+      return 'Main (production) branch name. Default `master`'
+    }
+    case 'usedev': {
+      return 'Use development branch? Default `false`'
+    }
+    case 'development': {
+      return 'Development branch name. Default `develop`'
+    }
+    case 'release': {
+      return 'Release branch name. Default: `release`'
+    }
+    case 'hotfix': {
+      return 'Hotfix branch name. Default: `hotfix`'
+    }
+    case 'feature': {
+      return 'Feature branch name. Default: `feature`'
+    }
+    case 'integration': {
+      return 'Integration method to use (see https://www.endoflineblog.com/oneflow-a-git-branching-model-and-workflow#feature-branches). Options: [`1`, `2`, `3`]. Default: `1`.'
+    }
+    case 'interactive': {
+      return 'Use interactve rebase (`git rebase -i` only valid for integration === 1 || 3)? Options: [`always`, `never`, `ask`]. Default: `always`.'
+    }
+    case 'push': {
+      return 'Push to origin after finishing feature/hotfix/release? Options: [`always`, `never`, `ask`]. Default: `always`.'
+    }
+    case 'delete': {
+      return 'Delete the working branch (feature/hotfix/release) after merging with main/development? Options: [`always`, `never`, `ask`]. Default: `always`.'
+    }
+    case 'tags': {
+      return 'Automatic tag releases and hotfixes (based on user input, e.g. release/0.2.0 => tag = 0.2.0. Default: `true`'
+    }
+    default: {
+      return ''
+    }
+  }
+}
+
+const getFileExt = (configFile: string): string => {
+  return extname(configFile)
+}
+
+const generateCommentedValues = (configValues: ConfigValues): string[] => {
+  const output: string[] = []
+  for (const key in configValues) {
+    if (Object.prototype.hasOwnProperty.call(configValues, key)) {
+      const element =
+        typeof configValues[key] === 'string'
+          ? `"${configValues[key]}"`
+          : configValues[key]
+      output.push(`\t/** ${getCommentFor(key)} */\n\t${key}: ${element},`)
+    }
+  }
+  return output
+}
+
 /**
  * Returns the default config values of the application
  *
@@ -87,8 +256,8 @@ export const writeConfigFile = ({
   file = defaultConfigFileName,
   data = defaultConfigValues
 }: {
-  file?: string
-  data?: ConfigValues
+  file?: string;
+  data?: ConfigValues;
 }): boolean => {
   let toWrite: string
 
@@ -120,175 +289,6 @@ export const writeConfigFile = ({
   return true
 }
 
-export const isValidBranchName = (branchName: string | unknown): boolean => {
-  return checkGitRefFormat(`refs/heads/${branchName}`)
-}
-
 export const isValidTagName = (tagName: string): boolean => {
   return checkGitRefFormat(`refs/tags/${tagName}`)
-}
-
-const validateMultipleChoiceOption = (element: string, key: string) => {
-  if (typeof element !== 'string' || !element.match(/^(ask|always|never)$/)) {
-    throw new Error(
-      `${info(
-        key
-      )} has to be either 'ask', 'always' or 'never'. Value found: ${error(
-        element
-      )}`
-    )
-  }
-}
-
-const validateIntegrationOption = (element: number, key: string) => {
-  if (typeof element !== 'number' || element < 1 || element > 3) {
-    throw new Error(
-      `${info(key)} has to be a number >=1 and <=3. Value found: ${error(
-        element
-      )}`
-    )
-  }
-}
-
-const validateBooleanOption = (element: boolean, key: string) => {
-  if (typeof element !== 'boolean') {
-    throw new Error(
-      `${info(key)} has to be either 'true' or 'false'. Value found: ${error(
-        element
-      )}`
-    )
-  }
-}
-
-const validateBranchName = (element: string, key: string) => {
-  if (!isValidBranchName(element)) {
-    throw new Error(
-      `${info(key)} branch name is invalid. Value found: ${error(element)}`
-    )
-  }
-}
-
-const sanityCheck = (configValues: ConfigValues): boolean => {
-  for (const key in configValues) {
-    if (configValues.hasOwnProperty(key)) {
-      const element = configValues[key]
-      switch (key) {
-        case 'main':
-        case 'development':
-        case 'hotfix':
-        case 'release':
-        case 'feature':
-          validateBranchName(element as string, key)
-          break
-        case 'usedev':
-          validateBooleanOption(element as boolean, key)
-          break
-        case 'integration':
-          validateIntegrationOption(element as number, key)
-          break
-        case 'interactive':
-        case 'push':
-        case 'delete':
-          validateMultipleChoiceOption(element as string, key)
-          break
-        case 'tags':
-          validateBooleanOption(element as boolean, key)
-          break
-        default:
-          throw new Error(`Unknown option ${error(key)} found in configuration`)
-      }
-    }
-  }
-  return true
-}
-
-const checkGitRefFormat = (value: string): boolean => {
-  return (
-    exec(`git check-ref-format "${value}"`, {
-      silent: true
-    }).code === 0
-  )
-}
-
-const defaultConfigValues: ConfigValues = {
-  delete: 'always',
-  development: 'develop',
-  feature: 'feature',
-  hotfix: 'hotfix',
-  integration: 1,
-  interactive: 'always',
-  main: 'master',
-  push: 'always',
-  release: 'release',
-  tags: true,
-  usedev: false
-}
-
-const defaultConfigFileName: string = 'gof.config.js'
-
-const defaultConfigFileNames: string[] = [
-  defaultConfigFileName,
-  '.gofrc.js',
-  '.gofrc'
-]
-
-// const supportedExtensions = ['.js', '.json']
-
-const getCommentFor = (key: string): string => {
-  switch (key) {
-    case 'main': {
-      return 'Main (production) branch name. Default `master`'
-    }
-    case 'usedev': {
-      return 'Use development branch? Default `false`'
-    }
-    case 'development': {
-      return 'Development branch name. Default `develop`'
-    }
-    case 'release': {
-      return 'Release branch name. Default: `release`'
-    }
-    case 'hotfix': {
-      return 'Hotfix branch name. Default: `hotfix`'
-    }
-    case 'feature': {
-      return 'Feature branch name. Default: `feature`'
-    }
-    case 'integration': {
-      return 'Integration method to use (see https://www.endoflineblog.com/oneflow-a-git-branching-model-and-workflow#feature-branches). Options: [`1`, `2`, `3`]. Default: `1`.'
-    }
-    case 'interactive': {
-      return 'Use interactve rebase (`git rebase -i` only valid for integration === 1 || 3)? Options: [`always`, `never`, `ask`]. Default: `always`.'
-    }
-    case 'push': {
-      return 'Push to origin after finishing feature/hotfix/release? Options: [`always`, `never`, `ask`]. Default: `always`.'
-    }
-    case 'delete': {
-      return 'Delete the working branch (feature/hotfix/release) after merging with main/development? Options: [`always`, `never`, `ask`]. Default: `always`.'
-    }
-    case 'tags': {
-      return 'Automatic tag releases and hotfixes (based on user input, e.g. release/0.2.0 => tag = 0.2.0. Default: `true`'
-    }
-    default: {
-      return ''
-    }
-  }
-}
-
-const getFileExt = (configFile: string) => {
-  return extname(configFile)
-}
-
-const generateCommentedValues = (configValues: ConfigValues) => {
-  const output: string[] = []
-  for (const key in configValues) {
-    if (configValues.hasOwnProperty(key)) {
-      const element =
-        typeof configValues[key] === 'string'
-          ? `"${configValues[key]}"`
-          : configValues[key]
-      output.push(`\t/** ${getCommentFor(key)} */\n\t${key}: ${element},`)
-    }
-  }
-  return output
 }
