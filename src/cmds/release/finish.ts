@@ -11,17 +11,29 @@ import { Arguments, CommandModule } from 'yargs'
 import { info } from '../../utils/text'
 import { loadConfigFile } from '../../core'
 
-export class FinishRelease implements CommandModule {
-  public command: string = 'finish <releaseName>'
+const ask = async (question: string): Promise<string> => {
+  const answer: { accept: string } = await prompt([
+    {
+      message: question,
+      name: 'accept',
+      type: 'confirm'
+    }
+  ])
+  return answer.accept
+}
 
-  public describe: string = 'Finishes a release.'
-
-  public handler = (argv: Arguments): Promise<void> => {
-    return handleFinish(argv)
+const deleteBranch = async (argv: Arguments): Promise<void> => {
+  exec(`git branch -d ${argv.release}/${argv.releaseName}`)
+  if (
+    await ask(
+      `Do you want to delete on origin branch ${argv.release}/${argv.releaseName}?`
+    )
+  ) {
+    exec(`git push origin :${argv.release}/${argv.releaseName}`)
   }
 }
 
-const handleFinish = async (argv: Arguments) => {
+const handleFinish = async (argv: Arguments): Promise<void> => {
   if (argv.c) loadConfigFile(argv.c as string)
 
   const mergeInto = argv.usedev ? argv.development : argv.main
@@ -72,24 +84,12 @@ const handleFinish = async (argv: Arguments) => {
   }
 }
 
-const deleteBranch = async (argv: Arguments) => {
-  exec(`git branch -d ${argv.release}/${argv.releaseName}`)
-  if (
-    await ask(
-      `Do you want to delete on origin branch ${argv.release}/${argv.releaseName}?`
-    )
-  ) {
-    exec(`git push origin :${argv.release}/${argv.releaseName}`)
-  }
-}
+export class FinishRelease implements CommandModule {
+  public command = 'finish <releaseName>'
 
-const ask = async (question: string) => {
-  const answer: { accept: string } = await prompt([
-    {
-      message: question,
-      name: 'accept',
-      type: 'confirm'
-    }
-  ])
-  return answer.accept
+  public describe = 'Finishes a release.'
+
+  public handler = (argv: Arguments): Promise<void> => {
+    return handleFinish(argv)
+  }
 }

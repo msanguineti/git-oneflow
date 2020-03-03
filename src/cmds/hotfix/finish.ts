@@ -11,15 +11,25 @@ import { Arguments, CommandModule } from 'yargs'
 import { info } from '../../utils/text'
 import { loadConfigFile } from '../../core'
 
-export class FinishHotfix implements CommandModule {
-  public command: string = 'finish <hotfixName>'
+const ask = async (question: string): Promise<string> => {
+  const answer: { accept: string } = await prompt([
+    {
+      message: question,
+      name: 'accept',
+      type: 'confirm'
+    }
+  ])
+  return answer.accept
+}
 
-  public describe: string = 'Finishes a hotfix.'
-
-  public handler = (argv: Arguments): Promise<void> => {
-    if (argv.c) loadConfigFile(argv.c as string)
-
-    return handleFinish(argv)
+const deleteBranch = async (argv: Arguments): Promise<void> => {
+  exec(`git branch -d ${argv.hotfix}/${argv.hotfixName}`)
+  if (
+    await ask(
+      `Do you want to delete on origin branch ${argv.hotfix}/${argv.hotfixName}?`
+    )
+  ) {
+    exec(`git push origin :${argv.hotfix}/${argv.hotfixName}`)
   }
 }
 
@@ -73,24 +83,14 @@ const handleFinish = async (argv: Arguments): Promise<void> => {
   }
 }
 
-const deleteBranch = async (argv: Arguments): Promise<void> => {
-  exec(`git branch -d ${argv.hotfix}/${argv.hotfixName}`)
-  if (
-    await ask(
-      `Do you want to delete on origin branch ${argv.hotfix}/${argv.hotfixName}?`
-    )
-  ) {
-    exec(`git push origin :${argv.hotfix}/${argv.hotfixName}`)
-  }
-}
+export class FinishHotfix implements CommandModule {
+  public command = 'finish <hotfixName>'
 
-const ask = async (question: string): Promise<string> => {
-  const answer: { accept: string } = await prompt([
-    {
-      message: question,
-      name: 'accept',
-      type: 'confirm'
-    }
-  ])
-  return answer.accept
+  public describe = 'Finishes a hotfix.'
+
+  public handler = (argv: Arguments): Promise<void> => {
+    if (argv.c) loadConfigFile(argv.c as string)
+
+    return handleFinish(argv)
+  }
 }

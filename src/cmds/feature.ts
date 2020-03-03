@@ -10,9 +10,9 @@ import { FinishFeature } from './feature/finish'
 import { StartFeature } from './feature/start'
 
 export class Feature implements CommandModule {
-  public command: string = 'feature <command>'
+  public command = 'feature <command>'
 
-  public describe: string = 'Manage starting and finishing features'
+  public describe = 'Manage starting and finishing features'
 
   public builder = (yargs: Argv): Argv => {
     return yargs
@@ -25,5 +25,7 @@ export class Feature implements CommandModule {
       .command(new FinishFeature())
   }
 
-  public handler = () => {}
+  public handler: () => void = () => {
+    //do nothing
+  }
 }

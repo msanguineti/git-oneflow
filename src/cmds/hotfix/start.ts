@@ -10,9 +10,9 @@ import { Arguments, CommandModule } from 'yargs'
 import { isValidBranchName, loadConfigFile } from '../../core'
 
 export class StartHotfix implements CommandModule {
-  public command: string = 'start <hotfixName> <from>'
+  public command = 'start <hotfixName> <from>'
 
-  public describe: string = `Start a new hotfix.
+  public describe = `Start a new hotfix.
   <hotfixName> should be something like \`2.3.1\`.
   <from> should be a branch (e.g. develop), a tag (e.g. 2.3.0) or a commit (e.g. 9af345)`
 
