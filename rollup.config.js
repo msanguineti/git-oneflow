@@ -7,7 +7,7 @@ import { terser } from 'rollup-plugin-terser'
 const preamble = `#!/usr/bin/env node
 
 /**
- * Copyright (c) 2019 Mirco Sanguineti
+ * Copyright (c) ${new Date().getFullYear()} Mirco Sanguineti
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -26,7 +26,7 @@ const plugins = [
 ]
 
 const output = {
-  file: 'bin/cli.js',
+  file: 'bin/cli',
   format: 'cjs'
 }
 

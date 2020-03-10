@@ -3,11 +3,11 @@
   "version": "0.10.8",
   "description": "CLI tooling implementing GIT OneFlow branching model",
   "bin": {
-    "gof": "bin/cli.js",
-    "git-oneflow": "bin/cli.js"
+    "gof": "bin/cli",
+    "git-oneflow": "bin/cli"
   },
   "files": [
-    "bin/cli.js"
+    "bin/cli"
   ],
   "scripts": {
     "test": "jest",
