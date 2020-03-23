@@ -2,7 +2,7 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/msanguineti/git-oneflow/badge/master)](https://www.codefactor.io/repository/github/msanguineti/git-oneflow/overview/master)
 [![npm](https://badgen.net/npm/v/git-oneflow)](https://www.npmjs.com/package/git-oneflow)
-[![JavaScript Style Guide](https://badgen.net/badge/code%20style/standard/f2a)](https://standardjs.com) [![Conventional Commits](https://badgen.net/badge/Conventional%20Commits/1.0.0/d4ac20)](https://conventionalcommits.org)
+[![code style: prettier](https://badgen.net/badge/code%20style/prettier/ff69b4)](https://prettier.io/) [![Conventional Commits](https://badgen.net/badge/Conventional%20Commits/1.0.0/d4ac20)](https://conventionalcommits.org)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=msanguineti/git-oneflow)](https://dependabot.com)
 
 > CLI tools implementing the _OneFlow_ git branching model.
