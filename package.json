@@ -3,19 +3,19 @@
   "version": "0.10.8",
   "description": "CLI tooling implementing GIT OneFlow branching model",
   "bin": {
-    "gof": "bin/cli.js",
-    "git-oneflow": "bin/cli.js"
+    "gof": "bin/cli",
+    "git-oneflow": "bin/cli"
   },
   "files": [
-    "bin/cli.js"
+    "bin/cli"
   ],
   "scripts": {
     "test": "jest",
     "clean": "rimraf bin",
-    "prebuild": "run-s clean test",
+    "prebuild": "npm run clean",
     "build": "rollup -c",
-    "lint": "eslint --fix 'src/**/*.ts' '__tests__/**/*.ts'",
-    "format": "prettier --write 'src/**/*.ts' '__tests__/**/*.ts'",
+    "lint": "eslint --fix \"src/**/*.ts\"",
+    "format": "prettier --write \"src/.\"",
     "watch": "rollup -c --watch",
     "typecheck": "tsc",
     "prerelease": "run-s typecheck lint build",
@@ -46,7 +46,6 @@
     "@babel/preset-typescript": "^7.9.0",
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
-    "@types/find-up": "^4.0.0",
     "@types/inquirer": "^6.5.0",
     "@types/jest": "^25.2.1",
     "@types/shelljs": "^0.8.7",
@@ -69,10 +68,10 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "chalk": "^3.0.0",
-    "find-up": "^4.1.0",
+    "chalk": "^4.0.0",
+    "commander": "^5.0.0",
+    "cosmiconfig": "^6.0.0",
     "inquirer": "^7.1.0",
-    "shelljs": "^0.8.3",
-    "yargs": "^15.3.1"
+    "shelljs": "^0.8.3"
   }
 }
