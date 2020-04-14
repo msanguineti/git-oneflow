@@ -1,4 +1,4 @@
-import commander, { Command } from 'commander'
+import commander from 'commander'
 import path from 'path'
 import * as config from '../lib/config'
 import * as log from '../lib/log'
@@ -18,7 +18,7 @@ export type GofCommand = {
     event: string | symbol
     callback: (...args: (string | boolean | undefined)[]) => void
   }[]
-  action?: (...args: unknown[]) => void | Promise<void>
+  action?: (...args: (string & commander.Command)[]) => void | Promise<void>
   examples?: string[]
 }
 

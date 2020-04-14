@@ -1,15 +1,15 @@
-import commander, { Command } from 'commander'
+import commander from 'commander'
 import * as gofCommand from './gofCommand'
 import * as config from '../lib/config'
-import * as prompt from '../lib/prompt'
+import * as inquisitor from '../lib/inquisitor'
 import * as git from '../lib/git'
 import * as log from '../lib/log'
 
 const askTagNameToUser = async (): Promise<string | undefined> => {
   if (config.getConfigValue('tagCommit') === 'true')
     return (
-      await prompt.promptUser([
-        prompt.askInput({
+      await inquisitor.promptUser([
+        inquisitor.askInput({
           message: `Tag name (latest tag: ${git.getLatestTag()})`,
           name: 'tag',
           validate: (input) =>
@@ -61,8 +61,8 @@ const tagOptions: gofCommand.GofCmdOption[] = [
 
 const maybeUseCurrentBranch = async (): Promise<string | undefined> => {
   const currentBranch = git.getCurrentBranch()
-  const useCurrentBranch = await prompt.promptUser([
-    prompt.askConfirmation({
+  const useCurrentBranch = await inquisitor.promptUser([
+    inquisitor.askConfirmation({
       message: `Use current branch (${currentBranch})?`,
       name: 'confirmation',
     }),
@@ -78,8 +78,8 @@ const askBranchNameToUser = async (
   const userInput =
     (base ? `${base}/` : '') +
     (
-      await prompt.promptUser([
-        prompt.askInput({
+      await inquisitor.promptUser([
+        inquisitor.askInput({
           message: `${
             cmdName.charAt(0).toUpperCase() + cmdName.slice(1)
           } name?`,
@@ -94,7 +94,7 @@ const askBranchNameToUser = async (
 }
 
 const maybeCheckoutAndGetBranchName = async (
-  cmd: Command,
+  cmd: commander.Command,
   arg?: string
 ): Promise<string> => {
   const base = cmd.base ?? config.getBaseBranch(cmd._name)
@@ -110,7 +110,7 @@ const maybeCheckoutAndGetBranchName = async (
   )
 }
 
-const getTag = async (cmd: Command): Promise<string | false> => {
+const getTag = async (cmd: commander.Command): Promise<string | false> => {
   const tag: string = cmd.tag ?? (await askTagNameToUser())
   if (tag) git.tagBranch(tag, cmd.message ?? tag)
   else log.warning('commit has not being tagged!')
@@ -118,18 +118,15 @@ const getTag = async (cmd: Command): Promise<string | false> => {
 }
 
 const releaseHotfixAction = async (
-  arg: unknown,
-  cmd: unknown
+  arg: string,
+  cmd: commander.Command
 ): Promise<void> => {
-  const branchName = await maybeCheckoutAndGetBranchName(
-    cmd as Command,
-    arg as string | undefined
-  )
+  const branchName = await maybeCheckoutAndGetBranchName(cmd, arg)
 
-  const tag = await getTag(cmd as Command)
+  const tag = await getTag(cmd)
 
   const onto =
-    (cmd as Command).onto ??
+    cmd.onto ??
     config.getConfigValue('development') ??
     config.getConfigValue('main')
 
@@ -137,19 +134,13 @@ const releaseHotfixAction = async (
 
   git.mergeBranch(branchName)
 
-  if (
-    (cmd as Command).push ||
-    config.getConfigValue('pushAfterMerge') === 'true'
-  )
+  if (cmd.push || config.getConfigValue('pushAfterMerge') === 'true')
     git.pushToOrigin(onto, tag)
 
-  if (
-    (cmd as Command).delete ||
-    config.getConfigValue('deleteAfterMerge') === 'true'
-  ) {
+  if (cmd.delete || config.getConfigValue('deleteAfterMerge') === 'true') {
     git.deleteBranch(branchName)
-    const ans = await prompt.promptUser([
-      prompt.askConfirmation({
+    const ans = await inquisitor.promptUser([
+      inquisitor.askConfirmation({
         message: `Delete '${branchName}' from remote?`,
         name: 'confirmation',
       }),
@@ -161,8 +152,8 @@ const releaseHotfixAction = async (
   if (
     config.getConfigValue('development') &&
     (
-      await prompt.promptUser([
-        prompt.askConfirmation({
+      await inquisitor.promptUser([
+        inquisitor.askConfirmation({
           message: `Merge '${tag || branchName}' into '${config.getConfigValue(
             'main'
           )}'?`,
@@ -208,7 +199,7 @@ const rebaseOptions = [
   { flags: '-s,--strategy <strategy>', desc: 'merge strategy' },
 ]
 
-const getStrategy = (cmd: Command): string => {
+const getStrategy = (cmd: commander.Command): string => {
   const strategy = cmd.strategy ?? config.getConfigValue('strategy')
   if (!config.strategyOptionValues.includes(strategy))
     throw new Error(
@@ -230,24 +221,20 @@ const feature: gofCommand.GofCommand = {
     '$ gof f f -s no-ff',
     '$ gof finish f --dry-run --no-interactive -s rebase-no-ff my-feature',
   ],
-  action: async (arg, cmd) => {
-    const strategy = getStrategy(cmd as Command)
+  action: async (arg: string, cmd: commander.Command) => {
+    const strategy = getStrategy(cmd)
 
-    const branchName = await maybeCheckoutAndGetBranchName(
-      cmd as Command,
-      arg as string
-    )
+    const branchName = await maybeCheckoutAndGetBranchName(cmd, arg)
 
     const onto =
-      (cmd as Command).onto ??
+      cmd.onto ??
       config.getConfigValue('development') ??
       config.getConfigValue('main')
 
     if (/^rebase/.test(strategy))
       git.rebase(
         onto,
-        (cmd as Command).interactive ??
-          config.getConfigValue('interactive') === 'true'
+        cmd.interactive ?? config.getConfigValue('interactive') === 'true'
       )
 
     git.checkoutBranch(onto)
@@ -255,19 +242,13 @@ const feature: gofCommand.GofCommand = {
     if (/no-ff/.test(strategy)) git.mergeBranch(branchName, '--no-ff')
     else git.mergeBranch(branchName, '--ff-only')
 
-    if (
-      (cmd as Command).push ||
-      config.getConfigValue('pushAfterMerge') === 'true'
-    )
+    if (cmd.push || config.getConfigValue('pushAfterMerge') === 'true')
       git.pushToOrigin(onto)
 
-    if (
-      (cmd as Command).delete ||
-      config.getConfigValue('deleteAfterMerge') === 'true'
-    ) {
+    if (cmd.delete || config.getConfigValue('deleteAfterMerge') === 'true') {
       git.deleteBranch(branchName)
-      const ans = await prompt.promptUser([
-        prompt.askConfirmation({
+      const ans = await inquisitor.promptUser([
+        inquisitor.askConfirmation({
           message: `Delete '${branchName}' from remote?`,
           name: 'confirmation',
         }),

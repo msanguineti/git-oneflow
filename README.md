@@ -42,8 +42,9 @@ Fun facts:
     - [Release/Hotfix branches](#releasehotfix-branches)
       - [Tags](#tags)
   - [Customisation](#customisation)
-    - [Configuration files](#configuration-files)
     - [Options](#options)
+    - [Generate default file](#generate-default-file)
+- [Commands](#commands)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
 - [License](#license)
@@ -83,32 +84,30 @@ gof --help
 Feature branches stem from `feature`:
 
 ```sh
-gof feature start my-feature
+$ gof start feature my-feature
 # equivalent to...
-git checkout -b feature/my-feature
+$ git checkout -b feature/my-feature
 ```
 
 Finishing a feature is done by rebasing:
 
 ```sh
-gof feature finish my-feature
+$ gof finish feature my-feature
 # equivalent to...
-git checkout feature/my-feature
-git rebase -i master
-git checkout master
-git merge --ff-only feature/my-feature
-git push origin master
-git branch -d feature/my-feature
+$ git checkout feature/my-feature
+$ git rebase -i master
+$ git checkout master
+$ git merge --ff-only feature/my-feature
+$ git push origin master
+$ git branch -d feature/my-feature
 ```
-
-The rebase step might be set to perform always, never or ask the user everytime. Also, passing the option `--overwrite-interactive` will make the step perform no matter the option set (see [Options](#options))
 
 #### Release/Hotfix branches
 
 Releases and hotfixes share the same workflow: (just substitute `hotfix` for `release` in the following examples)
 
 ```sh
-gof release start 2.3.0
+$ gof start release 2.3.0
 # equivalent to...
 git checkout -b release/2.3.0
 ```
@@ -116,108 +115,84 @@ git checkout -b release/2.3.0
 ...then
 
 ```sh
-gof release finish 2.3.0
+$ gof finish release 2.3.0 -t 2.3.0
 # equivalent to...
-git checkout release/2.3.0
-git tag 2.3.0
-git checkout master
-git merge release/2.3.0
-git push --tags origin master
-git branch -d release/2.3.0
+$ git checkout release/2.3.0
+$ git tag -a -m '2.3.0' 2.3.0
+$ git checkout master
+$ git merge release/2.3.0
+$ git push --follow-tags origin master
+$ git branch -d release/2.3.0
 ```
-
-Using the above commands, release (and hotfix) branches will stem from the current branch. Hopefully this is `master`, but even so, this might not be desirable. Therefore, the `start` command takes an extra optional parameter which defines where the release (or hotfix) should stem from.
-
-```sh
-gof release start 2.3.0 09f76a3
-# equivalent to...
-git checkout -b release/2.3.0 09f76a3
-```
-
-The above command will start a release from commit `09f76a3`.
 
 ##### Tags
 
-Automatic tagging creation when releasing or hotfixing might not be needed. One case would be if something like `standard version` is used, which tags releases based on some commit conventions. Therefore, there's a configuration option named `tags` which is `true` by default. Setting it to `false` will not create tags and also tags won't be pushed.
-
-```sh
-# do work, commit, test, build, ...
-npm run release
-# standard version does its magic
-# some tag is created
-gof release finish my-release
-# equivalent to...
-git checkout master
-git merge release/my-release
-git push origin master
-git branch -d release/my-release
-# now push --follow-tags origin && npm publish
-```
-
-_It is up to the user to manage tagging._
+Tags creation when releasing or hotfixing might not be needed. One case would be if something like [`standard-version`](https://www.npmjs.com/package/standard-version) is used, which tags releases based on some commit conventions. Therefore, a `--no-tag` option is used to avoid tagging the commit. A commit is either tagged on the command line by passing `-t|--tag <tagName>` or the program will ask to specify a tag name. If both `-t` and `--no-tag` are specified, `--no-tag` takes the precedence. This is true for any other `off` switch.
 
 ### Customisation
 
 ```sh
-gof init
+$ gof init
 ```
 
 `init` starts an interactive session that allows for customising the configuration of **_git-OneFlow_**
 
-This creates a `gof.config.js` file with the chosen configuration options.
+This creates a `.gitoneflowrc` file with the chosen configuration [options](#options). **_git-OneFlow_** uses [`cosmiconfig`](https://www.npmjs.com/package/cosmiconfig) under the hood.
 
-#### Configuration files
+To specify a configuration file on the command line use `-c|--configuration` with the name of the file (and it's path).
 
-By default, **_git-OneFlow_** checks for a config file (`gof.config.js`, `.gofrc` or `.gofrc.js`), or a dedicated `git-oneflow` section in `package.json`
-
-```js
-// package.json
-{
-  "git-oneflow": {
-    "feature": "feat",
-    "delete": "ask"
-  }
-}
+```sh
+$ gof start feature -c config/my-gof-config.json
 ```
-
-Passing `--config <fileName>` allows to specify the config file to use.
-
-> The `package.json` section takes precedence over any file.
 
 #### Options
 
-| Option        | Descritpion                                                                                                                       |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `main`        | name of the main (production) branch (default `master`)                                                                           |
-| `usedev`      | whether to use a development branch (default `false`)                                                                             |
-| `development` | the name of the development branch (default: `develop` iff `usedev` is `true`)                                                    |
-| `feature`     | name of the features branch (default `feature`)                                                                                   |
-| `release`     | name of the releases branch (default `release`)                                                                                   |
-| `hotfix`      | name of the hotfixes branch (default `hotfix`)                                                                                    |
-| `integration` | which feature integration strategy to use (default #`1`)                                                                          |
-| `interactive` | whether to rebase interactively `rebase -i` (default `always`, can also be `never` or `ask`)                                      |
-| `push`        | whether to push to `origin` after finishing (default `always`, can also be `never` or `ask`)                                      |
-| `delete`      | whether to delete the current working branch after merging with main/development (default `always`, can also be `never` or `ask`) |
-| `tags`        | whether to automatically tag releases and hotfixes (default: `true`)                                                              |
+| Option             | Description                                                              | Default     | Details                                                                                                                                                                                                                                                                                                                                |
+| ------------------ | ------------------------------------------------------------------------ | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `main`             | name of the main (production) branch                                     | `master`    | must be set to an existing branch name                                                                                                                                                                                                                                                                                                 |
+| `development`      | name of the development branch                                           | `undefined` | not set or an existing branch name                                                                                                                                                                                                                                                                                                     |
+| `features`         | name of the features branch (prefixed to the feature name)               | `feature`   | empty string or a valid branch name. This strings works as a branch prefix, e.g. if the chosen feature name is `my-super-feature` the resulting (using the default) branch name for this feature will be `feature/my-super-feature`. An empty string will result in `my-super-feature`. This applies to releases and hotfixes as well. |
+| `releases`         | name of the releases branch (prefixed to the release name)               | `release`   | empty string or a valid branch name                                                                                                                                                                                                                                                                                                    |
+| `hotfixes`         | name of the hotfixes branch (prefixed to the hotfix name)                | `hotfix`    | empty string or a valid branch name                                                                                                                                                                                                                                                                                                    |
+| `strategy`         | which feature integration merge strategy to use                          | `rebase`    | Valid options are: `rebase`, `rebase-no-ff` and `no-ff`                                                                                                                                                                                                                                                                                |
+| `interactive`      | whether to rebase interactively `rebase -i`                              | `true`      | the values `true` or `false`, not the strings 'true' or 'false'. See [example](#generate-default-file). If set to `false` this, and other boolean options, act as a permanent `off` switch for the given option. In this case, it is like `--no-interactive` is always specified on the command line.                                  |
+| `pushAfterMerge`   | whether to push to `origin` after finishing                              | `true`      | `true`, `false`                                                                                                                                                                                                                                                                                                                        |
+| `deleteAfterMerge` | whether to delete the working branch after merging with main/development | `true`      | `true`, `false`                                                                                                                                                                                                                                                                                                                        |
+| `tagCommit`        | whether to ask to tag releases and hotfixes                              | `true`      | `true`, `false`. This option is used to decide whether to prompt the user or not in case a tag hasn't been specified, for example with `--tag 2.3.4`.                                                                                                                                                                                  |
 
-When an option is set to `ask`, the user will be prompted to choose an action when appropriate.
+#### Generate default file
 
-`gof.config.js` with default values:
+To create a configuration file with default values:
 
-```js
-module.exports = {
-  main: 'master',
-  usedev: false,
-  feature: 'feature',
-  release: 'release',
-  hotfix: 'hotfix',
-  integration: 1,
-  interactive: 'always',
-  push: 'always',
-  delete: 'always',
-  tags: true
+```sh
+$ gof init -y
+```
+
+this will create `.gitonelfowrc` in the current directory with the following content:
+
+```json
+{
+  "main": "master",
+  "features": "feature",
+  "releases": "release",
+  "hotfixes": "hotfix",
+  "strategy": "rebase",
+  "interactive": true,
+  "deleteAfterMerge": true,
+  "pushAfterMerge": true,
+  "tagCommit": true
 }
 ```
+
+## Commands
+
+Each command comes with its own help and its own set of options.
+
+```sh
+$ gof start feature -h
+```
+
+Under the hood, **git-OneFlow** uses [`commander`](https://www.npmjs.com/package/commander).
 
 ## Changelog
 

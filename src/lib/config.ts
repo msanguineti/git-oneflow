@@ -10,9 +10,9 @@ type StrategyOptions = 'rebase' | 'no-ff' | 'rebase-no-ff'
 type Configuration = {
   main: string
   development: string | undefined
-  featuresBranch: string
-  releasesBranch: string
-  hotfixesBranch: string
+  features: string
+  releases: string
+  hotfixes: string
   strategy: StrategyOptions
   interactive: boolean
   deleteAfterMerge: boolean
@@ -29,9 +29,9 @@ export const strategyOptionValues: StrategyOptions[] = [
 export const defaultConfiguration: Configuration = {
   main: 'master',
   development: undefined,
-  featuresBranch: 'feature',
-  releasesBranch: 'release',
-  hotfixesBranch: 'hotfix',
+  features: 'feature',
+  releases: 'release',
+  hotfixes: 'hotfix',
   strategy: 'rebase',
   interactive: true,
   deleteAfterMerge: true,
@@ -83,10 +83,10 @@ export const getDefaultValue = (
 export const getBaseBranch = (cmd: string): string | undefined => {
   switch (cmd) {
     case 'feature':
-      return getConfigValue('featuresBranch')
+      return getConfigValue('features')
     case 'release':
-      return getConfigValue('releasesBranch')
+      return getConfigValue('releases')
     case 'hotfix':
-      return getConfigValue('hotfixesBranch')
+      return getConfigValue('hotfixes')
   }
 }

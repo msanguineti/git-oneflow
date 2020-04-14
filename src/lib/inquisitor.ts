@@ -1,15 +1,17 @@
 import inquirer from 'inquirer'
 
+export type GofQuestion = inquirer.Question
+
 export const askInput = ({
   message,
   name,
-  defaultValues,
+  defaultValue,
   when,
   validate,
 }: {
   message: string
   name: string
-  defaultValues?: string | boolean | undefined
+  defaultValue?: string | boolean | undefined
   when?: (answer: inquirer.Answers) => boolean
   validate?: (
     input: string,
@@ -20,7 +22,7 @@ export const askInput = ({
     type: 'input',
     name,
     message,
-    default: defaultValues ?? undefined,
+    default: defaultValue,
     when,
     validate,
   }
@@ -30,16 +32,22 @@ export const presentChoices = ({
   message,
   name,
   choices,
+  when,
+  defaultValue,
 }: {
   message: string
   name: string
-  choices: string[]
+  choices: string[] | ((answer: inquirer.Answers) => string[])
+  when?: (answer: inquirer.Answers) => boolean
+  defaultValue?: string
 }): inquirer.ListQuestion => {
   return {
     type: 'list',
     name,
     message,
     choices,
+    when,
+    default: defaultValue,
   }
 }
 
@@ -47,21 +55,24 @@ export const askConfirmation = ({
   message,
   name,
   defaultValue = true,
+  when,
 }: {
   message: string
   name: string
   defaultValue?: boolean
+  when?: (answer: inquirer.Answers) => boolean
 }): inquirer.ConfirmQuestion => {
   return {
     type: 'confirm',
     name,
     message,
     default: defaultValue,
+    when,
   }
 }
 
 export const promptUser = async (
-  questions: inquirer.Question[]
+  questions: GofQuestion[]
 ): Promise<inquirer.Answers> => {
   return inquirer.prompt(questions)
 }

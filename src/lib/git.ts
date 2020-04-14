@@ -12,6 +12,27 @@ const executeOrDie = (cmd: string): void => {
   }
 }
 
+const noErrorsExec = (cmd: string): boolean =>
+  0 === shelljs.exec(cmd, { silent: true }).code
+
+export const isOK = (): boolean => noErrorsExec('git status')
+
+export const getLocalBranches = (exclude?: string): string[] | undefined => {
+  const shellString = shelljs.exec('git branch', { silent: true })
+
+  if (shellString.code === 0)
+    return shellString.stdout
+      .replace(new RegExp(`\\W+|${exclude}`, 'gm'), ' ')
+      .trim()
+      .split(' ')
+}
+
+export const branchExists = (name: string): boolean =>
+  noErrorsExec(`git show-ref refs/heads/${name}`)
+
+export const isValidBranchName = (name: string): boolean =>
+  noErrorsExec(`git check-ref-format --branch ${name}`)
+
 export const getCurrentBranch = (): string => {
   return shelljs.exec('git symbolic-ref --short HEAD', { silent: true }).trim()
 }

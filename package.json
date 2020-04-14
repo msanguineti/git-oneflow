@@ -18,7 +18,7 @@
     "format": "prettier --write \"src/.\"",
     "watch": "rollup -c --watch",
     "typecheck": "tsc",
-    "prerelease": "run-s typecheck lint build",
+    "prerelease": "run-s typecheck lint format build",
     "release": "standard-version"
   },
   "repository": {
