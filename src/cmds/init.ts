@@ -1,268 +1,127 @@
-/**
- * Copyright (c) 2019 Mirco Sanguineti
- *
- * This software is released under the MIT License.
- * https://opensource.org/licenses/MIT
- */
+import commander from 'commander'
+import fs from 'fs'
+import path from 'path'
+import * as packageJson from '../../package.json'
+import * as config from '../lib/config'
+import * as log from '../lib/log'
+import * as inquisitor from '../lib/inquisitor'
+import yoda from '../lib/yoda'
+import * as git from '../lib/git'
 
-import { Answers, prompt, QuestionCollection } from 'inquirer'
-import { Arguments, CommandModule, Argv } from 'yargs'
-import {
-  ConfigValues,
-  isValidBranchName,
-  writeConfigFile,
-  getDefaultConfigValues
-} from '../core'
-import { error, success, info } from '../utils/text'
+const configInitQuestions = (): inquisitor.GofQuestion[] => [
+  inquisitor.presentChoices({
+    message: 'Main branch name?',
+    name: config.optionNames.main,
+    choices: git.getLocalBranches() as string[],
+    defaultValue: config.getConfigValue('main'),
+  }),
+  inquisitor.askConfirmation({
+    message: 'Do you use a development branch?',
+    name: 'useDevelop',
+    defaultValue: config.getConfigValue('development') !== undefined,
+    when: (answers) =>
+      undefined !== git.getLocalBranches(answers[config.optionNames.main]),
+  }),
+  inquisitor.presentChoices({
+    message: 'Development branch name?',
+    name: config.optionNames.development,
+    choices: (answers) =>
+      git.getLocalBranches(answers[config.optionNames.main]) as string[],
+    when: (answers) => answers.useDevelop === true,
+  }),
+  inquisitor.askInput({
+    message: 'Features branch basename?',
+    name: config.optionNames.features,
+    defaultValue:
+      config.getConfigValue('features') ?? config.getDefaultValue('features'),
+    validate: (input) =>
+      input.trim() === '' ||
+      git.isValidBranchName(input) ||
+      'Please, enter a valid branch name',
+  }),
+  inquisitor.askInput({
+    message: 'Releases branch basename?',
+    name: config.optionNames.releases,
+    defaultValue:
+      config.getConfigValue('releases') ?? config.getDefaultValue('releases'),
+    validate: (input) =>
+      input.trim() === '' ||
+      git.isValidBranchName(input) ||
+      'Please, enter a valid branch name',
+  }),
+  inquisitor.askInput({
+    message: 'Hotfixes branch basename?',
+    name: config.optionNames.hotfixes,
+    defaultValue:
+      config.getConfigValue('hotfixes') ?? config.getDefaultValue('hotfixes'),
+    validate: (input) =>
+      input.trim() === '' ||
+      git.isValidBranchName(input) ||
+      'Please, enter a valid branch name',
+  }),
+  inquisitor.presentChoices({
+    message: 'Merge strategy to use?',
+    name: config.optionNames.strategy,
+    choices: config.strategyOptionValues,
+    defaultValue: config.getConfigValue('strategy'),
+  }),
+  inquisitor.askConfirmation({
+    message: 'Always rebase interactively?',
+    name: config.optionNames.interactive,
+    defaultValue: config.getConfigValue('interactive') === 'true',
+  }),
+  inquisitor.askConfirmation({
+    message: 'Push to origin after merge?',
+    name: config.optionNames.pushAfterMerge,
+    defaultValue: config.getConfigValue('pushAfterMerge') === 'true',
+  }),
+  inquisitor.askConfirmation({
+    message: 'Delete branch after merge?',
+    name: config.optionNames.deleteAfterMerge,
+    defaultValue: config.getConfigValue('deleteAfterMerge') === 'true',
+  }),
+  inquisitor.askConfirmation({
+    message: 'Tag releases and hotfixes?',
+    name: config.optionNames.tagCommit,
+    defaultValue: config.getConfigValue('tagCommit') === 'true',
+  }),
+]
 
-const expandAnswer = (
-  dFault: string,
-  message: string,
-  name: string,
-  choices: { key: string; name: string; value: string }[],
-  when?: Function
-): {
-  choices: {
-    key: string;
-    name: string;
-    value: string;
-  }[];
-  default: string;
-  message: string;
-  name: string;
-  type: string;
-  when: Function | undefined;
-} => {
-  return {
-    choices,
-    default: dFault,
-    message,
-    name,
-    type: 'expand',
-    when
-  }
+const maybePromptUser = async (defaults?: boolean): Promise<string> => {
+  if (defaults) return JSON.stringify(config.defaultConfiguration, null, 2)
+
+  const ans = await inquisitor.promptUser(configInitQuestions())
+  delete ans.useDevelop
+  return JSON.stringify(ans, null, 2)
 }
 
-const confirmAnswer = (
-  dFault: boolean,
-  message: string,
-  name: string
-): {
-  default: boolean;
-  message: string;
-  name: string;
-  type: string;
-} => {
-  return {
-    default: dFault,
-    message,
-    name,
-    type: 'confirm'
-  }
-}
+const maybeUseTheForce = (force?: boolean): void => {
+  const oldConfFile = config.getConfigFile()
 
-const inputBranchName = (
-  dFault: string,
-  message: string,
-  name: string,
-  when?: Function
-): Answers => {
-  return {
-    default: dFault,
-    message,
-    name,
-    type: 'input',
-    validate: (value: string): boolean | string => {
-      return (
-        isValidBranchName(value) || 'Please, choose a valid name for the branch'
-      )
-    },
-    when
-  }
-}
+  if (!oldConfFile) return
 
-const generateQuestions = (argv: Arguments): QuestionCollection<Answers>[] => {
-  return [
-    inputBranchName(
-      (argv.main as string) || 'master',
-      'Main (production) branch:',
-      'main'
-    ),
-    confirmAnswer(
-      (argv.usedev as boolean) || false,
-      'Do you use a development branch?',
-      'usedev'
-    ),
-    inputBranchName(
-      (argv.development as string) || 'develop',
-      'Development branch:',
-      'development',
-      (answers: Answers) => {
-        return answers.usedev
-      }
-    ),
-    inputBranchName(
-      (argv.feature as string) || 'feature',
-      'Feature branch:',
-      'feature'
-    ),
-    inputBranchName(
-      (argv.release as string) || 'release',
-      'Release branch:',
-      'release'
-    ),
-    inputBranchName(
-      (argv.hotfix as string) || 'hotfix',
-      'Hotfix branch:',
-      'hotfix'
-    ),
-    {
-      choices: [
-        {
-          name:
-            'Integrate feature branch with main/development using rebase (rebase -> merge --ff-only).',
-          short: 'rebase',
-          value: 1
-        },
-        {
-          name:
-            'Feature is merged in main/development à la GitFlow (merge --no-ff).',
-          short: 'merge --no-ff',
-          value: 2
-        },
-        {
-          name:
-            'Mix the previous two: rebase and merge (rebase -> merge --no-ff).',
-          short: 'rebase + merge --no-ff',
-          value: 3
-        }
-      ],
-      default: (argv.integration as number) - 1 || 1,
-      message: 'Which feature branch integration method do you want to use?',
-      name: 'integration',
-      type: 'list'
-    },
-
-    expandAnswer(
-      (argv.interactive as string) || 'always',
-      'Do you want to use rebase interactively (rebase -i)?',
-      'interactive',
-      [
-        {
-          key: 'y',
-          name: 'Always',
-          value: 'always'
-        },
-        {
-          key: 'n',
-          name: 'Never',
-          value: 'never'
-        },
-        {
-          key: 'a',
-          name: 'Ask me every time',
-          value: 'ask'
-        }
-      ],
-      (answers: Answers) => {
-        return answers.integration !== 2
-      }
-    ),
-
-    expandAnswer(
-      (argv.push as string) || 'always',
-      'Do you want to push to origin after merging?',
-      'push',
-      [
-        {
-          key: 'y',
-          name: 'Always',
-          value: 'always'
-        },
-        {
-          key: 'n',
-          name: 'Never',
-          value: 'never'
-        },
-        {
-          key: 'a',
-          name: 'Ask me every time',
-          value: 'ask'
-        }
-      ]
-    ),
-    expandAnswer(
-      (argv.push as string) || 'always',
-      'Do you want to delete working branch after merging?',
-      'delete',
-      [
-        {
-          key: 'y',
-          name: 'Always',
-          value: 'always'
-        },
-        {
-          key: 'n',
-          name: 'Never',
-          value: 'never'
-        },
-        {
-          key: 'a',
-          name: 'Ask me every time',
-          value: 'ask'
-        }
-      ]
-    ),
-    confirmAnswer(
-      (argv.usedev as boolean) || true,
-      'Do you want automatic tagging of releases/hotfixes?',
-      'tags'
+  if (!force) {
+    log.warning(
+      `a configuration exists at '${oldConfFile}'. Cowardly refusing to proceed!`
     )
-  ]
+    process.exit(0)
+  }
+  log.info('Use the Force, Luke', yoda)
+  log.warning(`option '-f,--force' detected. Using the force...`)
 }
 
-const askConfirmationBeforeWrite = async (): Promise<boolean> => {
-  const ans: { write: boolean } = await prompt([
-    {
-      message: 'Write to config file?',
-      name: 'write',
-      type: 'confirm'
-    }
-  ])
-  return ans.write
+const writeConfigFile = (values: string): void => {
+  const filePath = path.resolve(process.cwd(), `.${packageJson.name}rc`)
+  fs.writeFileSync(filePath, values)
+  log.info('config', `new configuration file created at '${filePath}'`)
 }
-export class Init implements CommandModule {
-  public command = 'init [options]'
 
-  public describe = 'Generate a config file'
-
-  public builder = (yargs: Argv): Argv => {
-    return yargs.option('d', {
-      alias: 'defaultValues',
-      describe: 'Generates default value file. Overwrites old values'
+export default (): commander.Command =>
+  new commander.Command('init')
+    .description('initialise configuration file')
+    .option('-y, --defaults', 'accept all defaults')
+    .option('-f, --force', 'force creation of configuration file')
+    .action(async (cmd: commander.Command) => {
+      maybeUseTheForce(cmd.force)
+      writeConfigFile(await maybePromptUser(cmd.defaults))
     })
-  }
-
-  public handler = async (argv: Arguments): Promise<void> => {
-    try {
-      if (argv.defaultValues) {
-        writeConfigFile({ data: getDefaultConfigValues() })
-        console.log('Config file created:', info('gof.config.js'))
-      } else {
-        const jsonValues: ConfigValues = await prompt(generateQuestions(argv))
-
-        console.log(JSON.stringify(jsonValues, null, 2))
-
-        if (await askConfirmationBeforeWrite()) {
-          if (writeConfigFile({ data: jsonValues })) {
-            console.log(success('Initialisation done!'))
-          } else {
-            console.error(error('Cannot write config file!'))
-          }
-        }
-      }
-    } catch (err) {
-      console.error(error(err))
-    }
-  }
-}

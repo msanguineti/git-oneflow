@@ -1,4 +1,4 @@
-module.exports = function(api) {
+module.exports = function (api) {
   api.cache(true)
 
   const presets = [
@@ -6,21 +6,21 @@ module.exports = function(api) {
       '@babel/env',
       {
         targets: {
-          node: true
-        }
-      }
+          node: true,
+        },
+      },
     ],
-    '@babel/typescript'
+    '@babel/typescript',
   ]
 
   const plugins = [
     // "@babel/syntax-dynamic-import",
     // ["dynamic-import-node", { noInterop: true }],
-    '@babel/proposal-class-properties'
+    '@babel/proposal-class-properties',
   ]
 
   return {
     presets,
-    plugins
+    plugins,
   }
 }

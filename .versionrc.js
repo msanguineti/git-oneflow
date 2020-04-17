@@ -8,6 +8,6 @@ module.exports = {
     { type: 'style', section: 'Refactoring', hidden: true },
     { type: 'refactor', section: 'Refactoring', hidden: false },
     { type: 'perf', section: 'Improvements' },
-    { type: 'test', section: 'Tests', hidden: false }
-  ]
+    { type: 'test', section: 'Tests', hidden: false },
+  ],
 }

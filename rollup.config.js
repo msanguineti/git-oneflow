@@ -7,7 +7,7 @@ import { terser } from 'rollup-plugin-terser'
 const preamble = `#!/usr/bin/env node
 
 /**
- * Copyright (c) 2019 Mirco Sanguineti
+ * Copyright (c) ${new Date().getFullYear()} Mirco Sanguineti
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -15,19 +15,20 @@ const preamble = `#!/usr/bin/env node
 `
 const extensions = ['.js', '.ts']
 
-const input = 'src/cli.ts'
+const input = 'src/index.ts'
 
 const plugins = [
   json(),
   resolve({ extensions }),
   cjs(),
   babel({ extensions, include: ['src/**/*'] }),
-  terser({ output: { beautify: true, preamble: preamble } })
+  terser({ output: { beautify: true, preamble: preamble } }),
 ]
 
 const output = {
-  file: 'bin/cli.js',
-  format: 'cjs'
+  file: 'bin/cli',
+  format: 'cjs',
+  entryFileNames: '[name]',
 }
 
 export default {
@@ -36,18 +37,17 @@ export default {
   // Specify here external modules which you don't want to include in your bundle (for instance: 'lodash', 'moment' etc.)
   // https://rollupjs.org/guide/en#external-e-external
   external: [
-    // 'simple-git/promise',
     'shelljs',
-    // 'commander',
+    'commander',
     'inquirer',
     'chalk',
-    'yargs',
+    'cosmiconfig',
     'path',
-    'find-up',
-    'child_process'
+    'child_process',
+    'fs',
   ],
 
   plugins,
 
-  output
+  output,
 }
