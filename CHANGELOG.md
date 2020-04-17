@@ -2,6 +2,89 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/msanguineti/git-oneflow/compare/v0.10.8...v1.0.0) (2020-04-17)
+
+### ⚠ BREAKING CHANGES
+
+- complete redux! Nothing works as before
+
+### Features
+
+- remake cmds + config ([ab9e377](https://github.com/msanguineti/git-oneflow/commit/ab9e377dc989fd8f21a1b9e449f88e0c1f4e70d8))
+
+### Misc
+
+- **deps:** [security] bump acorn from 6.4.0 to 6.4.1 ([5182dd4](https://github.com/msanguineti/git-oneflow/commit/5182dd4d0b62b2e208bde91103bda2541b505bc2))
+- **deps:** bump inquirer from 7.0.5 to 7.0.6 ([214265a](https://github.com/msanguineti/git-oneflow/commit/214265a7f7a1f4231d5f812324cdc6ba20e06625))
+- **deps:** bump inquirer from 7.0.6 to 7.1.0 ([54e7945](https://github.com/msanguineti/git-oneflow/commit/54e7945246ceae104d96e7aa72dc8cb346f01dcf))
+- **deps:** bump yargs from 15.1.0 to 15.3.0 ([4f0c694](https://github.com/msanguineti/git-oneflow/commit/4f0c694ef17c4dc822bc6ed04206f67a63ec16b1))
+- **deps:** bump yargs from 15.3.0 to 15.3.1 ([bcda220](https://github.com/msanguineti/git-oneflow/commit/bcda2206f68bef5362c044cba1406b5989eda677))
+- **deps-dev:** bump @babel/core from 7.8.6 to 7.8.7 ([6a49b4e](https://github.com/msanguineti/git-oneflow/commit/6a49b4e8f342242fa9bdd120c6f39bb2ad1ac802))
+- **deps-dev:** bump @babel/core from 7.8.7 to 7.9.0 ([a30beaa](https://github.com/msanguineti/git-oneflow/commit/a30beaa86d1b42c00f72ae883de40db9e8dd0939))
+- **deps-dev:** bump @babel/preset-env from 7.8.6 to 7.8.7 ([ac1456d](https://github.com/msanguineti/git-oneflow/commit/ac1456dca7977914079b515a472fd3d98fa9d19f))
+- **deps-dev:** bump @babel/preset-env from 7.8.7 to 7.9.0 ([e3c2b62](https://github.com/msanguineti/git-oneflow/commit/e3c2b62201895e5684ca8e2f659199d57e432608))
+- **deps-dev:** bump @babel/preset-env from 7.9.0 to 7.9.5 ([7e024e6](https://github.com/msanguineti/git-oneflow/commit/7e024e6feed5239f5850ff5204d621c6d6439c94))
+- **deps-dev:** bump @babel/preset-typescript from 7.8.3 to 7.9.0 ([3e5796f](https://github.com/msanguineti/git-oneflow/commit/3e5796fa2648e9b00bde3a3819f0b06672b6381e))
+- **deps-dev:** bump @types/jest from 25.1.3 to 25.1.4 ([2c018f3](https://github.com/msanguineti/git-oneflow/commit/2c018f358ede9cfccffb93edcc0f777cdc7dbb09))
+- **deps-dev:** bump @types/jest from 25.1.4 to 25.1.5 ([5b9e27b](https://github.com/msanguineti/git-oneflow/commit/5b9e27bc6d6b85cf8ec69fc9e824176c85395ace))
+- **deps-dev:** bump @types/jest from 25.1.5 to 25.2.1 ([54791fa](https://github.com/msanguineti/git-oneflow/commit/54791fafbb7131b539134a117ca988be20629a85))
+- **deps-dev:** bump @types/shelljs from 0.8.6 to 0.8.7 ([1441c3d](https://github.com/msanguineti/git-oneflow/commit/1441c3dc5b8799b1fa923c5c1fcc365791e8c440))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([6b62519](https://github.com/msanguineti/git-oneflow/commit/6b62519a629d8ed0330d4b5d8c19b18fcdea2019))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([9b1e824](https://github.com/msanguineti/git-oneflow/commit/9b1e8240353a7d61b156a42ed57f037b639c1d72))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([1124cde](https://github.com/msanguineti/git-oneflow/commit/1124cde1203f72e5d8cb51d6154e493c8b7fd838))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([b841012](https://github.com/msanguineti/git-oneflow/commit/b8410129795aafaa46c2269e36b9a246ffcc4a88))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([44b7869](https://github.com/msanguineti/git-oneflow/commit/44b7869d57815b2b026d45f30cdb7993c350a082))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([c7fdd33](https://github.com/msanguineti/git-oneflow/commit/c7fdd332a9d0e22978aeefb20257f1ba1c19eada))
+- **deps-dev:** bump @typescript-eslint/parser from 2.22.0 to 2.23.0 ([7c96e65](https://github.com/msanguineti/git-oneflow/commit/7c96e650cc32c6cd5fdde5b1b473eef1399f5799))
+- **deps-dev:** bump @typescript-eslint/parser from 2.23.0 to 2.24.0 ([fd7e5f2](https://github.com/msanguineti/git-oneflow/commit/fd7e5f2588edae4a6a182e8738c7ed3122648d12))
+- **deps-dev:** bump @typescript-eslint/parser from 2.24.0 to 2.25.0 ([61ea5b2](https://github.com/msanguineti/git-oneflow/commit/61ea5b2c1acc16969760eecdc4ccb07acbe33ede))
+- **deps-dev:** bump @typescript-eslint/parser from 2.25.0 to 2.26.0 ([99c58b2](https://github.com/msanguineti/git-oneflow/commit/99c58b2eb64e5b3caab4b799d9569653c16a4497))
+- **deps-dev:** bump @typescript-eslint/parser from 2.26.0 to 2.27.0 ([98c3ab4](https://github.com/msanguineti/git-oneflow/commit/98c3ab4406d81736fb687551542c8cce5b30a1e1))
+- **deps-dev:** bump @typescript-eslint/parser from 2.27.0 to 2.28.0 ([875b889](https://github.com/msanguineti/git-oneflow/commit/875b889acfdfa7aa0578e600f65f07347f667891))
+- **deps-dev:** bump eslint-config-prettier from 6.10.0 to 6.10.1 ([a1934b7](https://github.com/msanguineti/git-oneflow/commit/a1934b79a9c6a2892563bfe663d5d867c5e8c07a))
+- **deps-dev:** bump husky from 4.2.3 to 4.2.5 ([09cff08](https://github.com/msanguineti/git-oneflow/commit/09cff08b4dbbcc2cc2365ab5aaa046dee42966e1))
+- **deps-dev:** bump jest from 25.1.0 to 25.2.0 ([21fabb1](https://github.com/msanguineti/git-oneflow/commit/21fabb1365d1b03b57b92fa0880f9c9a68fa90ac))
+- **deps-dev:** bump jest from 25.2.0 to 25.2.3 ([3e8585f](https://github.com/msanguineti/git-oneflow/commit/3e8585f57491109bf9391ab917faccb05a89a609))
+- **deps-dev:** bump jest from 25.2.3 to 25.2.4 ([3d52896](https://github.com/msanguineti/git-oneflow/commit/3d528965a554ee71e561c84e7df343381956197a))
+- **deps-dev:** bump jest from 25.2.4 to 25.2.6 ([e7aa03a](https://github.com/msanguineti/git-oneflow/commit/e7aa03ab940bcb446c5b8f7391acbacff95e63cb))
+- **deps-dev:** bump jest from 25.2.6 to 25.2.7 ([5ad9bd7](https://github.com/msanguineti/git-oneflow/commit/5ad9bd7cfcdb87972ef98089a7dbb38099b95b87))
+- **deps-dev:** bump jest from 25.2.7 to 25.3.0 ([42a0173](https://github.com/msanguineti/git-oneflow/commit/42a01735c7de5bd47f1e1b782826b7af6eedf925))
+- **deps-dev:** bump lint-staged from 10.0.10 to 10.1.0 ([6542b8d](https://github.com/msanguineti/git-oneflow/commit/6542b8d7c3b9df38a2bcfe86c66252b23e4e3c86))
+- **deps-dev:** bump lint-staged from 10.0.8 to 10.0.9 ([2ba34f7](https://github.com/msanguineti/git-oneflow/commit/2ba34f7d332b596f6675066a2a25dec732dfeb4b))
+- **deps-dev:** bump lint-staged from 10.0.9 to 10.0.10 ([6735bd9](https://github.com/msanguineti/git-oneflow/commit/6735bd970468bd290657e8a30fc8de05aa1d818a))
+- **deps-dev:** bump lint-staged from 10.1.0 to 10.1.1 ([4816543](https://github.com/msanguineti/git-oneflow/commit/4816543187a8dd52499b854953feef74336ee00c))
+- **deps-dev:** bump lint-staged from 10.1.1 to 10.1.2 ([ca9d898](https://github.com/msanguineti/git-oneflow/commit/ca9d898eff0866f8f67c24710969004f30367a71))
+- **deps-dev:** bump lint-staged from 10.1.2 to 10.1.3 ([86b3656](https://github.com/msanguineti/git-oneflow/commit/86b3656133ecd2d49f722a890e2e6965846d2098))
+- **deps-dev:** bump prettier from 1.19.1 to 2.0.1 ([d379d05](https://github.com/msanguineti/git-oneflow/commit/d379d057b248d893f4a21e3e404174bf21e81475))
+- **deps-dev:** bump prettier from 2.0.1 to 2.0.2 ([ccb4e17](https://github.com/msanguineti/git-oneflow/commit/ccb4e173444c535f9b4a70d435e2e3d94ec8b08f))
+- **deps-dev:** bump prettier from 2.0.2 to 2.0.3 ([62dc029](https://github.com/msanguineti/git-oneflow/commit/62dc02957e7de0ff843c1938cce93e857eca6d95))
+- **deps-dev:** bump prettier from 2.0.3 to 2.0.4 ([6fd0567](https://github.com/msanguineti/git-oneflow/commit/6fd056757d29df3b39326884d7383d3ca3e2d925))
+- **deps-dev:** bump rollup from 1.32.0 to 1.32.1 ([b36905f](https://github.com/msanguineti/git-oneflow/commit/b36905f8a8ff5f1dc5dcc126db9e03b853f82ff3))
+- **deps-dev:** bump rollup from 1.32.1 to 2.0.3 ([18dc751](https://github.com/msanguineti/git-oneflow/commit/18dc7518e16e60948e2c47ec70e1bcbdaca24b3d))
+- **deps-dev:** bump rollup from 2.0.3 to 2.0.5 ([12e2d72](https://github.com/msanguineti/git-oneflow/commit/12e2d72515ae9e35050e6f890b5b2d7bde414b87))
+- **deps-dev:** bump rollup from 2.0.5 to 2.0.6 ([31de95f](https://github.com/msanguineti/git-oneflow/commit/31de95f71d10d17871fbb7055223c2fe8b7e31a6))
+- **deps-dev:** bump rollup from 2.0.6 to 2.1.0 ([14a28ac](https://github.com/msanguineti/git-oneflow/commit/14a28acf61bff27a97d82178d8980c7e20516585))
+- **deps-dev:** bump rollup from 2.1.0 to 2.2.0 ([3c4fc32](https://github.com/msanguineti/git-oneflow/commit/3c4fc320fa4b99620e7a8b3c8e270960b12918ac))
+- **deps-dev:** bump rollup from 2.2.0 to 2.3.0 ([bc5f959](https://github.com/msanguineti/git-oneflow/commit/bc5f95918beee415c5bb649e83b18903fb162d1b))
+- **deps-dev:** bump rollup from 2.3.0 to 2.3.1 ([219aacd](https://github.com/msanguineti/git-oneflow/commit/219aacd98ed63771a9c4a3d7bd434144f7b650c9))
+- **deps-dev:** bump rollup from 2.3.1 to 2.3.2 ([28e0313](https://github.com/msanguineti/git-oneflow/commit/28e0313bdadad860eb8276fdadab0f347acca2df))
+- **deps-dev:** bump rollup from 2.3.2 to 2.3.3 ([e9b58e2](https://github.com/msanguineti/git-oneflow/commit/e9b58e2a05c808fb3f091dcb96f700a428ee44ba))
+- **deps-dev:** bump rollup from 2.3.3 to 2.3.4 ([8c7a10f](https://github.com/msanguineti/git-oneflow/commit/8c7a10fe2afc1a6c6a33823d2be6ce5bbf8ba2b0))
+- **deps-dev:** bump rollup from 2.3.4 to 2.4.0 ([15d3a22](https://github.com/msanguineti/git-oneflow/commit/15d3a221b13cdb5c266b1f66e7b9d0c9bd2ba396))
+- **deps-dev:** bump rollup from 2.4.0 to 2.6.1 ([781b5b4](https://github.com/msanguineti/git-oneflow/commit/781b5b4f081b9be21780eb37957f7f4b411f0f76))
+- move from shields.io to badgen ([a1bc07d](https://github.com/msanguineti/git-oneflow/commit/a1bc07da139b2f852cb056a5741e53860efbc31b))
+- substitute standard badge with prettier ([b1e5427](https://github.com/msanguineti/git-oneflow/commit/b1e5427b16152c25c59340c63970d82ea7bb850e))
+- **deps-dev:** bump rollup-plugin-babel from 4.3.3 to 4.4.0 ([0b74f44](https://github.com/msanguineti/git-oneflow/commit/0b74f445899c943bceaceb95297b05fa11f21604))
+- **deps-dev:** bump rollup-plugin-terser from 5.2.0 to 5.3.0 ([2033680](https://github.com/msanguineti/git-oneflow/commit/20336809da69b7f02cd976cb55d14739a7ea3f90))
+
+### Documentation
+
+- updated readme ([9c3c632](https://github.com/msanguineti/git-oneflow/commit/9c3c632d842743b80483ad34469e1945e517380a))
+
+### Tests
+
+- test cli ([63ab7a0](https://github.com/msanguineti/git-oneflow/commit/63ab7a05c2d228becded4684799a68761fa6e06c))
+
 ### [0.10.8](https://github.com/msanguineti/git-oneflow/compare/v0.10.7...v0.10.8) (2020-03-03)
 
 ### Bug Fixes
