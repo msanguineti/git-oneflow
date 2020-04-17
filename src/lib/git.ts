@@ -27,11 +27,23 @@ export const getLocalBranches = (exclude?: string): string[] | undefined => {
       .split(' ')
 }
 
-export const branchExists = (name: string): boolean =>
-  noErrorsExec(`git show-ref refs/heads/${name}`)
+export const branchExists = (name: string): boolean => {
+  const cmd = `git show-ref refs/heads/${name}`
+  if (process.env.GOF_CHICKENOUT) {
+    log.info('dry-run', cmd)
+    return true
+  }
+  return noErrorsExec(cmd)
+}
 
-export const isValidBranchName = (name: string): boolean =>
-  noErrorsExec(`git check-ref-format --branch ${name}`)
+export const isValidBranchName = (name: string): boolean => {
+  const cmd = `git check-ref-format --branch ${name}`
+  if (process.env.GOF_CHICKENOUT) {
+    log.info('dry-run', cmd)
+    return true
+  }
+  return noErrorsExec(cmd)
+}
 
 export const getCurrentBranch = (): string => {
   return shelljs.exec('git symbolic-ref --short HEAD', { silent: true }).trim()

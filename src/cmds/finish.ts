@@ -117,6 +117,32 @@ const getTag = async (cmd: commander.Command): Promise<string | false> => {
   return tag
 }
 
+const maybeDeleteBranch = async (
+  cmdDelete: boolean | undefined,
+  branchName: string
+): Promise<void> => {
+  const del = cmdDelete ?? config.getConfigValue('deleteAfterMerge') === 'true'
+  if (del) {
+    git.deleteBranch(branchName)
+    const ans = await inquisitor.promptUser([
+      inquisitor.askConfirmation({
+        message: `Delete '${branchName}' from remote?`,
+        name: 'confirmation',
+      }),
+    ])
+    if (ans.confirmation) git.deleteBranch(branchName, true)
+  }
+}
+
+const maybePush = (
+  cmdPush: boolean | undefined,
+  onto: string,
+  tag: string | boolean | undefined
+): void => {
+  const push = cmdPush ?? config.getConfigValue('pushAfterMerge') === 'true'
+  if (push) git.pushToOrigin(onto, tag)
+}
+
 const releaseHotfixAction = async (
   arg: string,
   cmd: commander.Command
@@ -134,19 +160,11 @@ const releaseHotfixAction = async (
 
   git.mergeBranch(branchName)
 
-  if (cmd.push || config.getConfigValue('pushAfterMerge') === 'true')
-    git.pushToOrigin(onto, tag)
+  // const push = cmd.push ?? config.getConfigValue('pushAfterMerge') === 'true'
+  // if (push) git.pushToOrigin(onto, tag)
+  maybePush(cmd.push, onto, tag)
 
-  if (cmd.delete || config.getConfigValue('deleteAfterMerge') === 'true') {
-    git.deleteBranch(branchName)
-    const ans = await inquisitor.promptUser([
-      inquisitor.askConfirmation({
-        message: `Delete '${branchName}' from remote?`,
-        name: 'confirmation',
-      }),
-    ])
-    if (ans.confirmation) git.deleteBranch(branchName, true)
-  }
+  await maybeDeleteBranch(cmd.delete, branchName)
 
   // extra step
   if (
@@ -242,19 +260,9 @@ const feature: gofCommand.GofCommand = {
     if (/no-ff/.test(strategy)) git.mergeBranch(branchName, '--no-ff')
     else git.mergeBranch(branchName, '--ff-only')
 
-    if (cmd.push || config.getConfigValue('pushAfterMerge') === 'true')
-      git.pushToOrigin(onto)
+    maybePush(cmd.push, onto, false)
 
-    if (cmd.delete || config.getConfigValue('deleteAfterMerge') === 'true') {
-      git.deleteBranch(branchName)
-      const ans = await inquisitor.promptUser([
-        inquisitor.askConfirmation({
-          message: `Delete '${branchName}' from remote?`,
-          name: 'confirmation',
-        }),
-      ])
-      if (ans.confirmation) git.deleteBranch(branchName, true)
-    }
+    await maybeDeleteBranch(cmd.delete, branchName)
   },
 }
 

@@ -10,12 +10,13 @@
     "bin/cli"
   ],
   "scripts": {
+    "pretest": "npm run lint && npm run format",
     "test": "jest",
     "clean": "rimraf bin",
     "prebuild": "npm run clean",
     "build": "rollup -c",
-    "lint": "eslint --fix \"src/**/*.ts\"",
-    "format": "prettier --write \"src/.\"",
+    "lint": "eslint --fix  \"*.js\" \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "format": "prettier --write .",
     "watch": "rollup -c --watch",
     "typecheck": "tsc",
     "prerelease": "run-s typecheck lint format build",
