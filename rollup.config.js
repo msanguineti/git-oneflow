@@ -3,10 +3,13 @@ import cjs from 'rollup-plugin-commonjs'
 import babel from 'rollup-plugin-babel'
 import json from 'rollup-plugin-json'
 import { terser } from 'rollup-plugin-terser'
+import { version } from './package.json'
 
 const preamble = `#!/usr/bin/env node
 
 /**
+ * git-OneFlow v${version}
+ * 
  * Copyright (c) ${new Date().getFullYear()} Mirco Sanguineti
  * 
  * This software is released under the MIT License.
