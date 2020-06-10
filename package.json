@@ -1,6 +1,6 @@
 {
   "name": "git-oneflow",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "CLI tooling implementing GIT OneFlow branching model",
   "bin": {
     "gof": "bin/cli",
@@ -19,8 +19,9 @@
     "format": "prettier --write .",
     "watch": "rollup -c --watch",
     "typecheck": "tsc",
-    "prerelease": "run-s typecheck lint format build",
-    "release": "standard-version"
+    "prerelease": "run-s typecheck lint format",
+    "release": "standard-version",
+    "postrelease": "npm run build"
   },
   "repository": {
     "type": "git",
