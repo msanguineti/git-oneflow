@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.4](https://github.com/msanguineti/git-oneflow/compare/v1.0.3...v1.0.4) (2020-06-18)
+
+### Bug Fixes
+
+- that was a pretty nasty mistake ([6cf7f23](https://github.com/msanguineti/git-oneflow/commit/6cf7f235eec2b702899fb7792ba62c15ba84901a))
+
 ### [1.0.3](https://github.com/msanguineti/git-oneflow/compare/v1.0.2...v1.0.3) (2020-06-18)
 
 ### Misc
