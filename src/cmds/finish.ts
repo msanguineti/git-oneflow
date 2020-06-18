@@ -113,7 +113,7 @@ const maybeCheckoutAndGetBranchName = async (
 const getTag = async (cmd: commander.Command): Promise<string | false> => {
   const tag: string = cmd.tag ?? (await askTagNameToUser())
   if (tag) git.tagBranch(tag, cmd.message ?? tag)
-  else log.warning('commit has not being tagged!')
+  else log.warning('commit has not been tagged!')
   return tag
 }
 
