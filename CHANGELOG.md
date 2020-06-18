@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.3](https://github.com/msanguineti/git-oneflow/compare/v1.0.2...v1.0.3) (2020-06-18)
+
+### Misc
+
+- **deps:** bump inquirer from 7.1.0 to 7.2.0 ([261b1aa](https://github.com/msanguineti/git-oneflow/commit/261b1aa463f0b99c68f4ce7b5ffb7a6cd9cd01f5))
+- **deps-dev:** bump lint-staged from 10.2.10 to 10.2.11 ([d2a1a7e](https://github.com/msanguineti/git-oneflow/commit/d2a1a7e52bab56d92b0cec0990766054137d4c27))
+- **deps-dev:** bump lint-staged from 10.2.9 to 10.2.10 ([a3e3124](https://github.com/msanguineti/git-oneflow/commit/a3e312479065a022945ba6142f3ecb745e6ab85d))
+- **deps-dev:** bump rollup from 2.15.0 to 2.16.1 ([e692d8c](https://github.com/msanguineti/git-oneflow/commit/e692d8ca28d016c169d9bc28385953988a92a573))
+- **deps-dev:** bump rollup from 2.16.1 to 2.17.0 ([d1f6e9c](https://github.com/msanguineti/git-oneflow/commit/d1f6e9c65e4e85475d400ad58aec67d71f048859))
+
 ### [1.0.2](https://github.com/msanguineti/git-oneflow/compare/v1.0.1...v1.0.2) (2020-06-10)
 
 ### Misc

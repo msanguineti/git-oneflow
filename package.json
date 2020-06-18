@@ -1,6 +1,6 @@
 {
   "name": "git-oneflow",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "CLI tooling implementing GIT OneFlow branching model",
   "bin": {
     "gof": "bin/cli",
@@ -51,8 +51,8 @@
     "@types/inquirer": "^6.5.0",
     "@types/jest": "^26.0.0",
     "@types/shelljs": "^0.8.8",
-    "@typescript-eslint/eslint-plugin": "^2.34.0",
-    "@typescript-eslint/parser": "^2.34.0",
+    "@typescript-eslint/eslint-plugin": "^3.3.0",
+    "@typescript-eslint/parser": "^3.3.0",
     "eslint": "^7.2.0",
     "eslint-config-prettier": "^6.11.0",
     "husky": "^4.2.5",
