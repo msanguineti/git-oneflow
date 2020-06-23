@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.5](https://github.com/msanguineti/git-oneflow/compare/v1.0.4...v1.0.5) (2020-06-23)
+
+### Misc
+
+- **deps-dev:** bump @babel/core from 7.10.2 to 7.10.3 ([1da33e7](https://github.com/msanguineti/git-oneflow/commit/1da33e7c4056ea693a80713c1f4864a6f88ffbab))
+- **deps-dev:** bump @babel/preset-env from 7.10.2 to 7.10.3 ([ddc44d0](https://github.com/msanguineti/git-oneflow/commit/ddc44d053885fc2dc58ef9678ecd5c90b0dd795d))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([86e6ad9](https://github.com/msanguineti/git-oneflow/commit/86e6ad912a92e82c74b16e2d0438ef3e0a072381))
+- **deps-dev:** bump @typescript-eslint/parser from 3.3.0 to 3.4.0 ([bbbf2b8](https://github.com/msanguineti/git-oneflow/commit/bbbf2b807fb390c9aeba52b2de09bffb985452a3))
+- **deps-dev:** bump eslint from 7.2.0 to 7.3.0 ([d458dca](https://github.com/msanguineti/git-oneflow/commit/d458dcae1b0c64e6bbc491167fad0ebf3689e792))
+- **deps-dev:** bump eslint from 7.3.0 to 7.3.1 ([a69eb18](https://github.com/msanguineti/git-oneflow/commit/a69eb180c072efccd785fdbe3103062c4cddbe7a))
+- **deps-dev:** bump rollup from 2.17.0 to 2.17.1 ([3a04ff7](https://github.com/msanguineti/git-oneflow/commit/3a04ff745f2e7786855378f4618a0aa5ad023463))
+- **deps-dev:** bump rollup from 2.17.1 to 2.18.0 ([9184e2e](https://github.com/msanguineti/git-oneflow/commit/9184e2eec41f9bd97ad1b5ef000295eaf87221d0))
+
 ### [1.0.4](https://github.com/msanguineti/git-oneflow/compare/v1.0.3...v1.0.4) (2020-06-18)
 
 ### Bug Fixes
