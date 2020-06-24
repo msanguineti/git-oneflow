@@ -3,11 +3,6 @@ import * as packageJson from '../package.json'
 import yoda from '../src/lib/yoda'
 import * as git from '../src/lib/git'
 
-beforeAll(() => {
-  if (!shelljs.test('-e', 'bin/cli'))
-    shelljs.exec('npm run build', { silent: true })
-})
-
 describe('Program transpiled correctly', () => {
   it('is transpiled', () => {
     expect(shelljs.test('-e', 'bin/cli')).toBe(true)

@@ -77,10 +77,9 @@ export const checkoutBranch = (branch: string): void => {
 }
 
 export const tagBranch = (tag: string, message?: string): void => {
-  if (process.env.GOF_CHICKENOUT)
-    log.info('dry-run', `git tag ${message ? `-a -m '${message}' ` : ''}${tag}`)
-  else if (message) executeOrDie(`git tag -a -m '${message}' ${tag}`)
-  else executeOrDie(`git tag ${tag}`)
+  const cmd = `git tag ${message ? `-a -m '${message}' ` : ''}${tag}`
+  if (process.env.GOF_CHICKENOUT) log.info('dry-run', cmd)
+  else executeOrDie(cmd)
 }
 
 export const mergeBranch = (from: string, strategy?: string): void => {
@@ -90,21 +89,13 @@ export const mergeBranch = (from: string, strategy?: string): void => {
 }
 
 export const pushToOrigin = (branch: string, tag?: string | boolean): void => {
-  if (process.env.GOF_CHICKENOUT)
-    log.info(
-      'dry-run',
-      `git push ${tag ? '--follow-tags ' : ''}origin ${branch}`
-    )
-  else if (tag) executeOrDie(`git push --follow-tags origin ${branch}`)
-  else executeOrDie(`git push origin ${branch}`)
+  const cmd = `git push ${tag ? '--follow-tags ' : ''}origin ${branch}`
+  if (process.env.GOF_CHICKENOUT) log.info('dry-run', cmd)
+  else executeOrDie(cmd)
 }
 
 export const deleteBranch = (branch: string, remote = false): void => {
-  if (process.env.GOF_CHICKENOUT)
-    log.info(
-      'dry-run',
-      `git ${remote ? 'push origin :' : 'branch -d '}${branch}`
-    )
-  else if (remote) executeOrDie(`git push origin :${branch}`)
-  else executeOrDie(`git branch -d ${branch}`)
+  const cmd = `git ${remote ? 'push origin :' : 'branch -d '}${branch}`
+  if (process.env.GOF_CHICKENOUT) log.info('dry-run', cmd)
+  else executeOrDie(cmd)
 }
