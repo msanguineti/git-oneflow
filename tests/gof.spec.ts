@@ -3,7 +3,14 @@ import * as packageJson from '../package.json'
 import yoda from '../src/lib/yoda'
 import * as git from '../src/lib/git'
 
+let gitStashed = false
+
 beforeAll(() => {
+  if (git.hasChanges()) {
+    git.stash('push -u')
+    gitStashed = true
+  }
+
   if (!shelljs.test('-e', 'bin/cli'))
     shelljs.exec('npm run build', { silent: true })
 })
@@ -234,5 +241,7 @@ describe('Start/Finish commands', () => {
   afterAll(() => {
     git.checkoutBranch(currentBranch)
     git.deleteBranch(testBranch)
+
+    if (gitStashed) git.stash('pop')
   })
 })
