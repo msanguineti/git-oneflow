@@ -99,12 +99,3 @@ export const deleteBranch = (branch: string, remote = false): void => {
   if (process.env.GOF_CHICKENOUT) log.info('dry-run', cmd)
   else executeOrDie(cmd)
 }
-
-export const hasChanges = (): boolean =>
-  shelljs.exec('git diff HEAD --name-only', { silent: true }).stdout !== ''
-
-export const stash = (...args: string[]): void => {
-  const cmd = `git stash ${args.join(' ')}`
-  if (process.env.GOF_CHICKENOUT) log.info('dry-run', cmd)
-  else executeOrDie(cmd)
-}
