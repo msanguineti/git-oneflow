@@ -33,6 +33,7 @@ Fun facts:
 
 ## Table of Contents <!-- omit in toc -->
 
+- [Node Compatibility](#node-compatibility)
 - [Install](#install)
 - [Usage](#usage)
 - [Configuration](#configuration)
@@ -48,6 +49,10 @@ Fun facts:
 - [Changelog](#changelog)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Node Compatibility
+
+Tested in node **v10.x**, **v12.x** and **v14.x**
 
 ## Install
 
