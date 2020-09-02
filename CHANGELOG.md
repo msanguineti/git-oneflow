@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.8](https://github.com/msanguineti/git-oneflow/compare/v1.0.7...v1.0.8) (2020-09-02)
+
+### Misc
+
+- add node 14 in CI ([b8672a9](https://github.com/msanguineti/git-oneflow/commit/b8672a93bafeb643cbe0348a5a3ab4833b7ffae3))
+
+### Documentation
+
+- updated readme ([42f117f](https://github.com/msanguineti/git-oneflow/commit/42f117fe64eeb24b79f2228a4902d18d2580c032))
+
 ### [1.0.7](https://github.com/msanguineti/git-oneflow/compare/v1.0.6...v1.0.7) (2020-09-02)
 
 ### Misc
