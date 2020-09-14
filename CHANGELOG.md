@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.9](https://github.com/msanguineti/git-oneflow/compare/v1.0.8...v1.0.9) (2020-09-14)
+
+### Misc
+
+- update & audit packages ([6be4d7e](https://github.com/msanguineti/git-oneflow/commit/6be4d7eced3aa24aa0f93b7be8abfc4b2d640adb))
+- update eslint config and npm scripts ([1dd223b](https://github.com/msanguineti/git-oneflow/commit/1dd223b148e3d48d71433af6245de473057b370b))
+- update prettier config & npm scripts ([92ac7d9](https://github.com/msanguineti/git-oneflow/commit/92ac7d9a12c57ed48060e80081174f0ccacaf20b))
+- **deps-dev:** bump @babel/core from 7.11.5 to 7.11.6 ([c12e891](https://github.com/msanguineti/git-oneflow/commit/c12e89123fa95bbe909ff5f09f17f150de637a1c))
+- **deps-dev:** bump @types/jest from 26.0.12 to 26.0.13 ([b273ed9](https://github.com/msanguineti/git-oneflow/commit/b273ed9e1559e3615d89bdaba6ba2e876171e6ba))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([1c99a1c](https://github.com/msanguineti/git-oneflow/commit/1c99a1ce7ff70d6689167b4876140bb749809c39))
+- **deps-dev:** bump @typescript-eslint/parser from 4.0.1 to 4.1.0 ([9db30c7](https://github.com/msanguineti/git-oneflow/commit/9db30c7e58b04057e9e6647cf4ab9673e8a08d22))
+- **deps-dev:** bump eslint from 7.8.1 to 7.9.0 ([843e073](https://github.com/msanguineti/git-oneflow/commit/843e0733a412ae4f817d70d85fe1a53eff243c72))
+- **deps-dev:** bump husky from 4.2.5 to 4.3.0 ([03ba78d](https://github.com/msanguineti/git-oneflow/commit/03ba78dde77772ad54ec9360043a49d14b9e8b79))
+- **deps-dev:** bump lint-staged from 10.2.13 to 10.3.0 ([ac30970](https://github.com/msanguineti/git-oneflow/commit/ac30970b5bf80cbcab2f2c14b74cfb4ab3d100be))
+- **deps-dev:** bump rollup from 2.26.10 to 2.26.11 ([b30b99b](https://github.com/msanguineti/git-oneflow/commit/b30b99bfa07ccb914c241a1872832d9bd99f4e7b))
+- **deps-dev:** bump rollup from 2.26.9 to 2.26.10 ([07a0601](https://github.com/msanguineti/git-oneflow/commit/07a0601a68bd87f2d4afb2a3a944b1b382796d13))
+- **deps-dev:** bump rollup-plugin-terser from 7.0.1 to 7.0.2 ([34bfd5c](https://github.com/msanguineti/git-oneflow/commit/34bfd5c130536522e6eec91d11d4f7058dd577c3))
+
 ### [1.0.8](https://github.com/msanguineti/git-oneflow/compare/v1.0.7...v1.0.8) (2020-09-02)
 
 ### Misc
