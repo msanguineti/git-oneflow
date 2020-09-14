@@ -16,7 +16,7 @@
     "clean": "rimraf bin",
     "prebuild": "npm run clean",
     "build": "rollup -c",
-    "lint": "eslint --fix  \"*.js\" \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "lint": "eslint . --cache --fix",
     "format": "prettier --loglevel warn --write .",
     "watch": "rollup -c --watch",
     "typecheck": "tsc",
