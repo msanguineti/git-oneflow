@@ -22,7 +22,7 @@
     "typecheck": "tsc",
     "prerelease": "GOF_CHICKENOUT=true npm test",
     "release": "standard-version",
-    "postrelease": "npm run build"
+    "prepublishOnly": "npm test && npm run build"
   },
   "repository": {
     "type": "git",
