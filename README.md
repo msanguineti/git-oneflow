@@ -23,7 +23,7 @@ For a good overview of why you should _and_ when you shouldn't use rebase read [
 
 I have simply put together some CLI commands to leverage the OneFlow model.
 
-I have remained strictly faithful to how Adam defines the worlflow without adding anything fancy (yet). This means that, by default, **_git-OneFlow_** works with one main branch only (`master`) and new features are rebased. Check the [initialisation](#initialisation) section.
+I have remained strictly faithful to how Adam defines the worlflow without adding anything fancy (yet). This means that, by default, **_git-OneFlow_** works with one main branch only (`master`) and new features are rebased. Check the [customisation](#customisation) section.
 
 Of course, one-size-fits-all does not always work, therefore, I have implemented all the feature integration options described in the article and both the _one main branch_ and _main and development branches_ models.
 
@@ -37,6 +37,7 @@ Fun facts:
 - [Node Compatibility](#node-compatibility)
 - [Install](#install)
 - [Usage](#usage)
+  - [Node Package Execute - npx](#node-package-execute---npx)
 - [Configuration](#configuration)
   - [Defaults](#defaults)
     - [One main branch](#one-main-branch)
@@ -74,6 +75,14 @@ gof --help
 ```
 
 `gof` is a convenient alias for the overly verbose and long to type `git-oneflow`.
+
+### Node Package Execute - npx
+
+It is possible to run `git-oneflow` directly from the `npm` registry with Node Package Execute:
+
+```sh
+npx git-oneflow --help
+```
 
 ## Configuration
 
