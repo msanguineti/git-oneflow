@@ -1,9 +1,10 @@
-import resolve from 'rollup-plugin-node-resolve'
-import cjs from 'rollup-plugin-commonjs'
-import babel from 'rollup-plugin-babel'
-import json from 'rollup-plugin-json'
+import resolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
+import typescript from '@rollup/plugin-typescript'
+import json from '@rollup/plugin-json'
 import { terser } from 'rollup-plugin-terser'
-import { version } from './package.json'
+import { version, dependencies } from './package.json'
+import builtins from 'builtin-modules'
 
 const preamble = `#!/usr/bin/env node
 
@@ -16,15 +17,14 @@ const preamble = `#!/usr/bin/env node
  * https://opensource.org/licenses/MIT
  */ 
 `
-const extensions = ['.js', '.ts']
 
 const input = 'src/index.ts'
 
 const plugins = [
   json(),
-  resolve({ extensions }),
-  cjs(),
-  babel({ extensions, include: ['src/**/*'] }),
+  resolve(),
+  commonjs(),
+  typescript(),
   terser({ output: { beautify: true, preamble: preamble } }),
 ]
 
@@ -37,18 +37,7 @@ const output = {
 export default {
   input,
 
-  // Specify here external modules which you don't want to include in your bundle (for instance: 'lodash', 'moment' etc.)
-  // https://rollupjs.org/guide/en#external-e-external
-  external: [
-    'shelljs',
-    'commander',
-    'inquirer',
-    'chalk',
-    'cosmiconfig',
-    'path',
-    'child_process',
-    'fs',
-  ],
+  external: [...builtins, ...Object.keys(dependencies)],
 
   plugins,
 
