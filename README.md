@@ -1,4 +1,4 @@
-# git-OneFlow <!-- omit in toc -->
+# ![git-OneFlow](g1-logo.png)
 
 [![CodeFactor](https://www.codefactor.io/repository/github/msanguineti/git-oneflow/badge/master)](https://www.codefactor.io/repository/github/msanguineti/git-oneflow/overview/master)
 [![npm](https://badgen.net/npm/v/git-oneflow)](https://www.npmjs.com/package/git-oneflow)
@@ -34,23 +34,24 @@ Fun facts:
 
 ## Table of Contents <!-- omit in toc -->
 
-- [Node Compatibility](#node-compatibility)
-- [Install](#install)
-- [Usage](#usage)
-  - [Node Package Execute - npx](#node-package-execute---npx)
-- [Configuration](#configuration)
-  - [Defaults](#defaults)
-    - [One main branch](#one-main-branch)
-    - [Feature branches](#feature-branches)
-    - [Release/Hotfix branches](#releasehotfix-branches)
-      - [Tags](#tags)
-  - [Customisation](#customisation)
-    - [Options](#options)
-    - [Generate default file](#generate-default-file)
-- [Commands](#commands)
-- [Changelog](#changelog)
-- [Contributing](#contributing)
-- [License](#license)
+- [!git-OneFlow](#git-oneflowg1-logopng)
+  - [Node Compatibility](#node-compatibility)
+  - [Install](#install)
+  - [Usage](#usage)
+    - [Node Package Execute - npx](#node-package-execute---npx)
+  - [Configuration](#configuration)
+    - [Defaults](#defaults)
+      - [One main branch](#one-main-branch)
+      - [Feature branches](#feature-branches)
+      - [Release/Hotfix branches](#releasehotfix-branches)
+        - [Tags](#tags)
+    - [Customisation](#customisation)
+      - [Options](#options)
+      - [Generate default file](#generate-default-file)
+  - [Commands](#commands)
+  - [Changelog](#changelog)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Node Compatibility
 
