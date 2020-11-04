@@ -1,4 +1,4 @@
-# git-OneFlow <!-- omit in toc -->
+# ![git-OneFlow](g1-logo.png) <!-- omit in toc -->
 
 [![CodeFactor](https://www.codefactor.io/repository/github/msanguineti/git-oneflow/badge/master)](https://www.codefactor.io/repository/github/msanguineti/git-oneflow/overview/master)
 [![npm](https://badgen.net/npm/v/git-oneflow)](https://www.npmjs.com/package/git-oneflow)
