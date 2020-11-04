@@ -18,9 +18,9 @@
     "build": "rollup -c",
     "watch": "rollup -c --watch",
     "typecheck": "tsc",
-    "prerelease": "GOF_DRY_RUN=true npm test",
+    "prerelease": "GOF_DRY_RUN=true npm t",
     "release": "standard-version",
-    "prepublishOnly": "npm test && npm run build",
+    "prepublishOnly": "npm run build && npm t",
     "lint": "eslint . --cache --fix --ext .ts",
     "format": "prettier --loglevel warn --write ."
   },
