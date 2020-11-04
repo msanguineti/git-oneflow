@@ -54,7 +54,12 @@ Fun facts:
 
 ## Node Compatibility
 
-Tested in node **v10.x**, **v12.x** and **v14.x**
+Tested in node
+
+- **v10.x**
+- **v12.x**
+- **v14.x**
+- **v15.x**
 
 ## Install
 
