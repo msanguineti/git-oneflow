@@ -40,7 +40,7 @@ export const makeGofCmd = ({
     })
     .option('--dry-run', 'just show which commands would be run')
     .on('option:dry-run', () => {
-      process.env.GOF_CHICKENOUT = 'true'
+      process.env.GOF_DRY_RUN = 'true'
     })
     .option(
       '-b, --base <name>',
