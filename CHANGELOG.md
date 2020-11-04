@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.13](https://github.com/msanguineti/git-oneflow/compare/v1.0.12...v1.0.13) (2020-11-04)
+
+### Chores & Miscellanea
+
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([b1cf45f](https://github.com/msanguineti/git-oneflow/commit/b1cf45ff22437fe37ff34eb3a41f42ab3c0c83d5))
+- **deps-dev:** bump @typescript-eslint/parser from 4.6.0 to 4.6.1 ([318d00d](https://github.com/msanguineti/git-oneflow/commit/318d00d14e3ff1698fb51244c84a91bed743b3ea))
+- **deps-dev:** bump jest from 26.6.1 to 26.6.2 ([ce65328](https://github.com/msanguineti/git-oneflow/commit/ce65328c3a675bee6422c0779b00ac46aab44a09))
+- **deps-dev:** bump jest from 26.6.2 to 26.6.3 ([97a926f](https://github.com/msanguineti/git-oneflow/commit/97a926f3a1a607d2a9012f88924c37deacf3c193))
+- **deps-dev:** bump lint-staged from 10.5.0 to 10.5.1 ([784dff7](https://github.com/msanguineti/git-oneflow/commit/784dff70ad2a3123e859c863f3d36b6601aaa1e9))
+- **deps-dev:** bump rollup from 2.32.1 to 2.33.0 ([6f16dd4](https://github.com/msanguineti/git-oneflow/commit/6f16dd486e59cc0ca8551f0577a3fa4df5cc5678))
+- **deps-dev:** bump rollup from 2.33.0 to 2.33.1 ([7567194](https://github.com/msanguineti/git-oneflow/commit/7567194192bd2f4f0338e9297f33fe092a07dbce))
+
+### Documentation
+
+- fix for codefactor badge ([7e4592b](https://github.com/msanguineti/git-oneflow/commit/7e4592b83ed41396a53492fe70e5e9c1698161d2))
+- new project's logo ([51c20cc](https://github.com/msanguineti/git-oneflow/commit/51c20cc11d9e87618e971c102872e6fd1c1fc2cc))
+- omit title in toc ([461cae3](https://github.com/msanguineti/git-oneflow/commit/461cae3b6ff8a9504cfe0e4769f89632bee5a106))
+
 ### [1.0.12](https://github.com/msanguineti/git-oneflow/compare/v1.0.10...v1.0.12) (2020-10-28)
 
 ### Style & Format
