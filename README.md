@@ -23,7 +23,7 @@ For a good overview of why you should _and_ when you shouldn't use rebase read [
 
 I have simply put together some CLI commands to leverage the OneFlow model.
 
-I have remained strictly faithful to how Adam defines the worlflow without adding anything fancy (yet). This means that, by default, **_git-OneFlow_** works with one main branch only (`master`) and new features are rebased. Check the [customisation](#customisation) section.
+I have remained strictly faithful to how Adam defines the workflow without adding anything fancy (yet). This means that, by default, **_git-OneFlow_** works with one main branch only (`master`) and new features are rebased. Check the [customisation](#customisation) section.
 
 Of course, one-size-fits-all does not always work, therefore, I have implemented all the feature integration options described in the article and both the _one main branch_ and _main and development branches_ models.
 
@@ -44,10 +44,18 @@ Fun facts:
     - [Feature branches](#feature-branches)
     - [Release/Hotfix branches](#releasehotfix-branches)
       - [Tags](#tags)
-  - [Customisation](#customisation)
-    - [Options](#options)
+  - [Configuration file](#configuration-file)
+    - [Configuration options](#configuration-options)
     - [Generate default file](#generate-default-file)
 - [Commands](#commands)
+  - [Common options to **all** commands](#common-options-to-all-commands)
+  - [The `start` command](#the-start-command)
+    - [`start` options](#start-options)
+  - [The `finish` command](#the-finish-command)
+    - [Common `finish` options](#common-finish-options)
+    - [`finish feature` options](#finish-feature-options)
+    - [`finish release` and `finish hotfix` options](#finish-release-and-finish-hotfix-options)
+  - [`--help` and `--dry-run` options](#--help-and---dry-run-options)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
 - [License](#license)
@@ -104,22 +112,22 @@ npx git-oneflow --help
 Feature branches stem from `feature`:
 
 ```sh
-$ gof start feature my-feature
+gof start feature my-feature
 # equivalent to...
-$ git checkout -b feature/my-feature
+git checkout -b feature/my-feature
 ```
 
 Finishing a feature is done by rebasing:
 
 ```sh
-$ gof finish feature my-feature
+gof finish feature my-feature
 # equivalent to...
-$ git checkout feature/my-feature
-$ git rebase -i master
-$ git checkout master
-$ git merge --ff-only feature/my-feature
-$ git push origin master
-$ git branch -d feature/my-feature
+git checkout feature/my-feature
+git rebase -i master
+git checkout master
+git merge --ff-only feature/my-feature
+git push origin master
+git branch -d feature/my-feature
 ```
 
 #### Release/Hotfix branches
@@ -127,7 +135,7 @@ $ git branch -d feature/my-feature
 Releases and hotfixes share the same workflow: (just substitute `hotfix` for `release` in the following examples)
 
 ```sh
-$ gof start release 2.3.0
+gof start release 2.3.0
 # equivalent to...
 git checkout -b release/2.3.0
 ```
@@ -135,24 +143,24 @@ git checkout -b release/2.3.0
 ...then
 
 ```sh
-$ gof finish release 2.3.0 -t 2.3.0
+gof finish release 2.3.0 -t 2.3.0
 # equivalent to...
-$ git checkout release/2.3.0
-$ git tag -a -m '2.3.0' 2.3.0
-$ git checkout master
-$ git merge release/2.3.0
-$ git push --follow-tags origin master
-$ git branch -d release/2.3.0
+git checkout release/2.3.0
+git tag -a -m '2.3.0' 2.3.0
+git checkout master
+git merge release/2.3.0
+git push --follow-tags origin master
+git branch -d release/2.3.0
 ```
 
 ##### Tags
 
-Tags creation when releasing or hotfixing might not be needed. One case would be if something like [`standard-version`](https://www.npmjs.com/package/standard-version) is used, which tags releases based on some commit conventions. Therefore, a `--no-tag` option is used to avoid tagging the commit. A commit is either tagged on the command line by passing `-t|--tag <tagName>` or the program will ask to specify a tag name. If both `-t` and `--no-tag` are specified, `--no-tag` takes the precedence. This is true for any other `off` switch.
+Tags creation when releasing or hot-fixing might not be needed. One case would be if something like [`standard-version`](https://www.npmjs.com/package/standard-version) is used, which tags releases based on some commit conventions. Therefore, a `--no-tag` option is used to avoid tagging the commit. A commit is either tagged on the command line by passing `-t|--tag <tagName>` or the program will ask to specify a tag name. If both `-t` and `--no-tag` are specified, `--no-tag` takes the precedence. This is true for any other `off` switch.
 
-### Customisation
+### Configuration file
 
 ```sh
-$ gof init
+gof init
 ```
 
 `init` starts an interactive session that allows for customising the configuration of **_git-OneFlow_**
@@ -162,10 +170,10 @@ This creates a `.gitoneflowrc` file with the chosen configuration [options](#opt
 To specify a configuration file on the command line use `-c|--configuration` with the name of the file (and it's path).
 
 ```sh
-$ gof start feature -c config/my-gof-config.json
+gof start feature -c config/my-gof-config.json
 ```
 
-#### Options
+#### Configuration options
 
 | Option             | Description                                                              | Default     | Details                                                                                                                                                                                                                                                                                                                                |
 | ------------------ | ------------------------------------------------------------------------ | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -185,7 +193,7 @@ $ gof start feature -c config/my-gof-config.json
 To create a configuration file with default values:
 
 ```sh
-$ gof init -y
+gof init -y
 ```
 
 this will create `.gitonelfowrc` in the current directory with the following content:
@@ -206,13 +214,90 @@ this will create `.gitonelfowrc` in the current directory with the following con
 
 ## Commands
 
-Each command comes with its own help and its own set of options.
+Under the hood, **_git-OneFlow_** uses [`commander`](https://www.npmjs.com/package/commander). Essentially, it is possible to `start` or `finish` either a `feature`, a `release` or an `hotfix`.
+
+Each command can be passed options that modify the default behaviour.
+
+### Common options to **all** commands
+
+| Option flag           | Description                           |
+| --------------------- | ------------------------------------- |
+| -c, --config \<file\> | configuration file to use             |
+| -b, --base \<name\>   | override the current base branch name |
+| --no-base             | do not use a base branch name         |
+
+### The `start` command
 
 ```sh
-$ gof start feature -h
+gof start <feature|release|hotfix> [options] [name]
 ```
 
-Under the hood, **git-OneFlow** uses [`commander`](https://www.npmjs.com/package/commander).
+Commands can be shortened using the initial letter:
+
+```sh
+gof s f -h # => gof start feature --help
+```
+
+#### `start` options
+
+Options are common to every sub-command (`start feature`, `start release`, `start hotfix`)
+
+| Option flag       | Description                                                     |
+| ----------------- | --------------------------------------------------------------- |
+| -r, --ref \<ref\> | new branch will be created from the given branch, commit or tag |
+| --no-ref          | create the new branch from the current branch                   |
+
+### The `finish` command
+
+The `finish` command syntax is exactly the same as the `start` command. What changes are the options that can be passed to the sub-commands.
+
+#### Common `finish` options
+
+| Option flag        | Description                    |
+| ------------------ | ------------------------------ |
+| -o,--onto \<onto\> | branch to merge or rebase onto |
+| -p,--push          | push to origin after merge     |
+| --no-push          | do not push                    |
+| -d,--delete        | delete branch after merge      |
+| --no-delete        | do not delete branch           |
+
+#### `finish feature` options
+
+| Option flag                | Description                 |
+| -------------------------- | --------------------------- |
+| -i,--interactive           | interactive rebase          |
+| --no-interactive           | do not rebase interactively |
+| -s,--strategy \<strategy\> | merge strategy              |
+
+#### `finish release` and `finish hotfix` options
+
+| Option flag          | Description                                           |
+| -------------------- | ----------------------------------------------------- |
+| -t,--tag \<tagName\> | tag the commit with the given tag                     |
+| --no-tag             | do not tag the commit                                 |
+| -m,--message \<msg\> | annotate tag with a message (default to the tag name) |
+
+### `--help` and `--dry-run` options
+
+A help menu is available with every command. Just append `-h` or `--help` to access help.
+
+```sh
+gof finish release --help
+```
+
+Another interesting way to experiment with **_git-OneFlow_** is to use the `--dry-run` option. This will show the commands that would be invoked without actually doing anything.
+
+It is possible to activate the `dry-run` mode also by setting the environment variable `GOF_DRY_RUN`
+
+```sh
+GOF_DRY_RUN=1 gof start release
+```
+
+or for Windows
+
+```sh
+set GOF_DRY_RUN=1 & gof start release
+```
 
 ## Changelog
 

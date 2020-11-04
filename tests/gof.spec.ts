@@ -86,7 +86,7 @@ describe('Start/Finish commands', () => {
       }
     )
 
-    if (process.env.GOF_CHICKENOUT)
+    if (process.env.GOF_DRY_RUN)
       expect(shellString.stdout).toMatch(
         'dry-run: git checkout -b feature/my-feature testBranch'
       )
@@ -103,7 +103,7 @@ describe('Start/Finish commands', () => {
       }
     )
 
-    if (process.env.GOF_CHICKENOUT)
+    if (process.env.GOF_DRY_RUN)
       expect(shellString.stdout).toMatch(
         'dry-run: git checkout feature/my-feature' +
           '\n' +
@@ -126,7 +126,7 @@ describe('Start/Finish commands', () => {
       `node bin/cli s f ${featureName} -r ${noBranch}`
     )
 
-    if (process.env.GOF_CHICKENOUT)
+    if (process.env.GOF_DRY_RUN)
       expect(shellString.stdout).toMatch(
         `dry-run: git checkout -b feature/${featureName} ${noBranch}`
       )
@@ -144,7 +144,7 @@ describe('Start/Finish commands', () => {
       }
     )
 
-    if (process.env.GOF_CHICKENOUT)
+    if (process.env.GOF_DRY_RUN)
       expect(shellString.stdout).toMatch(
         'dry-run: git checkout -b release/my-release testBranch'
       )
@@ -162,7 +162,7 @@ describe('Start/Finish commands', () => {
       }
     )
 
-    if (process.env.GOF_CHICKENOUT)
+    if (process.env.GOF_DRY_RUN)
       expect(shellString.stdout).toMatch(
         'dry-run: git checkout release/my-release' +
           '\n' +
@@ -189,7 +189,7 @@ describe('Start/Finish commands', () => {
       }
     )
 
-    if (process.env.GOF_CHICKENOUT)
+    if (process.env.GOF_DRY_RUN)
       expect(shellString.stdout).toMatch(
         'dry-run: git checkout -b hotfix/my-hotfix testBranch'
       )
@@ -207,7 +207,7 @@ describe('Start/Finish commands', () => {
       }
     )
 
-    if (process.env.GOF_CHICKENOUT)
+    if (process.env.GOF_DRY_RUN)
       expect(shellString.stdout).toMatch(
         'dry-run: git checkout hotfix/my-hotfix' +
           '\n' +
