@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/msanguineti/git-oneflow/compare/v1.0.13...v1.1.0) (2020-11-04)
+
+### Features
+
+- dry-run switch and env variable ([e90a4b3](https://github.com/msanguineti/git-oneflow/commit/e90a4b373602a4cabeb066bc54c7faeb91ca2719))
+
+### Chores & Miscellanea
+
+- remove babel ([ecb8a9b](https://github.com/msanguineti/git-oneflow/commit/ecb8a9b92053dc17b008d69c89103ea4835c5541))
+
+### Documentation
+
+- add node 15.x ([80c22d6](https://github.com/msanguineti/git-oneflow/commit/80c22d69d1ba5e2f0c4a3e5ea3fb82ca74ca7a49))
+
 ### [1.0.13](https://github.com/msanguineti/git-oneflow/compare/v1.0.12...v1.0.13) (2020-11-04)
 
 ### Chores & Miscellanea
