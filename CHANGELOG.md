@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/msanguineti/git-oneflow/compare/v1.1.0...v1.1.1) (2020-11-25)
+
+### Bug Fixes
+
+- :label: wrong type for param ([9aae095](https://github.com/msanguineti/git-oneflow/commit/9aae095041a69a1eedc656a0276da575aa2c408a))
+
+### Chores & Miscellanea
+
+- :heavy_plus_sign: shameless plug - remove `chalk` install `fude` ([d4ed8a6](https://github.com/msanguineti/git-oneflow/commit/d4ed8a687032a352ba7f1764eabb0ed7a9ef6d12))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([530fc3d](https://github.com/msanguineti/git-oneflow/commit/530fc3dae3bfcaa9f6438830749dc6112907128c))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([2393bed](https://github.com/msanguineti/git-oneflow/commit/2393bed2861ff1a276e8db9f31945ffccc0f7d57))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([54e7f0d](https://github.com/msanguineti/git-oneflow/commit/54e7f0df0cece8047bca6ae0a8e8b00b26373cde))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([0ebd9b2](https://github.com/msanguineti/git-oneflow/commit/0ebd9b2a40627178626aa4d115f8dca1eccb371c))
+- **deps-dev:** bump @typescript-eslint/parser from 4.6.1 to 4.7.0 ([75638fd](https://github.com/msanguineti/git-oneflow/commit/75638fd50d995dc2c5989bf24244ab33d04c70ef))
+- **deps-dev:** bump @typescript-eslint/parser from 4.7.0 to 4.8.0 ([e5e98e2](https://github.com/msanguineti/git-oneflow/commit/e5e98e2566bfecf24ede9aba215e8238da50d895))
+- **deps-dev:** bump @typescript-eslint/parser from 4.8.0 to 4.8.1 ([b64da32](https://github.com/msanguineti/git-oneflow/commit/b64da32099931d9d7c32ffb1272637f55a3bc88b))
+- **deps-dev:** bump @typescript-eslint/parser from 4.8.1 to 4.8.2 ([3219d35](https://github.com/msanguineti/git-oneflow/commit/3219d35cdd495c6cf85dd3ce591871f05b63f631))
+- **deps-dev:** bump eslint from 7.12.1 to 7.13.0 ([4b2eb9a](https://github.com/msanguineti/git-oneflow/commit/4b2eb9a3b61ed38c2d4846b53444f30f04cd42fa))
+- **deps-dev:** bump eslint from 7.13.0 to 7.14.0 ([3420329](https://github.com/msanguineti/git-oneflow/commit/3420329763d912a3ce0b7cb0c3a51140fc96bd24))
+- **deps-dev:** bump lint-staged from 10.5.1 to 10.5.2 ([ca3bba4](https://github.com/msanguineti/git-oneflow/commit/ca3bba4d702ce99fa7d8290669906924244ea0e7))
+- **deps-dev:** bump prettier from 2.1.2 to 2.2.0 ([afb8065](https://github.com/msanguineti/git-oneflow/commit/afb80655c3b1d7e66aef9f30f2d467022ad3b1e4))
+- **deps-dev:** bump rollup from 2.33.1 to 2.33.2 ([2a9d83e](https://github.com/msanguineti/git-oneflow/commit/2a9d83efe93d481a66e4aef835ec80d8226531e6))
+- **deps-dev:** bump rollup from 2.33.2 to 2.33.3 ([64f2749](https://github.com/msanguineti/git-oneflow/commit/64f2749fefca5bdbf18fc25c5c924bb590fe438d))
+- **deps-dev:** bump ts-jest from 26.4.3 to 26.4.4 ([bc25372](https://github.com/msanguineti/git-oneflow/commit/bc25372beba97f83d0c7706d028f788a70933b3a))
+- **deps-dev:** bump typescript from 4.0.5 to 4.1.2 ([bc64231](https://github.com/msanguineti/git-oneflow/commit/bc64231d0615e354f15fe08f6e9956fd3e270e15))
+- fix codeql-analisys.yml ([bab3117](https://github.com/msanguineti/git-oneflow/commit/bab3117f83e2d17fb442d4c305892050ee5aee57))
+
 ## [1.1.0](https://github.com/msanguineti/git-oneflow/compare/v1.0.13...v1.1.0) (2020-11-04)
 
 ### Features
