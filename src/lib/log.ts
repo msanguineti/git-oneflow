@@ -1,6 +1,6 @@
-import fude from 'fude'
+import * as fude from 'fude'
 
-export const info = (key: string, msg: unknown): void => {
+export const info = (key: string, msg: string): void => {
   console.info(`${fude.gray(key)}: ${fude.cyan(msg)}`)
 }
 
