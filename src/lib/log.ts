@@ -1,12 +1,12 @@
-import chalk from 'chalk'
+import fude from 'fude'
 
 export const info = (key: string, msg: unknown): void => {
-  console.info(`${chalk.grey(key)}: ${chalk.cyan(msg)}`)
+  console.info(`${fude.gray(key)}: ${fude.cyan(msg)}`)
 }
 
 export const error = (msg: string | Error): void => {
   console.error(
-    `${chalk.red('error')}: ${chalk.white(
+    `${fude.red('error')}: ${fude.white(
       msg instanceof Error ? msg.message : msg
     )}`
   )
@@ -15,7 +15,7 @@ export const error = (msg: string | Error): void => {
 
 export const warning = (msg: string | Error): void => {
   console.warn(
-    `${chalk.yellow('warning')}: ${chalk.white(
+    `${fude.yellow('warning')}: ${fude.white(
       msg instanceof Error ? msg.message : msg
     )}`
   )
