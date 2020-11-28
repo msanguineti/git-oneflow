@@ -3,56 +3,44 @@ import * as shelljs from 'shelljs'
 import * as log from './log'
 
 const executeOrDie = (cmd: string): void => {
-  const shellString = shelljs.exec(cmd, { silent: true })
-  const code = shellString.code
-
-  if (code !== 0) {
-    log.error(shellString.stderr.replace(/^error:/i, '').trim())
-    process.exit(code)
+  if (process.env.GOF_DRY_RUN) log.info('dry-run', cmd)
+  else {
+    const { code, stderr } = shelljs.exec(cmd, { silent: true })
+    if (0 !== code) {
+      log.error(stderr.replace(/^error:/i, '').trim())
+      process.exit(code)
+    }
   }
 }
 
 const noErrorsExec = (cmd: string): boolean =>
-  0 === shelljs.exec(cmd, { silent: true }).code
+  process.env.GOF_DRY_RUN
+    ? (log.info('dry-run', cmd), true)
+    : 0 === shelljs.exec(cmd, { silent: true }).code
 
 export const isOK = (): boolean => noErrorsExec('git status')
 
 export const getLocalBranches = (exclude?: string): string[] | undefined => {
-  const shellString = shelljs.exec('git branch', { silent: true })
+  const { code, stdout } = shelljs.exec('git branch', { silent: true })
 
-  if (shellString.code === 0)
-    return shellString.stdout
+  if (0 === code)
+    return stdout
       .replace(new RegExp(`\\W+|${exclude}`, 'gm'), ' ')
       .trim()
       .split(' ')
 }
 
-export const branchExists = (name: string): boolean => {
-  const cmd = `git show-ref refs/heads/${name}`
-  if (process.env.GOF_DRY_RUN) {
-    log.info('dry-run', cmd)
-    return true
-  }
-  return noErrorsExec(cmd)
-}
+export const branchExists = (name: string): boolean =>
+  noErrorsExec(`git show-ref refs/heads/${name}`)
 
-export const isValidBranchName = (name: string): boolean => {
-  const cmd = `git check-ref-format --branch ${name}`
-  if (process.env.GOF_DRY_RUN) {
-    log.info('dry-run', cmd)
-    return true
-  }
-  return noErrorsExec(cmd)
-}
+export const isValidBranchName = (name: string): boolean =>
+  noErrorsExec(`git check-ref-format --branch ${name}`)
 
-export const getCurrentBranch = (): string => {
-  return shelljs.exec('git symbolic-ref --short HEAD', { silent: true }).trim()
-}
+export const getCurrentBranch = (): string =>
+  shelljs.exec('git symbolic-ref --short HEAD', { silent: true }).trim()
 
 export const createBranch = (name: string, ref?: string | false): void => {
-  const cmd = `git checkout -b ${name}${ref ? ` ${ref}` : ''}`
-  if (process.env.GOF_DRY_RUN) log.info('dry-run', cmd)
-  else executeOrDie(cmd)
+  executeOrDie(`git checkout -b ${name}${ref ? ` ${ref}` : ''}`)
 }
 
 export const getLatestTag = (): string | undefined => {
@@ -71,31 +59,21 @@ export const rebase = (onto: string, interactive?: boolean): void => {
 }
 
 export const checkoutBranch = (branch: string): void => {
-  const cmd = `git checkout ${branch}`
-  if (process.env.GOF_DRY_RUN) log.info('dry-run', cmd)
-  else executeOrDie(cmd)
+  executeOrDie(`git checkout ${branch}`)
 }
 
 export const tagBranch = (tag: string, message?: string): void => {
-  const cmd = `git tag ${message ? `-a -m '${message}' ` : ''}${tag}`
-  if (process.env.GOF_DRY_RUN) log.info('dry-run', cmd)
-  else executeOrDie(cmd)
+  executeOrDie(`git tag ${message ? `-a -m '${message}' ` : ''}${tag}`)
 }
 
 export const mergeBranch = (from: string, strategy?: string): void => {
-  const cmd = `git merge ${strategy ? `${strategy} ` : ''}${from}`
-  if (process.env.GOF_DRY_RUN) log.info('dry-run', cmd)
-  else executeOrDie(cmd)
+  executeOrDie(`git merge ${strategy ? `${strategy} ` : ''}${from}`)
 }
 
 export const pushToOrigin = (branch: string, tag?: string | boolean): void => {
-  const cmd = `git push ${tag ? '--follow-tags ' : ''}origin ${branch}`
-  if (process.env.GOF_DRY_RUN) log.info('dry-run', cmd)
-  else executeOrDie(cmd)
+  executeOrDie(`git push ${tag ? '--follow-tags ' : ''}origin ${branch}`)
 }
 
 export const deleteBranch = (branch: string, remote = false): void => {
-  const cmd = `git ${remote ? 'push origin :' : 'branch -d '}${branch}`
-  if (process.env.GOF_DRY_RUN) log.info('dry-run', cmd)
-  else executeOrDie(cmd)
+  executeOrDie(`git ${remote ? 'push origin :' : 'branch -d '}${branch}`)
 }

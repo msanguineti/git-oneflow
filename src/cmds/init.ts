@@ -1,7 +1,7 @@
 import commander from 'commander'
 import fs from 'fs'
 import path from 'path'
-import * as packageJson from '../../package.json'
+import * as pkg from '../../package.json'
 import * as config from '../lib/config'
 import * as log from '../lib/log'
 import * as inquisitor from '../lib/inquisitor'
@@ -111,7 +111,7 @@ const maybeUseTheForce = (force?: boolean): void => {
 }
 
 const writeConfigFile = (values: string): void => {
-  const filePath = path.resolve(process.cwd(), `.${packageJson.name}rc`)
+  const filePath = path.resolve(process.cwd(), `.${pkg.name}rc`)
   fs.writeFileSync(filePath, values)
   log.info('config', `new configuration file created at '${filePath}'`)
 }

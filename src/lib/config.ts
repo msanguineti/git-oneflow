@@ -1,7 +1,7 @@
 import * as cosmiconfig from 'cosmiconfig'
-import * as packageJson from '../../package.json'
+import * as pkg from '../../package.json'
 
-const explorer = cosmiconfig.cosmiconfigSync(packageJson.name)
+const explorer = cosmiconfig.cosmiconfigSync(pkg.name)
 
 let configFile: string | undefined
 

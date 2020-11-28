@@ -1,5 +1,5 @@
 import program from 'commander'
-import * as packageJson from '../package.json'
+import * as pkg from '../package.json'
 import makeFinishCmd from './cmds/finish'
 import makeInitCmd from './cmds/init'
 import makeStartCmd from './cmds/start'
@@ -14,8 +14,8 @@ const main = async (): Promise<void> => {
   config.load()
 
   program
-    .name(packageJson.name)
-    .version(packageJson.version)
+    .name(pkg.name)
+    .version(pkg.version)
     .addCommand(makeStartCmd())
     .addCommand(makeFinishCmd())
     .addCommand(makeInitCmd())

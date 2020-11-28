@@ -1,5 +1,5 @@
 import * as shelljs from 'shelljs'
-import * as packageJson from '../package.json'
+import * as pkg from '../package.json'
 import yoda from '../src/lib/yoda'
 import * as git from '../src/lib/git'
 
@@ -13,7 +13,7 @@ describe('Program transpiled correctly', () => {
       silent: true,
     })
 
-    expect(shellString.stdout).toMatch(packageJson.version)
+    expect(shellString.stdout).toMatch(pkg.version)
   })
 })
 
