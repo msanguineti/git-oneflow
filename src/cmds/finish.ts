@@ -181,7 +181,7 @@ const releaseHotfixAction = async (
     ).confirmation
   ) {
     git.checkoutBranch(config.getConfigValue('main') as string)
-    git.mergeBranch((tag || branchName) as string, '--ff-only')
+    git.mergeBranch(tag || branchName, '--ff-only')
   }
 }
 
