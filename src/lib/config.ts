@@ -62,10 +62,11 @@ export const load = (file?: string): void => {
 
       // just create envvars if the value is truthy
       if (value) process.env[`gof_${key}`.toUpperCase()] = value
-    } else
+    } else {
       throw new Error(
         `unknown configuration option ${key} in ${result?.filepath}`
       )
+    }
   }
 }
 

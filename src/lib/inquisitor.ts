@@ -11,7 +11,7 @@ export const askInput = ({
 }: {
   message: string
   name: string
-  defaultValue?: string | boolean | undefined
+  defaultValue?: string | boolean
   when?: (answer: inquirer.Answers) => boolean
   validate?: (
     input: string,
