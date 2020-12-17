@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/msanguineti/git-oneflow/compare/v1.1.1...v1.1.2) (2020-12-17)
+
+### Refactoring
+
+- :recycle: address sonarqube issues ([68d6cd5](https://github.com/msanguineti/git-oneflow/commit/68d6cd5d0d9864fb2d068cc50e8f70a12b8f5373))
+- :recycle: refactoring code ([81fcd22](https://github.com/msanguineti/git-oneflow/commit/81fcd2284048ef62054fe9be1ce9bca0ad97ffac))
+
+### Chores & Miscellanea
+
+- **deps:** bump actions/setup-node from v2.1.2 to v2.1.4 ([2343fef](https://github.com/msanguineti/git-oneflow/commit/2343fefc4ab16b5256a72b5def2e36aaadcf0345))
+- :package: update packages ([1ddcfc7](https://github.com/msanguineti/git-oneflow/commit/1ddcfc7c5312c9b310a3b61f710973b21e6240aa))
+- **deps:** bump ini from 1.3.5 to 1.3.7 ([2314567](https://github.com/msanguineti/git-oneflow/commit/231456755404f1cfad7c6530a5441c975a4915eb))
+- **deps-dev:** bump @types/jest from 26.0.15 to 26.0.16 ([27e1cba](https://github.com/msanguineti/git-oneflow/commit/27e1cba93aaf72dfa789034ac6ef46f7807ed5ca))
+- **deps-dev:** bump @types/jest from 26.0.16 to 26.0.17 ([50cb3a4](https://github.com/msanguineti/git-oneflow/commit/50cb3a4c6a13f27c682443de23bd9865ffef77d3))
+- **deps-dev:** bump @types/jest from 26.0.17 to 26.0.18 ([1dc69ee](https://github.com/msanguineti/git-oneflow/commit/1dc69ee4226e38948b42ff6fcf3a8fd054da8e6f))
+- **deps-dev:** bump @types/jest from 26.0.18 to 26.0.19 ([f50930c](https://github.com/msanguineti/git-oneflow/commit/f50930cf03aea39761fd962c56c0eceb80656ed1))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([9b4b7b6](https://github.com/msanguineti/git-oneflow/commit/9b4b7b633e982d5f1c7ec907eba238312c721f56))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([70e9d5d](https://github.com/msanguineti/git-oneflow/commit/70e9d5d2f82f8d78dbdab2df520ba4fa478868c9))
+- **deps-dev:** bump @typescript-eslint/eslint-plugin ([0eaf87d](https://github.com/msanguineti/git-oneflow/commit/0eaf87de2ed072380c15271fc3246338268bf435))
+- **deps-dev:** bump @typescript-eslint/parser from 4.8.2 to 4.9.0 ([2f22886](https://github.com/msanguineti/git-oneflow/commit/2f22886ac9faa3c716ecd4314efdd68fa91b1837))
+- **deps-dev:** bump @typescript-eslint/parser from 4.9.0 to 4.9.1 ([be5ba39](https://github.com/msanguineti/git-oneflow/commit/be5ba39edc9fd97262f4828538fd56bca48fdab0))
+- **deps-dev:** bump @typescript-eslint/parser from 4.9.1 to 4.10.0 ([ac91bed](https://github.com/msanguineti/git-oneflow/commit/ac91bedc292ec88a982c1d33ed08659ae4b5b20c))
+- **deps-dev:** bump eslint from 7.14.0 to 7.15.0 ([550cf41](https://github.com/msanguineti/git-oneflow/commit/550cf41879572b748b76ce99e68d64af6e2c18e0))
+- **deps-dev:** bump husky from 4.3.0 to 4.3.5 ([acb060b](https://github.com/msanguineti/git-oneflow/commit/acb060bf6ef04a5eab3b7644fd897cda1c516894))
+- **deps-dev:** bump husky from 4.3.5 to 4.3.6 ([1c498e7](https://github.com/msanguineti/git-oneflow/commit/1c498e7867c6fac789674ad84f21948382648386))
+- **deps-dev:** bump lint-staged from 10.5.2 to 10.5.3 ([4bfa134](https://github.com/msanguineti/git-oneflow/commit/4bfa1348ac7ecf49e692044e6974507773e0a010))
+- **deps-dev:** bump rollup from 2.33.3 to 2.34.0 ([7b18219](https://github.com/msanguineti/git-oneflow/commit/7b18219ca02b3c82b90c7d670873654e3876ce39))
+- **deps-dev:** bump rollup from 2.34.0 to 2.34.1 ([e27a9bd](https://github.com/msanguineti/git-oneflow/commit/e27a9bd83ceccdc6addcb6d27fe4c9a65cd51f86))
+- **deps-dev:** bump rollup from 2.34.1 to 2.34.2 ([6837422](https://github.com/msanguineti/git-oneflow/commit/6837422e8e15c8bb590a135d8399fe032b607773))
+- **deps-dev:** bump rollup from 2.34.2 to 2.35.1 ([cb0af17](https://github.com/msanguineti/git-oneflow/commit/cb0af1788a0cc1f795090aefd678f81434aae53a))
+- **deps-dev:** bump typescript from 4.1.2 to 4.1.3 ([77349ac](https://github.com/msanguineti/git-oneflow/commit/77349ac399186c5a1ba054f056dfca2706308692))
+- :wrench: add coverage folder to .prettierignore ([b460943](https://github.com/msanguineti/git-oneflow/commit/b46094330330705a93b9e395676ed57389132025))
+- reverse build and test steps ([d8c898a](https://github.com/msanguineti/git-oneflow/commit/d8c898a36e6f838ac87959945c636cb1bf8c8bac))
+- **npm:** :package: update packages ([0ff55ed](https://github.com/msanguineti/git-oneflow/commit/0ff55ed052ae11517136a9e410f6ad58d89c6fcd))
+- **typescript:** :wrench: raised target to es2018 ([6eace2b](https://github.com/msanguineti/git-oneflow/commit/6eace2b84afbc9e1d1a8891c46d956b7a3ccabb2))
+
 ### [1.1.1](https://github.com/msanguineti/git-oneflow/compare/v1.1.0...v1.1.1) (2020-11-25)
 
 ### Bug Fixes
