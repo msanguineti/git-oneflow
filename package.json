@@ -70,6 +70,6 @@
     "cosmiconfig": "^7.0.0",
     "fude": "^1.1.1",
     "inquirer": "^8.0.0",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.8.5"
   }
 }
