@@ -69,7 +69,7 @@
     "commander": "^6.2.1",
     "cosmiconfig": "^7.0.1",
     "fude": "^2.0.0",
-    "inquirer": "^8.2.2",
+    "inquirer": "^8.2.3",
     "shelljs": "^0.8.5"
   }
 }
