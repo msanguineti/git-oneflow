@@ -23,8 +23,8 @@ const letUserSelectBranch = async (): Promise<string> => {
       message: 'Which branch to start from?',
       name: 'branch',
       defaultValue: config.optionNames.main,
-      choices: (answers) => git.getLocalBranches('feature') as string[],
-      when: (answers) => true,
+      choices: () => git.getLocalBranches('feature') as string[],
+      when: () => true,
     }),
   ])
   return userInput.branch
