@@ -22,12 +22,11 @@ export const isOK = (): boolean => noErrorsExec('git status')
 
 export const getLocalBranches = (exclude?: string): string[] | undefined => {
   const { code, stdout } = shelljs.exec('git branch', { silent: true })
-
   if (0 === code)
     return stdout
-      .replace(new RegExp(`\\W+|${exclude}`, 'gm'), ' ')
-      .trim()
-      .split(' ')
+      .split('\n')
+      .filter((b) => (exclude ? !b.includes(exclude) : false))
+      .filter((b) => b !== '')
 }
 
 export const branchExists = (name: string): boolean =>

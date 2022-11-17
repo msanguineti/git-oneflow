@@ -18,6 +18,8 @@ type Configuration = {
   deleteAfterMerge: boolean
   pushAfterMerge: boolean
   tagCommit: boolean
+  askOnFeatureStart: boolean
+  askOnFeatureFinish: boolean
 }
 
 export const strategyOptionValues: StrategyOptions[] = [
@@ -37,6 +39,8 @@ export const defaultConfiguration: Configuration = {
   deleteAfterMerge: true,
   pushAfterMerge: true,
   tagCommit: true,
+  askOnFeatureStart: false,
+  askOnFeatureFinish: false,
 }
 
 export const optionNames = Object.keys(defaultConfiguration)
