@@ -17,6 +17,19 @@ const getDefaultReference = (cmdName: string): string | undefined => {
   }
 }
 
+const letUserSelectBranch = async (): Promise<string> => {
+  const userInput = await inquisitor.promptUser([
+    inquisitor.presentChoices({
+      message: 'Which branch to start from?',
+      name: 'branch',
+      defaultValue: config.optionNames.main,
+      choices: () => git.getLocalBranches('feature') as string[],
+      when: () => true,
+    }),
+  ])
+  return userInput.branch
+}
+
 const cmdAction = async (
   arg: string,
   cmd: commander.Command
@@ -38,7 +51,11 @@ const cmdAction = async (
 
   const base = cmd.base ?? config.getBaseBranch(cmd._name)
 
-  const ref = cmd.ref ?? getDefaultReference(cmd._name)
+  const ref =
+    cmd.ref ??
+    (config.getConfigValue('askOnFeatureStart')
+      ? await letUserSelectBranch()
+      : getDefaultReference(cmd._name))
 
   git.createBranch(base ? `${base}/${name}` : name, ref)
 }

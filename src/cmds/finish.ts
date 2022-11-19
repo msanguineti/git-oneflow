@@ -59,6 +59,19 @@ const tagOptions: gofCommand.GofCmdOption[] = [
   },
 ]
 
+const letUserSelectBranch = async (): Promise<string> => {
+  const userInput = await inquisitor.promptUser([
+    inquisitor.presentChoices({
+      message: 'Which branch to merge onto?',
+      name: 'branch',
+      defaultValue: config.optionNames.main,
+      choices: () => git.getLocalBranches('feature') as string[],
+      when: () => true,
+    }),
+  ])
+  return userInput.branch
+}
+
 const maybeUseCurrentBranch = async (): Promise<string | undefined> => {
   const currentBranch = git.getCurrentBranch()
   const useCurrentBranch = await inquisitor.promptUser([
@@ -246,8 +259,9 @@ const feature: gofCommand.GofCommand = {
 
     const onto =
       cmd.onto ??
-      config.getConfigValue('development') ??
-      config.getConfigValue('main')
+      (config.getConfigValue('askOnFeatureFinish')
+        ? await letUserSelectBranch()
+        : config.getConfigValue('development') ?? config.getConfigValue('main'))
 
     if (/^rebase/.test(strategy))
       git.rebase(
