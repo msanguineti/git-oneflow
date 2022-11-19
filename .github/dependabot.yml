@@ -7,15 +7,15 @@ updates:
     open-pull-requests-limit: 10
     versioning-strategy: increase
     labels:
-      - "dependencies"
-      - "npm"
-      - "automerge"
+      - 'dependencies'
+      - 'npm'
+      - 'automerge'
   - package-ecosystem: github-actions
     directory: '/'
     schedule:
       interval: daily
     open-pull-requests-limit: 10
     labels:
-      - "dependencies"
-      - "github_actions"
-      - "automerge"
+      - 'dependencies'
+      - 'github_actions'
+      - 'automerge'
