@@ -39,8 +39,9 @@ export const isValidBranchName = (name: string): boolean =>
 export const getCurrentBranch = (): string =>
   shelljs.exec('git symbolic-ref --short HEAD', { silent: true }).trim()
 
-export const createBranch = (name: string, ref?: string | false): void => {
-  executeOrDie(`git checkout -b ${name}${ref ? ` ${ref}` : ''}`)
+export const createBranch = (name: string, ref?: string | boolean): void => {
+  const reference = ref ? ` ${ref}` : ''
+  executeOrDie(`git checkout -b ${name}${reference}`)
 }
 
 export const getLatestTag = (): string | undefined => {
@@ -63,11 +64,13 @@ export const checkoutBranch = (branch: string): void => {
 }
 
 export const tagBranch = (tag: string, message?: string): void => {
-  executeOrDie(`git tag ${message ? `-a -m '${message}' ` : ''}${tag}`)
+  const tagMessage = message ? `-a -m '${message}' ` : ''
+  executeOrDie(`git tag ${tagMessage}${tag}`)
 }
 
 export const mergeBranch = (from: string, strategy?: string): void => {
-  executeOrDie(`git merge ${strategy ? `${strategy} ` : ''}${from}`)
+  const mergeStrategy = strategy ? `${strategy} ` : ''
+  executeOrDie(`git merge ${mergeStrategy}${from}`)
 }
 
 export const pushToOrigin = (branch: string, tag?: string | boolean): void => {

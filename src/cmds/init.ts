@@ -1,4 +1,4 @@
-import commander from 'commander'
+import { Command } from 'commander'
 import fs from 'fs'
 import path from 'path'
 import * as pkg from '../../package.json'
@@ -126,12 +126,12 @@ const writeConfigFile = (values: string): void => {
   log.info('config', `new configuration file created at '${filePath}'`)
 }
 
-export default (): commander.Command =>
-  new commander.Command('init')
+export default (): Command =>
+  new Command('init')
     .description('initialise configuration file')
     .option('-y, --defaults', 'accept all defaults')
     .option('-f, --force', 'force creation of configuration file')
-    .action(async (cmd: commander.Command) => {
+    .action(async (cmd: Command & { force: boolean; defaults: boolean }) => {
       maybeUseTheForce(cmd.force)
       writeConfigFile(await maybePromptUser(cmd.defaults))
     })
