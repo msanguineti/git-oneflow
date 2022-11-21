@@ -1,13 +1,15 @@
-import * as childProcess from 'child_process'
-import * as shelljs from 'shelljs'
-import * as log from './log'
+import { spawnSync } from 'child_process'
+import shelljs from 'shelljs'
+import { error, info } from './log'
+
+const { exec } = shelljs
 
 const executeOrDie = (cmd: string): void => {
-  if (process.env.GOF_DRY_RUN) log.info('dry-run', cmd)
+  if (process.env.GOF_DRY_RUN) info('dry-run', cmd)
   else {
-    const { code, stderr } = shelljs.exec(cmd, { silent: true })
+    const { code, stderr } = exec(cmd, { silent: true })
     if (0 !== code) {
-      log.error(stderr.replace(/^error:/i, '').trim())
+      error(stderr.replace(/^error:/i, '').trim())
       process.exit(code)
     }
   }
@@ -15,13 +17,13 @@ const executeOrDie = (cmd: string): void => {
 
 const noErrorsExec = (cmd: string): boolean =>
   process.env.GOF_DRY_RUN
-    ? (log.info('dry-run', cmd), true)
-    : 0 === shelljs.exec(cmd, { silent: true }).code
+    ? (info('dry-run', cmd), true)
+    : 0 === exec(cmd, { silent: true }).code
 
 export const isOK = (): boolean => noErrorsExec('git status')
 
 export const getLocalBranches = (exclude?: string): string[] | undefined => {
-  const { code, stdout } = shelljs.exec('git branch', { silent: true })
+  const { code, stdout } = exec('git branch', { silent: true })
   if (0 === code)
     return stdout
       .split('\n')
@@ -37,7 +39,7 @@ export const isValidBranchName = (name: string): boolean =>
   noErrorsExec(`git check-ref-format --branch ${name}`)
 
 export const getCurrentBranch = (): string =>
-  shelljs.exec('git symbolic-ref --short HEAD', { silent: true }).trim()
+  exec('git symbolic-ref --short HEAD', { silent: true }).trim()
 
 export const createBranch = (name: string, ref?: string | boolean): void => {
   const reference = ref ? ` ${ref}` : ''
@@ -45,15 +47,15 @@ export const createBranch = (name: string, ref?: string | boolean): void => {
 }
 
 export const getLatestTag = (): string | undefined => {
-  const sstring = shelljs.exec('git describe --abbrev=0', { silent: true })
+  const sstring = exec('git describe --abbrev=0', { silent: true })
   return 0 === sstring.code ? sstring.trim() : undefined
 }
 
 export const rebase = (onto: string, interactive?: boolean): void => {
   if (process.env.GOF_DRY_RUN)
-    log.info('dry-run', `git rebase ${interactive ? '-i ' : ''}${onto}`)
+    info('dry-run', `git rebase ${interactive ? '-i ' : ''}${onto}`)
   else if (interactive)
-    childProcess.spawnSync('git', ['rebase', '-i', `${onto}`], {
+    spawnSync('git', ['rebase', '-i', `${onto}`], {
       stdio: 'inherit',
     })
   else executeOrDie(`git rebase ${onto}`)

@@ -1,10 +1,9 @@
-import * as shelljs from 'shelljs'
+import shelljs from 'shelljs'
+const { exec, test } = shelljs
 
 export default async (): Promise<void> => {
-  if (
-    shelljs.exec('git diff HEAD --name-only', { silent: true }).stdout !== ''
-  ) {
-    shelljs.exec('git stash push -u', { silent: true })
+  if (exec('git diff HEAD --name-only', { silent: true }).stdout !== '') {
+    exec('git stash push -u', { silent: true })
 
     const glbl = global as NodeJS.Global &
       typeof globalThis & { __STASHED__: boolean }
@@ -12,6 +11,5 @@ export default async (): Promise<void> => {
     glbl.__STASHED__ = true
   }
 
-  if (!shelljs.test('-e', 'bin/cli'))
-    shelljs.exec('npm run build', { silent: true })
+  if (!test('-e', 'bin/cli')) exec('npm run build', { silent: true })
 }

@@ -1,129 +1,139 @@
 import { Command } from 'commander'
 import fs from 'fs'
 import path from 'path'
-import * as pkg from '../../package.json'
-import * as config from '../lib/config'
-import * as log from '../lib/log'
-import * as inquisitor from '../lib/inquisitor'
+import { name } from '../../package.json'
+import {
+  optionNames,
+  getConfigValue,
+  getDefaultValue,
+  strategyOptionValues,
+  defaultConfiguration,
+  getConfigFile,
+} from '../lib/config'
+import { warning, info } from '../lib/log'
+import {
+  GofQuestion,
+  presentChoices,
+  askConfirmation,
+  askInput,
+  promptUser,
+} from '../lib/inquisitor'
 import yoda from '../lib/yoda'
-import * as git from '../lib/git'
+import { getLocalBranches, isValidBranchName } from '../lib/git'
 
-const configInitQuestions = (): inquisitor.GofQuestion[] => [
-  inquisitor.presentChoices({
+const configInitQuestions = (): GofQuestion[] => [
+  presentChoices({
     message: 'Main branch name?',
-    name: config.optionNames.main,
-    choices: git.getLocalBranches() as string[],
-    defaultValue: config.getConfigValue('main'),
+    name: optionNames.main,
+    choices: getLocalBranches() as string[],
+    defaultValue: getConfigValue('main'),
   }),
-  inquisitor.askConfirmation({
+  askConfirmation({
     message: 'Do you use a development branch?',
     name: 'useDevelop',
-    defaultValue: config.getConfigValue('development') !== undefined,
+    defaultValue: getConfigValue('development') !== undefined,
     when: (answers) =>
-      undefined !== git.getLocalBranches(answers[config.optionNames.main]),
+      undefined !== getLocalBranches(answers[optionNames.main]),
   }),
-  inquisitor.presentChoices({
+  presentChoices({
     message: 'Development branch name?',
-    name: config.optionNames.development,
+    name: optionNames.development,
     choices: (answers) =>
-      git.getLocalBranches(answers[config.optionNames.main]) as string[],
+      getLocalBranches(answers[optionNames.main]) as string[],
     when: (answers) => answers.useDevelop === true,
   }),
-  inquisitor.askInput({
+  askInput({
     message: 'Features branch basename?',
-    name: config.optionNames.features,
-    defaultValue:
-      config.getConfigValue('features') ?? config.getDefaultValue('features'),
+    name: optionNames.features,
+    defaultValue: getConfigValue('features') ?? getDefaultValue('features'),
     validate: (input) =>
       input.trim() === '' ||
-      git.isValidBranchName(input) ||
+      isValidBranchName(input) ||
       'Please, enter a valid branch name',
   }),
-  inquisitor.askInput({
+  askInput({
     message: 'Releases branch basename?',
-    name: config.optionNames.releases,
-    defaultValue:
-      config.getConfigValue('releases') ?? config.getDefaultValue('releases'),
+    name: optionNames.releases,
+    defaultValue: getConfigValue('releases') ?? getDefaultValue('releases'),
     validate: (input) =>
       input.trim() === '' ||
-      git.isValidBranchName(input) ||
+      isValidBranchName(input) ||
       'Please, enter a valid branch name',
   }),
-  inquisitor.askInput({
+  askInput({
     message: 'Hotfixes branch basename?',
-    name: config.optionNames.hotfixes,
-    defaultValue:
-      config.getConfigValue('hotfixes') ?? config.getDefaultValue('hotfixes'),
+    name: optionNames.hotfixes,
+    defaultValue: getConfigValue('hotfixes') ?? getDefaultValue('hotfixes'),
     validate: (input) =>
       input.trim() === '' ||
-      git.isValidBranchName(input) ||
+      isValidBranchName(input) ||
       'Please, enter a valid branch name',
   }),
-  inquisitor.presentChoices({
+  presentChoices({
     message: 'Merge strategy to use?',
-    name: config.optionNames.strategy,
-    choices: config.strategyOptionValues,
-    defaultValue: config.getConfigValue('strategy'),
+    name: optionNames.strategy,
+    choices: strategyOptionValues,
+    defaultValue: getConfigValue('strategy'),
   }),
-  inquisitor.askConfirmation({
+  askConfirmation({
     message: 'Always rebase interactively?',
-    name: config.optionNames.interactive,
-    defaultValue: config.getConfigValue('interactive') === 'true',
+    name: optionNames.interactive,
+    defaultValue: getConfigValue('interactive') === 'true',
   }),
-  inquisitor.askConfirmation({
+  askConfirmation({
     message: 'Push to origin after merge?',
-    name: config.optionNames.pushAfterMerge,
-    defaultValue: config.getConfigValue('pushAfterMerge') === 'true',
+    name: optionNames.pushAfterMerge,
+    defaultValue: getConfigValue('pushAfterMerge') === 'true',
   }),
-  inquisitor.askConfirmation({
+  askConfirmation({
     message: 'Delete branch after merge?',
-    name: config.optionNames.deleteAfterMerge,
-    defaultValue: config.getConfigValue('deleteAfterMerge') === 'true',
+    name: optionNames.deleteAfterMerge,
+    defaultValue: getConfigValue('deleteAfterMerge') === 'true',
   }),
-  inquisitor.askConfirmation({
+  askConfirmation({
     message: 'Tag releases and hotfixes?',
-    name: config.optionNames.tagCommit,
-    defaultValue: config.getConfigValue('tagCommit') === 'true',
+    name: optionNames.tagCommit,
+    defaultValue: getConfigValue('tagCommit') === 'true',
   }),
-  inquisitor.askConfirmation({
+  askConfirmation({
     message: 'Ask for ref branch on feature start?',
-    name: config.optionNames.askOnFeatureStart,
-    defaultValue: config.getConfigValue('askOnFeatureStart') === 'true',
+    name: optionNames.askOnFeatureStart,
+    defaultValue: getConfigValue('askOnFeatureStart') === 'true',
   }),
-  inquisitor.askConfirmation({
+  askConfirmation({
     message: 'Ask for merge branch on feature finish?',
-    name: config.optionNames.askOnFeatureFinish,
-    defaultValue: config.getConfigValue('askOnFeatureFinish') === 'true',
+    name: optionNames.askOnFeatureFinish,
+    defaultValue: getConfigValue('askOnFeatureFinish') === 'true',
   }),
 ]
 
 const maybePromptUser = async (defaults?: boolean): Promise<string> => {
-  if (defaults) return JSON.stringify(config.defaultConfiguration, null, 2)
+  if (defaults) return JSON.stringify(defaultConfiguration, null, 2)
 
-  const ans = await inquisitor.promptUser(configInitQuestions())
+  const ans = await promptUser(configInitQuestions())
   delete ans.useDevelop
   return JSON.stringify(ans, null, 2)
 }
 
 const maybeUseTheForce = (force?: boolean): void => {
-  const oldConfFile = config.getConfigFile()
+  const oldConfFile = getConfigFile()
 
   if (!oldConfFile) return
 
   if (!force) {
-    log.warning(
+    warning(
       `a configuration exists at '${oldConfFile}'. Cowardly refusing to proceed!`
     )
     process.exit(0)
   }
-  log.info('Use the Force, Luke', yoda)
-  log.warning(`option '-f,--force' detected. Using the force...`)
+  info('Use the Force, Luke', yoda)
+  warning(`option '-f,--force' detected. Using the force...`)
 }
 
 const writeConfigFile = (values: string): void => {
-  const filePath = path.resolve(process.cwd(), `.${pkg.name}rc`)
+  const filePath = path.resolve(process.cwd(), `.${name}rc`)
   fs.writeFileSync(filePath, values)
-  log.info('config', `new configuration file created at '${filePath}'`)
+  info('config', `new configuration file created at '${filePath}'`)
 }
 
 export default (): Command =>

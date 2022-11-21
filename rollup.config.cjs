@@ -29,8 +29,8 @@ const plugins = [
 ]
 
 const output = {
-  file: 'bin/cli',
-  format: 'cjs',
+  file: 'bin/cli.js',
+  format: 'esm',
   entryFileNames: '[name]',
 }
 

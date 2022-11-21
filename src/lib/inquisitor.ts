@@ -1,6 +1,12 @@
-import inquirer from 'inquirer'
+import inquirer, {
+  Question,
+  Answers,
+  InputQuestion,
+  ListQuestion,
+  ConfirmQuestion,
+} from 'inquirer'
 
-export type GofQuestion = inquirer.Question
+export type GofQuestion = Question
 
 export const askInput = ({
   message,
@@ -12,12 +18,12 @@ export const askInput = ({
   message: string
   name: string
   defaultValue?: string | boolean
-  when?: (answer: inquirer.Answers) => boolean
+  when?: (answer: Answers) => boolean
   validate?: (
     input: string,
-    answer: inquirer.Answers
+    answer: Answers
   ) => string | boolean | Promise<string | boolean>
-}): inquirer.InputQuestion => {
+}): InputQuestion => {
   return {
     type: 'input',
     name,
@@ -37,10 +43,10 @@ export const presentChoices = ({
 }: {
   message: string
   name: string
-  choices: string[] | ((answer: inquirer.Answers) => string[])
-  when?: (answer: inquirer.Answers) => boolean
+  choices: string[] | ((answer: Answers) => string[])
+  when?: (answer: Answers) => boolean
   defaultValue?: string
-}): inquirer.ListQuestion => {
+}): ListQuestion => {
   return {
     type: 'list',
     name,
@@ -60,8 +66,8 @@ export const askConfirmation = ({
   message: string
   name: string
   defaultValue?: boolean
-  when?: (answer: inquirer.Answers) => boolean
-}): inquirer.ConfirmQuestion => {
+  when?: (answer: Answers) => boolean
+}): ConfirmQuestion => {
   return {
     type: 'confirm',
     name,
@@ -73,6 +79,6 @@ export const askConfirmation = ({
 
 export const promptUser = async (
   questions: GofQuestion[]
-): Promise<inquirer.Answers> => {
+): Promise<Answers> => {
   return inquirer.prompt(questions)
 }

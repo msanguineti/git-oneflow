@@ -1,7 +1,7 @@
 import { Command } from 'commander'
 import path from 'path'
-import * as config from '../lib/config'
-import * as log from '../lib/log'
+import { load, getBaseBranch } from '../lib/config'
+import { info } from '../lib/log'
 
 export type GofCmdOption = {
   flags: string
@@ -42,7 +42,7 @@ export const makeGofCmd = ({
   cmd
     .option('-c, --config <file>', 'configuration file to use')
     .on('option:config', (file) => {
-      config.load(path.resolve(file))
+      load(path.resolve(file))
     })
     .option('--dry-run', 'just show which commands would be run')
     .on('option:dry-run', () => {
@@ -50,14 +50,12 @@ export const makeGofCmd = ({
     })
     .option(
       '-b, --base <name>',
-      `override the current base branch name: '${config.getBaseBranch(
-        cmd.name()
-      )}'`
+      `override the current base branch name: '${getBaseBranch(cmd.name())}'`
     )
     .option('--no-base', 'do not use a base branch name')
     .option('--debug')
     .on('option:debug', () =>
-      log.info('debug', JSON.stringify(cmd.opts(), null, 2))
+      info('debug', JSON.stringify(cmd.opts(), null, 2))
     )
 
   cmd.alias(name.charAt(0))
