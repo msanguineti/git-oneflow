@@ -2,19 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [1.2.0](https://github.com/msanguineti/git-oneflow/compare/v1.1.2...v1.2.0) (2022-11-19)
-
-
-### Features
-
-* ask on feature start and finish, fix git branch selection ([8470c43](https://github.com/msanguineti/git-oneflow/commit/8470c43282e15e508031f784760bc57129bd0881))
+### [1.2.1](https://github.com/msanguineti/git-oneflow/compare/v1.2.0...v1.2.1) (2022-11-21)
 
 
 ### Bug Fixes
 
-* codefactor ([81c051b](https://github.com/msanguineti/git-oneflow/commit/81c051bdd8a448ce625ecab7fb186a9faaac137b))
-* **npm:** npm audit fix ([3fb5276](https://github.com/msanguineti/git-oneflow/commit/3fb5276f40af6377f9f8ffbd324a8eccf37bfaf7))
-* readme ([5239cc6](https://github.com/msanguineti/git-oneflow/commit/5239cc665e1112fc173264b4b167b7ab75587c55))
+* codeql incomplete string escaping or encoding ([299196d](https://github.com/msanguineti/git-oneflow/commit/299196d9bf2c4b0cb8bbf0a33fea476bb5d221cb))
+* fix no branch on init, asterisk in branch name, questions ([281c92a](https://github.com/msanguineti/git-oneflow/commit/281c92a6f50c2b7271e001fcd54c776a302e4ca8))
+
+## [1.2.0](https://github.com/msanguineti/git-oneflow/compare/v1.1.2...v1.2.0) (2022-11-19)
+
+### Features
+
+- ask on feature start and finish, fix git branch selection ([8470c43](https://github.com/msanguineti/git-oneflow/commit/8470c43282e15e508031f784760bc57129bd0881))
+
+### Bug Fixes
+
+- codefactor ([81c051b](https://github.com/msanguineti/git-oneflow/commit/81c051bdd8a448ce625ecab7fb186a9faaac137b))
+- **npm:** npm audit fix ([3fb5276](https://github.com/msanguineti/git-oneflow/commit/3fb5276f40af6377f9f8ffbd324a8eccf37bfaf7))
+- readme ([5239cc6](https://github.com/msanguineti/git-oneflow/commit/5239cc665e1112fc173264b4b167b7ab75587c55))
 
 ### [1.1.2](https://github.com/msanguineti/git-oneflow/compare/v1.1.1...v1.1.2) (2020-12-17)
 
