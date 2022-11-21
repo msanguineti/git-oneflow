@@ -85,6 +85,16 @@ const configInitQuestions = (): inquisitor.GofQuestion[] => [
     name: config.optionNames.tagCommit,
     defaultValue: config.getConfigValue('tagCommit') === 'true',
   }),
+  inquisitor.askConfirmation({
+    message: 'Ask for ref branch on feature start?',
+    name: config.optionNames.askOnFeatureStart,
+    defaultValue: config.getConfigValue('askOnFeatureStart') === 'true',
+  }),
+  inquisitor.askConfirmation({
+    message: 'Ask for merge branch on feature finish?',
+    name: config.optionNames.askOnFeatureFinish,
+    defaultValue: config.getConfigValue('askOnFeatureFinish') === 'true',
+  }),
 ]
 
 const maybePromptUser = async (defaults?: boolean): Promise<string> => {
