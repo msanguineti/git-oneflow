@@ -4,12 +4,14 @@ import * as git from '../lib/git'
 import * as gofCommand from './gofCommand'
 import * as inquisitor from '../lib/inquisitor'
 
-const getDefaultReference = (cmdName: string): string | undefined => {
+const getDefaultReference = async (
+  cmdName: string
+): Promise<string | undefined> => {
   switch (cmdName) {
     case 'feature':
-      return (
-        config.getConfigValue('development') ?? config.getConfigValue('main')
-      )
+      return config.getConfigValue('askOnFeatureStart')
+        ? await letUserSelectBranch()
+        : config.getConfigValue('development') ?? config.getConfigValue('main')
     case 'release':
       return config.getConfigValue('main')
     case 'hotfix':
@@ -51,11 +53,7 @@ const cmdAction = async (
 
   const base = cmd.base ?? config.getBaseBranch(cmd._name)
 
-  const ref =
-    cmd.ref ??
-    (config.getConfigValue('askOnFeatureStart')
-      ? await letUserSelectBranch()
-      : getDefaultReference(cmd._name))
+  const ref = cmd.ref ?? (await getDefaultReference(cmd._name))
 
   git.createBranch(base ? `${base}/${name}` : name, ref)
 }
