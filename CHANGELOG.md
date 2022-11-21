@@ -4,11 +4,10 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.2.1](https://github.com/msanguineti/git-oneflow/compare/v1.2.0...v1.2.1) (2022-11-21)
 
-
 ### Bug Fixes
 
-* codeql incomplete string escaping or encoding ([299196d](https://github.com/msanguineti/git-oneflow/commit/299196d9bf2c4b0cb8bbf0a33fea476bb5d221cb))
-* fix no branch on init, asterisk in branch name, questions ([281c92a](https://github.com/msanguineti/git-oneflow/commit/281c92a6f50c2b7271e001fcd54c776a302e4ca8))
+- codeql incomplete string escaping or encoding ([299196d](https://github.com/msanguineti/git-oneflow/commit/299196d9bf2c4b0cb8bbf0a33fea476bb5d221cb))
+- fix no branch on init, asterisk in branch name, questions ([281c92a](https://github.com/msanguineti/git-oneflow/commit/281c92a6f50c2b7271e001fcd54c776a302e4ca8))
 
 ## [1.2.0](https://github.com/msanguineti/git-oneflow/compare/v1.1.2...v1.2.0) (2022-11-19)
 

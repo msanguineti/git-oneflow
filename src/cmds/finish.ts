@@ -1,4 +1,4 @@
-import commander from 'commander'
+import { Command } from 'commander'
 import * as gofCommand from './gofCommand'
 import * as config from '../lib/config'
 import * as inquisitor from '../lib/inquisitor'
@@ -6,17 +6,18 @@ import * as git from '../lib/git'
 import * as log from '../lib/log'
 
 const askTagNameToUser = async (): Promise<string | undefined> => {
-  if (config.getConfigValue('tagCommit') === 'true')
-    return (
-      await inquisitor.promptUser([
-        inquisitor.askInput({
-          message: `Tag name (latest tag: ${git.getLatestTag()})`,
-          name: 'tag',
-          validate: (input) =>
-            '' !== input.trim() || 'Please, enter a valid tag name',
-        }),
-      ])
-    ).tag
+  return config.getConfigValue('tagCommit') === 'true'
+    ? (
+        await inquisitor.promptUser([
+          inquisitor.askInput({
+            message: `Tag name (latest tag: ${git.getLatestTag()})`,
+            name: 'tag',
+            validate: (input) =>
+              '' !== input.trim() || 'Please, enter a valid tag name',
+          }),
+        ])
+      ).tag
+    : undefined
 }
 
 const commonOptions: gofCommand.GofCmdOption[] = [
@@ -60,16 +61,17 @@ const tagOptions: gofCommand.GofCmdOption[] = [
 ]
 
 const letUserSelectBranch = async (): Promise<string> => {
-  const userInput = await inquisitor.promptUser([
-    inquisitor.presentChoices({
-      message: 'Which branch to merge onto?',
-      name: 'branch',
-      defaultValue: config.optionNames.main,
-      choices: () => git.getLocalBranches('feature') as string[],
-      when: () => true,
-    }),
-  ])
-  return userInput.branch
+  return (
+    await inquisitor.promptUser([
+      inquisitor.presentChoices({
+        message: 'Which branch to merge onto?',
+        name: 'branch',
+        defaultValue: config.optionNames.main,
+        choices: () => git.getLocalBranches('feature') as string[],
+        when: () => true,
+      }),
+    ])
+  ).branch
 }
 
 const maybeUseCurrentBranch = async (): Promise<string | undefined> => {
@@ -85,7 +87,7 @@ const maybeUseCurrentBranch = async (): Promise<string | undefined> => {
 }
 
 const askBranchNameToUser = async (
-  base: string | boolean | undefined,
+  base: gofCommand.GofOptionsType,
   cmdName: string
 ): Promise<string> => {
   const userInput =
@@ -107,35 +109,31 @@ const askBranchNameToUser = async (
 }
 
 const maybeCheckoutAndGetBranchName = async (
-  cmd: commander.Command,
+  name: string,
+  base: string,
   arg?: string
 ): Promise<string> => {
-  const base = cmd.base ?? config.getBaseBranch(cmd._name)
+  const baseBranch = base ?? config.getBaseBranch(name)
+
   if (arg) {
-    const branchName: string = (base ? `${base}/` : '') + arg
+    const branchName: string = (baseBranch ? `${baseBranch}/` : '') + arg
     git.checkoutBranch(branchName)
     return branchName
   }
 
   return (
     (await maybeUseCurrentBranch()) ??
-    (await askBranchNameToUser(base, cmd._name))
+    (await askBranchNameToUser(baseBranch, name))
   )
 }
 
-const getTag = async (cmd: commander.Command): Promise<string | false> => {
-  const tag: string = cmd.tag ?? (await askTagNameToUser())
-  if (tag) git.tagBranch(tag, cmd.message ?? tag)
-  else log.warning('commit has not been tagged!')
-  return tag
-}
-
 const maybeDeleteBranch = async (
-  cmdDelete: boolean | undefined,
+  _delete: boolean | undefined,
   branchName: string
 ): Promise<void> => {
-  const del = cmdDelete ?? config.getConfigValue('deleteAfterMerge') === 'true'
-  if (del) {
+  const doDelete =
+    _delete ?? config.getConfigValue('deleteAfterMerge') === 'true'
+  if (doDelete) {
     git.deleteBranch(branchName)
     const ans = await inquisitor.promptUser([
       inquisitor.askConfirmation({
@@ -148,36 +146,43 @@ const maybeDeleteBranch = async (
 }
 
 const maybePush = (
-  cmdPush: boolean | undefined,
+  push: boolean | undefined,
   onto: string,
-  tag: string | boolean | undefined
+  tag: gofCommand.GofOptionsType
 ): void => {
-  const push = cmdPush ?? config.getConfigValue('pushAfterMerge') === 'true'
-  if (push) git.pushToOrigin(onto, tag)
+  const doPush = push ?? config.getConfigValue('pushAfterMerge') === 'true'
+  if (doPush) git.pushToOrigin(onto, tag)
 }
 
 const releaseHotfixAction = async (
   arg: string,
-  cmd: commander.Command
+  opts: Record<string, gofCommand.GofOptionsType>,
+  cmd: Command
 ): Promise<void> => {
-  const branchName = await maybeCheckoutAndGetBranchName(cmd, arg)
+  const branchName = await maybeCheckoutAndGetBranchName(
+    cmd.name(),
+    opts.base as string,
+    arg
+  )
 
-  const tag = await getTag(cmd)
+  const tag = opts.tag ?? (await askTagNameToUser())
+
+  tag
+    ? git.tagBranch(tag as string, (opts.message as string) ?? tag)
+    : log.warning('commit has not been tagged!')
 
   const onto =
-    cmd.onto ??
+    opts.onto ??
     config.getConfigValue('development') ??
     config.getConfigValue('main')
 
-  git.checkoutBranch(onto)
+  git.checkoutBranch(onto as string)
 
   git.mergeBranch(branchName)
 
-  // const push = cmd.push ?? config.getConfigValue('pushAfterMerge') === 'true'
-  // if (push) git.pushToOrigin(onto, tag)
-  maybePush(cmd.push, onto, tag)
+  maybePush(opts.push as boolean | undefined, onto as string, tag)
 
-  await maybeDeleteBranch(cmd.delete, branchName)
+  await maybeDeleteBranch(opts.delete as boolean | undefined, branchName)
 
   // extra step
   if (
@@ -194,14 +199,14 @@ const releaseHotfixAction = async (
     ).confirmation
   ) {
     git.checkoutBranch(config.getConfigValue('main') as string)
-    git.mergeBranch(tag || branchName, '--ff-only')
+    git.mergeBranch((tag as string) || branchName, '--ff-only')
   }
 }
 
 const release: gofCommand.GofCommand = {
   name: 'release',
-  desc: ['finish a release', { name: 'the name of the release to finish' }],
-  args: '[name]',
+  desc: 'finish a release',
+  args: [{ name: '[name]', desc: 'the name of the release to finish' }],
   opts: [...tagOptions, ...commonOptions],
   action: releaseHotfixAction,
   examples: [
@@ -213,8 +218,8 @@ const release: gofCommand.GofCommand = {
 
 const hotfix: gofCommand.GofCommand = {
   name: 'hotfix',
-  desc: ['finish a hotfix', { name: 'the name of the hotfix to finish' }],
-  args: '[name]',
+  desc: 'finish a hotfix',
+  args: [{ name: '[name]', desc: 'the name of the hotfix to finish' }],
   opts: [...tagOptions, ...commonOptions],
   action: releaseHotfixAction,
   examples: [
@@ -230,8 +235,8 @@ const rebaseOptions = [
   { flags: '-s,--strategy <strategy>', desc: 'merge strategy' },
 ]
 
-const getStrategy = (cmd: commander.Command): string => {
-  const strategy = cmd.strategy ?? config.getConfigValue('strategy')
+const getStrategy = (strategyOpt: config.StrategyOptions): string => {
+  const strategy = strategyOpt ?? config.getConfigValue('strategy')
   if (!config.strategyOptionValues.includes(strategy))
     throw new Error(
       `unknown strategy option: '${strategy}'. Valid options are '${config.strategyOptionValues.join(
@@ -243,8 +248,8 @@ const getStrategy = (cmd: commander.Command): string => {
 
 const feature: gofCommand.GofCommand = {
   name: 'feature',
-  args: '[name]',
-  desc: ['finish a feature', { name: 'the feature to finish' }],
+  args: [{ name: '[name]', desc: 'the feature to finish' }],
+  desc: 'finish a feature',
   opts: [...commonOptions, ...rebaseOptions],
 
   examples: [
@@ -252,36 +257,45 @@ const feature: gofCommand.GofCommand = {
     '$ gof f f -s no-ff',
     '$ gof finish f --dry-run --no-interactive -s rebase-no-ff my-feature',
   ],
-  action: async (arg: string, cmd: commander.Command) => {
-    const strategy = getStrategy(cmd)
+  action: async (
+    arg: string,
+    opts: Record<string, gofCommand.GofOptionsType>,
+    cmd: Command
+  ) => {
+    const strategy = getStrategy(opts.strategy as config.StrategyOptions)
 
-    const branchName = await maybeCheckoutAndGetBranchName(cmd, arg)
+    const branchName = await maybeCheckoutAndGetBranchName(
+      cmd.name(),
+      opts.base as string,
+      arg
+    )
 
     const onto =
-      cmd.onto ??
+      opts.onto ??
       (config.getConfigValue('askOnFeatureFinish')
         ? await letUserSelectBranch()
         : config.getConfigValue('development') ?? config.getConfigValue('main'))
 
     if (/^rebase/.test(strategy))
       git.rebase(
-        onto,
-        cmd.interactive ?? config.getConfigValue('interactive') === 'true'
+        onto as string,
+        (opts.interactive as boolean) ??
+          config.getConfigValue('interactive') === 'true'
       )
 
-    git.checkoutBranch(onto)
+    git.checkoutBranch(onto as string)
 
     if (/no-ff/.test(strategy)) git.mergeBranch(branchName, '--no-ff')
     else git.mergeBranch(branchName, '--ff-only')
 
-    maybePush(cmd.push, onto, false)
+    maybePush(opts.push as boolean, onto as string, false)
 
-    await maybeDeleteBranch(cmd.delete, branchName)
+    await maybeDeleteBranch(opts.delete as boolean, branchName)
   },
 }
 
-export default (): commander.Command =>
-  new commander.Command()
+export default (): Command =>
+  new Command()
     .name('finish')
     .alias('f')
     .description('finish a feature, release or hotfix')

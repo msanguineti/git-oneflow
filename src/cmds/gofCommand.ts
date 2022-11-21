@@ -1,4 +1,4 @@
-import commander from 'commander'
+import { Command } from 'commander'
 import path from 'path'
 import * as config from '../lib/config'
 import * as log from '../lib/log'
@@ -9,16 +9,22 @@ export type GofCmdOption = {
   defaultValue?: string | boolean
 }
 
+export type GofOptionsType = string | boolean | undefined
+
 export type GofCommand = {
   name: string
-  args?: string
-  desc?: [string, { [key: string]: string }?]
+  args?: [{ name: string; desc: string }]
+  desc?: string
   opts?: GofCmdOption[]
   listeners?: {
     event: string | symbol
     callback: (...args: (string | boolean | undefined)[]) => void
   }[]
-  action?: (...args: (string & commander.Command)[]) => void | Promise<void>
+  action?: (
+    arg: string,
+    opts: Record<string, GofOptionsType>,
+    cmd: Command
+  ) => void | Promise<void>
   examples?: string[]
 }
 
@@ -30,8 +36,8 @@ export const makeGofCmd = ({
   listeners,
   action,
   examples,
-}: GofCommand): commander.Command => {
-  const cmd = new commander.Command(name)
+}: GofCommand): Command => {
+  const cmd = new Command(name)
 
   cmd
     .option('-c, --config <file>', 'configuration file to use')
@@ -45,7 +51,7 @@ export const makeGofCmd = ({
     .option(
       '-b, --base <name>',
       `override the current base branch name: '${config.getBaseBranch(
-        cmd._name
+        cmd.name()
       )}'`
     )
     .option('--no-base', 'do not use a base branch name')
@@ -56,9 +62,12 @@ export const makeGofCmd = ({
 
   cmd.alias(name.charAt(0))
 
-  if (args) cmd.arguments(args)
+  if (args)
+    args.forEach((arg) => {
+      cmd.argument(arg.name, arg.desc)
+    })
 
-  if (desc) cmd.description(...desc)
+  if (desc) cmd.description(desc)
 
   if (opts) {
     opts.forEach((opt) => {

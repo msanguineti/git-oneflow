@@ -5,7 +5,7 @@ const explorer = cosmiconfig.cosmiconfigSync(pkg.name)
 
 let configFile: string | undefined
 
-type StrategyOptions = 'rebase' | 'no-ff' | 'rebase-no-ff'
+export type StrategyOptions = 'rebase' | 'no-ff' | 'rebase-no-ff'
 
 type Configuration = {
   main: string
@@ -29,7 +29,7 @@ export const strategyOptionValues: StrategyOptions[] = [
 ]
 
 export const defaultConfiguration: Configuration = {
-  main: 'master',
+  main: 'main',
   development: undefined,
   features: 'feature',
   releases: 'release',
