@@ -1,31 +1,36 @@
 import { Command } from 'commander'
-import * as config from '../lib/config'
-import * as git from '../lib/git'
-import * as gofCommand from './gofCommand'
-import * as inquisitor from '../lib/inquisitor'
+import { getConfigValue, optionNames, getBaseBranch } from '../lib/config'
+import { getLatestTag, getLocalBranches, createBranch } from '../lib/git'
+import {
+  GofOptionsType,
+  GofCmdOption,
+  GofCommand,
+  makeGofCmd,
+} from './gofCommand'
+import { promptUser, presentChoices, askInput } from '../lib/inquisitor'
 
 const getDefaultReference = async (
   cmdName: string
 ): Promise<string | undefined> => {
   switch (cmdName) {
     case 'feature':
-      return config.getConfigValue('askOnFeatureStart')
+      return getConfigValue('askOnFeatureStart')
         ? await letUserSelectBranch()
-        : config.getConfigValue('development') ?? config.getConfigValue('main')
+        : getConfigValue('development') ?? getConfigValue('main')
     case 'release':
-      return config.getConfigValue('main')
+      return getConfigValue('main')
     case 'hotfix':
-      return git.getLatestTag() ?? config.getConfigValue('main')
+      return getLatestTag() ?? getConfigValue('main')
   }
 }
 
 const letUserSelectBranch = async (): Promise<string> => {
-  const userInput = await inquisitor.promptUser([
-    inquisitor.presentChoices({
+  const userInput = await promptUser([
+    presentChoices({
       message: 'Which branch to start from?',
       name: 'branch',
-      defaultValue: config.optionNames.main,
-      choices: () => git.getLocalBranches('feature') as string[],
+      defaultValue: optionNames.main,
+      choices: () => getLocalBranches('feature') as string[],
       when: () => true,
     }),
   ])
@@ -34,14 +39,14 @@ const letUserSelectBranch = async (): Promise<string> => {
 
 const cmdAction = async (
   arg: string,
-  opts: Record<string, gofCommand.GofOptionsType>,
+  opts: Record<string, GofOptionsType>,
   cmd: Command
 ): Promise<void> => {
   const name =
     arg ??
     (
-      await inquisitor.promptUser([
-        inquisitor.askInput({
+      await promptUser([
+        askInput({
           message: `${
             cmd.name().charAt(0).toUpperCase() + cmd.name().slice(1)
           } name?`,
@@ -52,18 +57,18 @@ const cmdAction = async (
       ])
     ).branchName
 
-  const base = opts.base ?? config.getBaseBranch(cmd.name())
+  const base = opts.base ?? getBaseBranch(cmd.name())
 
   const ref =
     opts.ref ??
-    (config.getConfigValue('askOnFeatureStart')
+    (getConfigValue('askOnFeatureStart')
       ? await letUserSelectBranch()
       : await getDefaultReference(cmd.name()))
 
-  git.createBranch(base ? `${base}/${name}` : name, ref)
+  createBranch(base ? `${base}/${name}` : name, ref)
 }
 
-const commonOptions: gofCommand.GofCmdOption[] = [
+const commonOptions: GofCmdOption[] = [
   {
     flags: '-r, --ref <ref>',
     desc: 'new branch will be created from the given branch, commit or tag',
@@ -74,7 +79,7 @@ const commonOptions: gofCommand.GofCmdOption[] = [
   },
 ]
 
-const feature: gofCommand.GofCommand = {
+const feature: GofCommand = {
   name: 'feature',
   args: [
     {
@@ -92,7 +97,7 @@ const feature: gofCommand.GofCommand = {
   ],
 }
 
-const release: gofCommand.GofCommand = {
+const release: GofCommand = {
   name: 'release',
   args: [
     {
@@ -110,7 +115,7 @@ const release: gofCommand.GofCommand = {
   ],
 }
 
-const hotfix: gofCommand.GofCommand = {
+const hotfix: GofCommand = {
   name: 'hotfix',
   args: [
     {
@@ -133,6 +138,6 @@ export default (): Command =>
     .name('start')
     .alias('s')
     .description('start a new feature, release or hotfix')
-    .addCommand(gofCommand.makeGofCmd(feature))
-    .addCommand(gofCommand.makeGofCmd(release))
-    .addCommand(gofCommand.makeGofCmd(hotfix))
+    .addCommand(makeGofCmd(feature))
+    .addCommand(makeGofCmd(release))
+    .addCommand(makeGofCmd(hotfix))

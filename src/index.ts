@@ -3,15 +3,15 @@ import { name, version } from '../package.json'
 import makeFinishCmd from './cmds/finish'
 import makeInitCmd from './cmds/init'
 import makeStartCmd from './cmds/start'
-import * as config from './lib/config'
-import * as git from './lib/git'
-import * as log from './lib/log'
+import { load } from './lib/config'
+import { isOK } from './lib/git'
+import { error } from './lib/log'
 
 const main = async (): Promise<void> => {
-  if (!git.isOK())
+  if (!isOK())
     throw new Error('git not installed or not in a valid git repository')
 
-  config.load()
+  load()
 
   const program = new Command()
 
@@ -25,4 +25,4 @@ const main = async (): Promise<void> => {
   await program.parseAsync()
 }
 
-main().catch((err) => log.error(err))
+main().catch((err) => error(err))

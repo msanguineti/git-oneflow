@@ -1,7 +1,16 @@
-import * as shelljs from 'shelljs'
-import * as pkg from '../package.json'
+import { version } from '../package.json'
 import yoda from '../src/lib/yoda'
-import * as git from '../src/lib/git'
+import {
+  getCurrentBranch,
+  createBranch,
+  branchExists,
+  deleteBranch,
+  getLatestTag,
+  checkoutBranch,
+} from '../src/lib/git'
+import shelljs from 'shelljs'
+
+const { exec, rm, test } = shelljs
 
 // const SILENT is true if process.env.SILENT is undefined or 'true'
 const SILENT = process.env.SILENT === undefined || process.env.SILENT === 'true'
@@ -11,46 +20,46 @@ describe('Prepare test environemnt', () => {
   let currentBranch: string
 
   beforeAll(() => {
-    currentBranch = git.getCurrentBranch()
-    git.createBranch(testBranch)
+    currentBranch = getCurrentBranch()
+    createBranch(testBranch)
   })
 
   it('checks test branch exists', () => {
-    expect(git.branchExists(testBranch)).toBe(true)
+    expect(branchExists(testBranch)).toBe(true)
   })
 
   describe('Program transpiled correctly', () => {
     it('is transpiled', () => {
-      expect(shelljs.test('-e', 'bin/cli')).toBe(true)
+      expect(test('-e', 'bin/cli.js')).toBe(true)
     })
 
     it('returns the version', () => {
-      const shellString = shelljs.exec('node bin/cli -V', {
+      const shellString = exec('node bin/cli.js -V', {
         silent: SILENT,
       })
 
-      expect(shellString.stdout).toMatch(pkg.version)
+      expect(shellString.stdout).toMatch(version)
     })
   })
 
   describe('Init command', () => {
     beforeAll(() => {
-      if (shelljs.test('-e', '.git-oneflowrc')) shelljs.rm('.git-oneflowrc')
+      if (test('-e', '.git-oneflowrc')) rm('.git-oneflowrc')
     })
 
     it('creates default config file', () => {
-      const shellString = shelljs.exec('node bin/cli init -y', {
+      const shellString = exec('node bin/cli.js init -y', {
         silent: SILENT,
       })
 
       expect(shellString.stdout).toContain(
         'config: new configuration file created'
       )
-      expect(shelljs.test('-e', '.git-oneflowrc')).toBe(true)
+      expect(test('-e', '.git-oneflowrc')).toBe(true)
     })
 
     it('refuses to create a config file', () => {
-      const shellString = shelljs.exec('node bin/cli init -y', {
+      const shellString = exec('node bin/cli.js init -y', {
         silent: SILENT,
       })
 
@@ -58,7 +67,7 @@ describe('Prepare test environemnt', () => {
     })
 
     it('summons yoda', () => {
-      const shellString = shelljs.exec('node bin/cli init -y -f', {
+      const shellString = exec('node bin/cli.js init -y -f', {
         silent: SILENT,
       })
 
@@ -66,7 +75,7 @@ describe('Prepare test environemnt', () => {
     })
 
     afterAll(() => {
-      shelljs.rm('.git-oneflowrc')
+      rm('.git-oneflowrc')
     })
   })
 
@@ -76,7 +85,7 @@ describe('Prepare test environemnt', () => {
     const hotfixName = 'my-hotfix'
 
     it('shows default help', () => {
-      const shellString = shelljs.exec('node bin/cli start', {
+      const shellString = exec('node bin/cli.js start', {
         silent: SILENT,
       })
 
@@ -84,7 +93,7 @@ describe('Prepare test environemnt', () => {
     })
 
     it('shows help on demand', () => {
-      const shellString = shelljs.exec('node bin/cli start -h', {
+      const shellString = exec('node bin/cli.js start -h', {
         silent: SILENT,
       })
 
@@ -92,7 +101,7 @@ describe('Prepare test environemnt', () => {
     })
 
     it('shows suggestion if command is mistyped', () => {
-      const shellString = shelljs.exec('node bin/cli strat', {
+      const shellString = exec('node bin/cli.js strat', {
         silent: SILENT,
       })
 
@@ -100,8 +109,8 @@ describe('Prepare test environemnt', () => {
     })
 
     it('starts a feature', () => {
-      const shellString = shelljs.exec(
-        `node bin/cli s f -r ${testBranch} ${featureName}`,
+      const shellString = exec(
+        `node bin/cli.js s f -r ${testBranch} ${featureName}`,
         {
           silent: SILENT,
         }
@@ -112,13 +121,13 @@ describe('Prepare test environemnt', () => {
           'dry-run: git checkout -b feature/my-feature testBranch'
         )
       else {
-        expect(git.getCurrentBranch()).toMatch(`feature/${featureName}`)
+        expect(getCurrentBranch()).toMatch(`feature/${featureName}`)
       }
     })
 
     it('finishes a feature', () => {
-      const shellString = shelljs.exec(
-        `node bin/cli f f -o ${testBranch} ${featureName} --no-delete --no-interactive --no-push`,
+      const shellString = exec(
+        `node bin/cli.js f f -o ${testBranch} ${featureName} --no-delete --no-interactive --no-push`,
         {
           silent: SILENT,
         }
@@ -135,16 +144,16 @@ describe('Prepare test environemnt', () => {
             'dry-run: git merge --ff-only feature/my-feature'
         )
       else {
-        expect(git.branchExists(`feature/${featureName}`)).toBe(true)
-        expect(git.getCurrentBranch()).toMatch(testBranch)
-        git.deleteBranch(`feature/${featureName}`)
+        expect(branchExists(`feature/${featureName}`)).toBe(true)
+        expect(getCurrentBranch()).toMatch(testBranch)
+        deleteBranch(`feature/${featureName}`)
       }
     })
 
     it('fails to start a feature', () => {
       const noBranch = 'no-branch'
-      const shellString = shelljs.exec(
-        `node bin/cli s f ${featureName} -r ${noBranch}`
+      const shellString = exec(
+        `node bin/cli.js s f ${featureName} -r ${noBranch}`
       )
 
       if (process.env.GOF_DRY_RUN)
@@ -158,8 +167,8 @@ describe('Prepare test environemnt', () => {
     })
 
     it('starts a release', () => {
-      const shellString = shelljs.exec(
-        `node bin/cli s r -r ${testBranch} ${releaseName}`,
+      const shellString = exec(
+        `node bin/cli.js s r -r ${testBranch} ${releaseName}`,
         {
           silent: SILENT,
         }
@@ -170,14 +179,14 @@ describe('Prepare test environemnt', () => {
           'dry-run: git checkout -b release/my-release testBranch'
         )
       else {
-        expect(git.getCurrentBranch()).toMatch(`release/${releaseName}`)
+        expect(getCurrentBranch()).toMatch(`release/${releaseName}`)
       }
     })
 
     it('finishes a release', () => {
       const tag = '41.41.41'
-      const shellString = shelljs.exec(
-        `node bin/cli f r -o ${testBranch} ${releaseName} --no-delete --no-push -t ${tag} -m 'chore(release) ${tag}'`,
+      const shellString = exec(
+        `node bin/cli.js f r -o ${testBranch} ${releaseName} --no-delete --no-push -t ${tag} -m 'chore(release) ${tag}'`,
         {
           silent: SILENT,
         }
@@ -194,17 +203,17 @@ describe('Prepare test environemnt', () => {
             'dry-run: git merge release/my-release'
         )
       else {
-        expect(git.branchExists(`release/${releaseName}`)).toBe(true)
-        expect(git.getCurrentBranch()).toMatch(testBranch)
-        expect(git.getLatestTag()).toMatch(tag)
-        shelljs.exec(`git tag -d ${tag}`)
-        git.deleteBranch(`release/${releaseName}`)
+        expect(branchExists(`release/${releaseName}`)).toBe(true)
+        expect(getCurrentBranch()).toMatch(testBranch)
+        expect(getLatestTag()).toMatch(tag)
+        exec(`git tag -d ${tag}`)
+        deleteBranch(`release/${releaseName}`)
       }
     })
 
     it('starts a hotfix', () => {
-      const shellString = shelljs.exec(
-        `node bin/cli s h -r ${testBranch} ${hotfixName}`,
+      const shellString = exec(
+        `node bin/cli.js s h -r ${testBranch} ${hotfixName}`,
         {
           silent: SILENT,
         }
@@ -215,14 +224,14 @@ describe('Prepare test environemnt', () => {
           'dry-run: git checkout -b hotfix/my-hotfix testBranch'
         )
       else {
-        expect(git.getCurrentBranch()).toMatch(`hotfix/${hotfixName}`)
+        expect(getCurrentBranch()).toMatch(`hotfix/${hotfixName}`)
       }
     })
 
     it('finishes a hotfix', () => {
       const tag = '42.42.42'
-      const shellString = shelljs.exec(
-        `node bin/cli f h -o ${testBranch} ${hotfixName} --no-delete --no-push -t ${tag} -m 'chore(release) ${tag}'`,
+      const shellString = exec(
+        `node bin/cli.js f h -o ${testBranch} ${hotfixName} --no-delete --no-push -t ${tag} -m 'chore(release) ${tag}'`,
         {
           silent: SILENT,
         }
@@ -239,17 +248,17 @@ describe('Prepare test environemnt', () => {
             'dry-run: git merge hotfix/my-hotfix'
         )
       else {
-        expect(git.branchExists(`hotfix/${hotfixName}`)).toBe(true)
-        expect(git.getCurrentBranch()).toMatch(testBranch)
-        expect(git.getLatestTag()).toMatch(tag)
-        shelljs.exec(`git tag -d ${tag}`)
-        git.deleteBranch(`hotfix/${hotfixName}`)
+        expect(branchExists(`hotfix/${hotfixName}`)).toBe(true)
+        expect(getCurrentBranch()).toMatch(testBranch)
+        expect(getLatestTag()).toMatch(tag)
+        exec(`git tag -d ${tag}`)
+        deleteBranch(`hotfix/${hotfixName}`)
       }
     })
   })
 
   afterAll(() => {
-    git.checkoutBranch(currentBranch)
-    git.deleteBranch(testBranch)
+    checkoutBranch(currentBranch)
+    deleteBranch(testBranch)
   })
 })
