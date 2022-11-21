@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<<<<<<< HEAD
 ## [1.2.0](https://github.com/msanguineti/git-oneflow/compare/v1.1.2...v1.2.0) (2022-11-21)
+=======
+## [1.2.0](https://github.com/msanguineti/git-oneflow/compare/v1.1.2...v1.2.0) (2022-11-19)
+>>>>>>> de33d157c15b64d9262051990388e0d5707c49ad
 
 
 ### Features
@@ -13,6 +17,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### Bug Fixes
 
 * codefactor ([81c051b](https://github.com/msanguineti/git-oneflow/commit/81c051bdd8a448ce625ecab7fb186a9faaac137b))
+<<<<<<< HEAD
 * fix no branch on init, asterisk in branch name, questions ([477ffb9](https://github.com/msanguineti/git-oneflow/commit/477ffb903e2ba663fc684b09e6d1c2771207b578))
 * readme ([5239cc6](https://github.com/msanguineti/git-oneflow/commit/5239cc665e1112fc173264b4b167b7ab75587c55))
 
@@ -420,6 +425,11 @@ All notable changes to this project will be documented in this file. See [standa
 * **deps:** bump ws from 7.3.1 to 7.4.6 ([8c3fe23](https://github.com/msanguineti/git-oneflow/commit/8c3fe235925c8e6ccb4fb34af24597fdd2ceb30e))
 * **deps:** bump y18n from 4.0.0 to 4.0.3 ([d0db723](https://github.com/msanguineti/git-oneflow/commit/d0db723d2b9f02e017ce26ae3f4aef38fb0480cd))
 
+=======
+* **npm:** npm audit fix ([3fb5276](https://github.com/msanguineti/git-oneflow/commit/3fb5276f40af6377f9f8ffbd324a8eccf37bfaf7))
+* readme ([5239cc6](https://github.com/msanguineti/git-oneflow/commit/5239cc665e1112fc173264b4b167b7ab75587c55))
+
+>>>>>>> de33d157c15b64d9262051990388e0d5707c49ad
 ### [1.1.2](https://github.com/msanguineti/git-oneflow/compare/v1.1.1...v1.1.2) (2020-12-17)
 
 ### Refactoring
