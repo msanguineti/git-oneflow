@@ -62,12 +62,7 @@ Fun facts:
 
 ## Node Compatibility
 
-Tested in node
-
-- **v10.x**
-- **v12.x**
-- **v14.x**
-- **v15.x**
+Node versions 14 and above are supported.
 
 ## Install
 
