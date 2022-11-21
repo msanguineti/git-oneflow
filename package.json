@@ -50,7 +50,7 @@
     "@rollup/plugin-json": "^5.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-typescript": "^9.0.2",
-    "@types/inquirer": "^8.2.5",
+    "@types/inquirer": "^9.0.3",
     "@types/jest": "^29.2.3",
     "@types/shelljs": "^0.8.11",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
@@ -70,7 +70,7 @@
     "commander": "^9.4.1",
     "cosmiconfig": "^7.1.0",
     "fude": "^3.0.1",
-    "inquirer": "^8.2.5",
+    "inquirer": "^9.1.4",
     "shelljs": "^0.8.5"
   }
 }
