@@ -27,7 +27,7 @@ export const getLocalBranches = (exclude?: string): string[] | undefined => {
       .split('\n')
       .filter((b) => (exclude ? !b.includes(exclude) : true))
       .filter((b) => b !== '')
-      .map((b) => b.replace('*', '').trim())
+      .map((b) => b.replace(/\*/g, '').trim())
 }
 
 export const branchExists = (name: string): boolean =>
