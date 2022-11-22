@@ -132,6 +132,11 @@
         "type": "test",
         "section": "Tests",
         "hidden": false
+      },
+      {
+        "type": "ci",
+        "section": "CI/CD",
+        "hidden": false
       }
     ]
   },
