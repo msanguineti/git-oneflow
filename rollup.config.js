@@ -2,7 +2,6 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import typescript from '@rollup/plugin-typescript'
 import json from '@rollup/plugin-json'
-import { terser } from 'rollup-plugin-terser'
 import { version, dependencies } from './package.json'
 import builtins from 'builtin-modules'
 
@@ -20,18 +19,13 @@ const preamble = `#!/usr/bin/env node
 
 const input = 'src/index.ts'
 
-const plugins = [
-  json(),
-  resolve(),
-  commonjs(),
-  typescript(),
-  terser({ output: { beautify: true, preamble: preamble } }),
-]
+const plugins = [json(), resolve(), commonjs(), typescript()]
 
 const output = {
   file: 'bin/cli.js',
-  format: 'esm',
+  format: 'es',
   entryFileNames: '[name]',
+  banner: preamble,
 }
 
 export default {

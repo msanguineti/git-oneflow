@@ -57,14 +57,12 @@ export const load = (file?: string): void => {
 
   configFile = result?.filepath
 
-  // merge defaults
   const gofConfig = { ...defaultConfiguration, ...result?.config }
 
   for (const key in gofConfig) {
     if (Object.prototype.hasOwnProperty.call(defaultConfiguration, key)) {
       const value = gofConfig[key]
 
-      // just create envvars if the value is truthy
       if (value) process.env[`gof_${key}`.toUpperCase()] = value
     } else {
       throw new Error(

@@ -12,7 +12,6 @@ import shelljs from 'shelljs'
 
 const { exec, rm, test } = shelljs
 
-// const SILENT is true if process.env.SILENT is undefined or 'true'
 const SILENT = process.env.SILENT === undefined || process.env.SILENT === 'true'
 
 describe('Prepare test environemnt', () => {

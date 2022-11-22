@@ -1,5 +1,6 @@
 /**
  * Yoda by Blazej Kozlowski & Faux_Pseudo
+ * @copyright Blazej Kozlowski & Faux_Pseudo
  */
 export default `
                     ____
