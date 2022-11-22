@@ -1,6 +1,6 @@
 # ![git-OneFlow](g1-logo.png) <!-- omit in toc -->
 
-[![CodeFactor](https://www.codefactor.io/repository/github/msanguineti/git-oneflow/badge/main)](https://www.codefactor.io/repository/github/msanguineti/git-oneflow/overview/master)
+[![CodeFactor](https://www.codefactor.io/repository/github/msanguineti/git-oneflow/badge/main)](https://www.codefactor.io/repository/github/msanguineti/git-oneflow/overview/main)
 [![npm](https://badgen.net/npm/v/git-oneflow)](https://www.npmjs.com/package/git-oneflow)
 [![code style: prettier](https://badgen.net/badge/code%20style/prettier/ff69b4)](https://prettier.io/) [![Conventional Commits](https://badgen.net/badge/Conventional%20Commits/1.0.0/d4ac20)](https://conventionalcommits.org)
 ![Dependabot Status](https://badgen.net/github/dependabot/msanguineti/git-oneflow?icon=dependabot)
@@ -15,7 +15,7 @@ In [this article](https://www.endoflineblog.com/oneflow-a-git-branching-model-an
 **_This workflow is not for the uninitiated:_**
 
 1. Heavy use of `rebase`
-2. By default, work is off of `master`
+2. By default, work is off of `main`
 3. ???
 4. No Profit :( and surefire way to mess things up quickly and embarrassingly.
 
@@ -23,7 +23,7 @@ For a good overview of why you should _and_ when you shouldn't use rebase read [
 
 I have simply put together some CLI commands to leverage the OneFlow model.
 
-I have remained strictly faithful to how Adam defines the workflow without adding anything fancy (yet). This means that, by default, **_git-OneFlow_** works with one main branch only (`master`) and new features are rebased. Check the [customisation](#customisation) section.
+I have remained strictly faithful to how Adam defines the workflow without adding anything fancy (yet). This means that, by default, **_git-OneFlow_** works with one main branch only (`main`) and new features are rebased. Check the [customisation](#customisation) section.
 
 Of course, one-size-fits-all does not always work, therefore, I have implemented all the feature integration options described in the article and both the _one main branch_ and _main and development branches_ models.
 
@@ -86,7 +86,7 @@ gof --help
 
 ### Node Package Execute - npx
 
-It is possible to run `git-oneflow` directly from the `npm` registry with Node Package Execute:
+It is possible to run `git-oneflow` directly (i.e. no local installation) from the `npm` registry with Node Package Execute:
 
 ```sh
 npx git-oneflow --help
@@ -100,7 +100,7 @@ npx git-oneflow --help
 
 #### One main branch
 
-`master`
+`main`
 
 #### Feature branches
 
@@ -118,10 +118,10 @@ Finishing a feature is done by rebasing:
 gof finish feature my-feature
 # equivalent to...
 git checkout feature/my-feature
-git rebase -i master
-git checkout master
+git rebase -i main
+git checkout main
 git merge --ff-only feature/my-feature
-git push origin master
+git push origin main
 git branch -d feature/my-feature
 ```
 
@@ -142,9 +142,9 @@ gof finish release 2.3.0 -t 2.3.0
 # equivalent to...
 git checkout release/2.3.0
 git tag -a -m '2.3.0' 2.3.0
-git checkout master
+git checkout main
 git merge release/2.3.0
-git push --follow-tags origin master
+git push --follow-tags origin main
 git branch -d release/2.3.0
 ```
 
@@ -172,7 +172,7 @@ gof start feature -c config/my-gof-config.json
 
 | Option               | Description                                                              | Default     | Details                                                                                                                                                                                                                                                                                                                                |
 | -------------------- | ------------------------------------------------------------------------ | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `main`               | name of the main (production) branch                                     | `master`    | must be set to an existing branch name                                                                                                                                                                                                                                                                                                 |
+| `main`               | name of the main (production) branch                                     | `main`      | must be set to an existing branch name                                                                                                                                                                                                                                                                                                 |
 | `development`        | name of the development branch                                           | `undefined` | not set or an existing branch name                                                                                                                                                                                                                                                                                                     |
 | `features`           | name of the features branch (prefixed to the feature name)               | `feature`   | empty string or a valid branch name. This strings works as a branch prefix, e.g. if the chosen feature name is `my-super-feature` the resulting (using the default) branch name for this feature will be `feature/my-super-feature`. An empty string will result in `my-super-feature`. This applies to releases and hotfixes as well. |
 | `releases`           | name of the releases branch (prefixed to the release name)               | `release`   | empty string or a valid branch name                                                                                                                                                                                                                                                                                                    |
@@ -197,7 +197,7 @@ this will create `.gitonelfowrc` in the current directory with the following con
 
 ```json
 {
-  "main": "master",
+  "main": "main",
   "features": "feature",
   "releases": "release",
   "hotfixes": "hotfix",
