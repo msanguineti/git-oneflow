@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/msanguineti/git-oneflow/compare/v1.2.1...v2.0.0) (2022-11-22)
+
+### ⚠ BREAKING CHANGES
+
+- :boom: drop support for node 12 and below
+
+### Features
+
+- :boom: drop support for node 12 and below ([e2d3c32](https://github.com/msanguineti/git-oneflow/commit/e2d3c32174c6feef02806901c3a22ff033627c04))
+
+### Bug Fixes
+
+- commander upgrade to latest ([29e18e0](https://github.com/msanguineti/git-oneflow/commit/29e18e027fbd3e987b2fbe61d7b3268300c2c6ea))
+- inquirer upgrade to latest ([8df0aca](https://github.com/msanguineti/git-oneflow/commit/8df0acab03ec21b908eac20204993943c0026dde))
+
+### CI/CD
+
+- remove kodiak ([634a02a](https://github.com/msanguineti/git-oneflow/commit/634a02a2b57a6dfd16f57a73f22fc73ae63faa4c))
+
+### Documentation
+
+- remove noise from CHANGELOG ([f85a1b7](https://github.com/msanguineti/git-oneflow/commit/f85a1b76bcf5d265a5e0d14e4b1d67301b8c7263))
+- update README ([2cb4633](https://github.com/msanguineti/git-oneflow/commit/2cb4633524f8d1151f3460e36aa6001f744795f9))
+
 ### [1.2.1](https://github.com/msanguineti/git-oneflow/compare/v1.2.0...v1.2.1) (2022-11-21)
 
 ### Bug Fixes
