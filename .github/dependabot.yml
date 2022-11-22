@@ -9,7 +9,6 @@ updates:
     labels:
       - 'dependencies'
       - 'npm'
-      - 'automerge'
   - package-ecosystem: github-actions
     directory: '/'
     schedule:
@@ -18,4 +17,3 @@ updates:
     labels:
       - 'dependencies'
       - 'github_actions'
-      - 'automerge'
