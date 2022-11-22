@@ -8,21 +8,25 @@ import { isOK } from './lib/git'
 import { error } from './lib/log'
 
 const main = async (): Promise<void> => {
-  if (!isOK())
-    throw new Error('git not installed or not in a valid git repository')
+  try {
+    if (!isOK())
+      throw new Error('git not installed or not in a valid git repository')
 
-  load()
+    load()
 
-  const program = new Command()
+    const program = new Command()
 
-  program
-    .name(name)
-    .version(version)
-    .addCommand(makeStartCmd())
-    .addCommand(makeFinishCmd())
-    .addCommand(makeInitCmd())
+    program
+      .name(name)
+      .version(version)
+      .addCommand(makeStartCmd())
+      .addCommand(makeFinishCmd())
+      .addCommand(makeInitCmd())
 
-  await program.parseAsync()
+    await program.parseAsync()
+  } catch (err) {
+    error(err as Error)
+  }
 }
 
-main().catch((err) => error(err))
+main()

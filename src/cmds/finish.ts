@@ -207,7 +207,6 @@ const releaseHotfixAction = async (
 
   await maybeDeleteBranch(opts.delete as boolean | undefined, branchName)
 
-  // extra step
   if (
     getConfigValue('development') &&
     (
