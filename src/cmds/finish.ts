@@ -247,7 +247,7 @@ const hotfix: GofCommand = {
   examples: [
     '$ gof finish hotfix 2.3.1 -b bugs',
     '$ gof f h 2.3.1',
-    '$ git-oneflow finish hotfix -o master --no-delete 2.3.1',
+    '$ git-oneflow finish hotfix -o main --no-delete 2.3.1',
   ],
 }
 

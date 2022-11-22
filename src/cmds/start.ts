@@ -129,7 +129,7 @@ const hotfix: GofCommand = {
   examples: [
     '$ gof start hotfix 2.3.1 -b bugs',
     '$ gof s h 2.3.1',
-    '$ git-oneflow start hotfix -r master --no-base 2.3.1',
+    '$ git-oneflow start hotfix -r main --no-base 2.3.1',
   ],
 }
 
