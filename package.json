@@ -68,7 +68,7 @@
   },
   "dependencies": {
     "commander": "^9.4.1",
-    "cosmiconfig": "^7.1.0",
+    "cosmiconfig": "^8.1.0",
     "fude": "^3.0.1",
     "inquirer": "^9.1.4",
     "shelljs": "^0.8.5"
