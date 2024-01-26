@@ -21,7 +21,7 @@ export const askInput = ({
   when?: (answer: Answers) => boolean
   validate?: (
     input: string,
-    answer: Answers
+    answer: Answers,
   ) => string | boolean | Promise<string | boolean>
 }): InputQuestion => {
   return {
@@ -78,7 +78,7 @@ export const askConfirmation = ({
 }
 
 export const promptUser = async (
-  questions: GofQuestion[]
+  questions: GofQuestion[],
 ): Promise<Answers> => {
   return inquirer.prompt(questions)
 }

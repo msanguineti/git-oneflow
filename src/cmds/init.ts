@@ -122,7 +122,7 @@ const maybeUseTheForce = (force?: boolean): void => {
 
   if (!force) {
     warning(
-      `a configuration exists at '${oldConfFile}'. Cowardly refusing to proceed!`
+      `a configuration exists at '${oldConfFile}'. Cowardly refusing to proceed!`,
     )
     process.exit(0)
   }

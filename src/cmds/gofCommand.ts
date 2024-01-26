@@ -23,7 +23,7 @@ export type GofCommand = {
   action?: (
     arg: string,
     opts: Record<string, GofOptionsType>,
-    cmd: Command
+    cmd: Command,
   ) => void | Promise<void>
   examples?: string[]
 }
@@ -50,12 +50,12 @@ export const makeGofCmd = ({
     })
     .option(
       '-b, --base <name>',
-      `override the current base branch name: '${getBaseBranch(cmd.name())}'`
+      `override the current base branch name: '${getBaseBranch(cmd.name())}'`,
     )
     .option('--no-base', 'do not use a base branch name')
     .option('--debug')
     .on('option:debug', () =>
-      info('debug', JSON.stringify(cmd.opts(), null, 2))
+      info('debug', JSON.stringify(cmd.opts(), null, 2)),
     )
 
   cmd.alias(name.charAt(0))
