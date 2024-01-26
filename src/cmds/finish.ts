@@ -114,7 +114,7 @@ const maybeUseCurrentBranch = async (): Promise<string | undefined> => {
 
 const askBranchNameToUser = async (
   base: GofOptionsType,
-  cmdName: string
+  cmdName: string,
 ): Promise<string> => {
   const userInput =
     (base ? `${base}/` : '') +
@@ -137,7 +137,7 @@ const askBranchNameToUser = async (
 const maybeCheckoutAndGetBranchName = async (
   name: string,
   base: string,
-  arg?: string
+  arg?: string,
 ): Promise<string> => {
   const baseBranch = base ?? getBaseBranch(name)
 
@@ -155,7 +155,7 @@ const maybeCheckoutAndGetBranchName = async (
 
 const maybeDeleteBranch = async (
   _delete: boolean | undefined,
-  branchName: string
+  branchName: string,
 ): Promise<void> => {
   const doDelete = _delete ?? getConfigValue('deleteAfterMerge') === 'true'
   if (doDelete) {
@@ -173,7 +173,7 @@ const maybeDeleteBranch = async (
 const maybePush = (
   push: boolean | undefined,
   onto: string,
-  tag: GofOptionsType
+  tag: GofOptionsType,
 ): void => {
   const doPush = push ?? getConfigValue('pushAfterMerge') === 'true'
   if (doPush) pushToOrigin(onto, tag)
@@ -182,12 +182,12 @@ const maybePush = (
 const releaseHotfixAction = async (
   arg: string,
   opts: Record<string, GofOptionsType>,
-  cmd: Command
+  cmd: Command,
 ): Promise<void> => {
   const branchName = await maybeCheckoutAndGetBranchName(
     cmd.name(),
     opts.base as string,
-    arg
+    arg,
   )
 
   const tag = opts.tag ?? (await askTagNameToUser())
@@ -213,7 +213,7 @@ const releaseHotfixAction = async (
       await promptUser([
         askConfirmation({
           message: `Merge '${tag || branchName}' into '${getConfigValue(
-            'main'
+            'main',
           )}'?`,
           name: 'confirmation',
         }),
@@ -262,8 +262,8 @@ const getStrategy = (strategyOpt: StrategyOptions): string => {
   if (!strategyOptionValues.includes(strategy))
     throw new Error(
       `unknown strategy option: '${strategy}'. Valid options are '${strategyOptionValues.join(
-        ', '
-      )}'`
+        ', ',
+      )}'`,
     )
   return strategy
 }
@@ -282,14 +282,14 @@ const feature: GofCommand = {
   action: async (
     arg: string,
     opts: Record<string, GofOptionsType>,
-    cmd: Command
+    cmd: Command,
   ) => {
     const strategy = getStrategy(opts.strategy as StrategyOptions)
 
     const branchName = await maybeCheckoutAndGetBranchName(
       cmd.name(),
       opts.base as string,
-      arg
+      arg,
     )
 
     const onto =
@@ -298,11 +298,11 @@ const feature: GofCommand = {
         ? await letUserSelectBranch()
         : getConfigValue('development') ?? getConfigValue('main'))
 
-    if (/^rebase/.test(strategy))
+    if (strategy.startsWith('rebase'))
       rebase(
         onto as string,
         (opts.interactive as boolean) ??
-          getConfigValue('interactive') === 'true'
+          getConfigValue('interactive') === 'true',
       )
 
     checkoutBranch(onto as string)

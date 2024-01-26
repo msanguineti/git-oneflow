@@ -44,9 +44,7 @@ export const defaultConfiguration: Configuration = {
 }
 
 export const optionNames = Object.keys(defaultConfiguration)
-  .filter((key) =>
-    Object.prototype.hasOwnProperty.call(defaultConfiguration, key)
-  )
+  .filter((key) => Object.hasOwn(defaultConfiguration, key))
   .reduce((a: { [key: string]: string }, v: string) => {
     a[v] = v
     return a
@@ -60,13 +58,13 @@ export const load = (file?: string): void => {
   const gofConfig = { ...defaultConfiguration, ...result?.config }
 
   for (const key in gofConfig) {
-    if (Object.prototype.hasOwnProperty.call(defaultConfiguration, key)) {
+    if (Object.hasOwn(defaultConfiguration, key)) {
       const value = gofConfig[key]
 
       if (value) process.env[`gof_${key}`.toUpperCase()] = value
     } else {
       throw new Error(
-        `unknown configuration option ${key} in ${result?.filepath}`
+        `unknown configuration option ${key} in ${result?.filepath}`,
       )
     }
   }
@@ -74,13 +72,11 @@ export const load = (file?: string): void => {
 
 export const getConfigFile = (): string | undefined => configFile
 
-export const getConfigValue = (
-  key: keyof Configuration
-): string | StrategyOptions | undefined =>
+export const getConfigValue = (key: keyof Configuration): string | undefined =>
   process.env[`gof_${key}`.toUpperCase()]
 
 export const getDefaultValue = (
-  key: keyof Configuration
+  key: keyof Configuration,
 ): string | boolean | undefined => defaultConfiguration[key]
 
 export const getBaseBranch = (cmd: string): string | undefined => {

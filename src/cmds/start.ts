@@ -10,7 +10,7 @@ import {
 import { promptUser, presentChoices, askInput } from '../lib/inquisitor'
 
 const getDefaultReference = async (
-  cmdName: string
+  cmdName: string,
 ): Promise<string | undefined> => {
   switch (cmdName) {
     case 'feature':
@@ -40,7 +40,7 @@ const letUserSelectBranch = async (): Promise<string> => {
 const cmdAction = async (
   arg: string,
   opts: Record<string, GofOptionsType>,
-  cmd: Command
+  cmd: Command,
 ): Promise<void> => {
   const name =
     arg ??

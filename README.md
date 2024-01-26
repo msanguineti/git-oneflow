@@ -298,7 +298,7 @@ set GOF_DRY_RUN=1 & gof start release
 
 ## Changelog
 
-See [CHANGELOG](./CHANGELOG.md) for latest changes.
+The changelog can be found on the [Releases page](https://github.com/msanguineti/git-oneflow/releases).
 
 ## Contributing
 
