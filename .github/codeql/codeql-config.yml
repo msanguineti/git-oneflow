@@ -1,7 +1,0 @@
-name: 'CodeQL config file'
-
-paths:
-  - src
-paths-ignore:
-  - node_modules
-  - test
