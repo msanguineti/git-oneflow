@@ -6,6 +6,12 @@
     "gof": "bin/cli.js",
     "git-oneflow": "bin/cli.js"
   },
+  "engines": {
+    "node": ">=18",
+    "npm": ">=10",
+    "yarn": "please-use-npm",
+    "pnpm": "please-use-npm"
+  },
   "files": [
     "bin/cli.js"
   ],
@@ -30,7 +36,8 @@
     "branching",
     "model",
     "Adam",
-    "Ruka"
+    "Ruka",
+    "cli"
   ],
   "author": "Mirco Sanguineti",
   "license": "MIT",
