@@ -1,14 +1,14 @@
-import { version } from '../package.json'
-import yoda from '../src/lib/yoda'
-import {
-  getCurrentBranch,
-  createBranch,
-  branchExists,
-  deleteBranch,
-  getLatestTag,
-  checkoutBranch,
-} from '../src/lib/git'
 import shelljs from 'shelljs'
+import { version } from '../package.json'
+import {
+  branchExists,
+  checkoutBranch,
+  createBranch,
+  deleteBranch,
+  getCurrentBranch,
+  getLatestTag,
+} from '../src/lib/git'
+import yoda from '../src/lib/yoda'
 
 const { exec, rm, test } = shelljs
 
@@ -79,6 +79,10 @@ describe('Prepare test environemnt', () => {
   })
 
   describe('Start/Finish commands', () => {
+    const featureBranch = 'featureBranch'
+    const releaseBranch = 'releaseBranch'
+    const hotfixBranch = 'hotfixBranch'
+
     const featureName = 'my-feature'
     const releaseName = 'my-release'
     const hotfixName = 'my-hotfix'
@@ -109,7 +113,7 @@ describe('Prepare test environemnt', () => {
 
     it('starts a feature', () => {
       const shellString = exec(
-        `node bin/cli.js s f -r ${testBranch} ${featureName}`,
+        `node bin/cli.js s f -b ${featureBranch} -r ${testBranch} ${featureName}`,
         {
           silent: SILENT,
         },
@@ -117,16 +121,16 @@ describe('Prepare test environemnt', () => {
 
       if (process.env.GOF_DRY_RUN)
         expect(shellString.stdout).toMatch(
-          'dry-run: git checkout -b feature/my-feature testBranch',
+          `dry-run: git checkout -b ${featureBranch}/${featureName} ${testBranch}`,
         )
       else {
-        expect(getCurrentBranch()).toMatch(`feature/${featureName}`)
+        expect(getCurrentBranch()).toMatch(`${featureBranch}/${featureName}`)
       }
     })
 
     it('finishes a feature', () => {
       const shellString = exec(
-        `node bin/cli.js f f -o ${testBranch} ${featureName} --no-delete --no-interactive --no-push`,
+        `node bin/cli.js f f -o ${testBranch} ${featureName} -b ${featureBranch} --no-delete --no-interactive --no-push`,
         {
           silent: SILENT,
         },
@@ -134,40 +138,38 @@ describe('Prepare test environemnt', () => {
 
       if (process.env.GOF_DRY_RUN)
         expect(shellString.stdout).toMatch(
-          'dry-run: git checkout feature/my-feature' +
-            '\n' +
-            'dry-run: git rebase testBranch' +
-            '\n' +
-            'dry-run: git checkout testBranch' +
-            '\n' +
-            'dry-run: git merge --ff-only feature/my-feature',
+          `dry-run: git status\n` +
+            `dry-run: git checkout ${featureBranch}/${featureName}\n` +
+            `dry-run: git rebase ${testBranch}\n` +
+            `dry-run: git checkout ${testBranch}\n` +
+            `dry-run: git merge --ff-only ${featureBranch}/${featureName}`,
         )
       else {
-        expect(branchExists(`feature/${featureName}`)).toBe(true)
+        expect(branchExists(`${featureBranch}/${featureName}`)).toBe(true)
         expect(getCurrentBranch()).toMatch(testBranch)
-        deleteBranch(`feature/${featureName}`)
+        deleteBranch(`${featureBranch}/${featureName}`)
       }
     })
 
     it('fails to start a feature', () => {
       const noBranch = 'no-branch'
       const shellString = exec(
-        `node bin/cli.js s f ${featureName} -r ${noBranch}`,
+        `node bin/cli.js s f ${featureName} -r ${noBranch} -b ${featureBranch}`,
       )
 
       if (process.env.GOF_DRY_RUN)
         expect(shellString.stdout).toMatch(
-          `dry-run: git checkout -b feature/${featureName} ${noBranch}`,
+          `dry-run: git checkout -b ${featureBranch}/${featureName} ${noBranch}`,
         )
       else
         expect(shellString.stderr).toMatch(
-          `error: fatal: '${noBranch}' is not a commit and a branch 'feature/${featureName}' cannot be created from it`,
+          `error: fatal: '${noBranch}' is not a commit and a branch '${featureBranch}/${featureName}' cannot be created from it`,
         )
     })
 
     it('starts a release', () => {
       const shellString = exec(
-        `node bin/cli.js s r -r ${testBranch} ${releaseName}`,
+        `node bin/cli.js s r -b ${releaseBranch} -r ${testBranch} ${releaseName}`,
         {
           silent: SILENT,
         },
@@ -175,17 +177,17 @@ describe('Prepare test environemnt', () => {
 
       if (process.env.GOF_DRY_RUN)
         expect(shellString.stdout).toMatch(
-          'dry-run: git checkout -b release/my-release testBranch',
+          `dry-run: git checkout -b ${releaseBranch}/${releaseName} ${testBranch}`,
         )
       else {
-        expect(getCurrentBranch()).toMatch(`release/${releaseName}`)
+        expect(getCurrentBranch()).toMatch(`${releaseBranch}/${releaseName}`)
       }
     })
 
     it('finishes a release', () => {
       const tag = '41.41.41'
       const shellString = exec(
-        `node bin/cli.js f r -o ${testBranch} ${releaseName} --no-delete --no-push -t ${tag} -m 'chore(release) ${tag}'`,
+        `node bin/cli.js f r -o ${testBranch} ${releaseName} -b ${releaseBranch} --no-delete --no-push -t ${tag} -m 'chore(release) ${tag}'`,
         {
           silent: SILENT,
         },
@@ -193,26 +195,24 @@ describe('Prepare test environemnt', () => {
 
       if (process.env.GOF_DRY_RUN)
         expect(shellString.stdout).toMatch(
-          'dry-run: git checkout release/my-release' +
-            '\n' +
-            `dry-run: git tag -a -m 'chore(release) ${tag}' ${tag}` +
-            '\n' +
-            'dry-run: git checkout testBranch' +
-            '\n' +
-            'dry-run: git merge release/my-release',
+          `dry-run: git status\n` +
+            `dry-run: git checkout ${releaseBranch}/${releaseName}\n` +
+            `dry-run: git tag -a -m 'chore(release) ${tag}' ${tag}\n` +
+            `dry-run: git checkout ${testBranch}\n` +
+            `dry-run: git merge ${releaseBranch}/${releaseName}`,
         )
       else {
-        expect(branchExists(`release/${releaseName}`)).toBe(true)
+        expect(branchExists(`${releaseBranch}/${releaseName}`)).toBe(true)
         expect(getCurrentBranch()).toMatch(testBranch)
         expect(getLatestTag()).toMatch(tag)
         exec(`git tag -d ${tag}`)
-        deleteBranch(`release/${releaseName}`)
+        deleteBranch(`${releaseBranch}/${releaseName}`)
       }
     })
 
     it('starts a hotfix', () => {
       const shellString = exec(
-        `node bin/cli.js s h -r ${testBranch} ${hotfixName}`,
+        `node bin/cli.js s h -b${hotfixBranch} -r ${testBranch} ${hotfixName}`,
         {
           silent: SILENT,
         },
@@ -220,17 +220,17 @@ describe('Prepare test environemnt', () => {
 
       if (process.env.GOF_DRY_RUN)
         expect(shellString.stdout).toMatch(
-          'dry-run: git checkout -b hotfix/my-hotfix testBranch',
+          `dry-run: git checkout -b ${hotfixBranch}/${hotfixName} ${testBranch}`,
         )
       else {
-        expect(getCurrentBranch()).toMatch(`hotfix/${hotfixName}`)
+        expect(getCurrentBranch()).toMatch(`${hotfixBranch}/${hotfixName}`)
       }
     })
 
     it('finishes a hotfix', () => {
       const tag = '42.42.42'
       const shellString = exec(
-        `node bin/cli.js f h -o ${testBranch} ${hotfixName} --no-delete --no-push -t ${tag} -m 'chore(release) ${tag}'`,
+        `node bin/cli.js f h -o ${testBranch} ${hotfixName} -b ${hotfixBranch} --no-delete --no-push -t ${tag} -m 'chore(release) ${tag}'`,
         {
           silent: SILENT,
         },
@@ -238,20 +238,18 @@ describe('Prepare test environemnt', () => {
 
       if (process.env.GOF_DRY_RUN)
         expect(shellString.stdout).toMatch(
-          'dry-run: git checkout hotfix/my-hotfix' +
-            '\n' +
-            `dry-run: git tag -a -m 'chore(release) ${tag}' ${tag}` +
-            '\n' +
-            'dry-run: git checkout testBranch' +
-            '\n' +
-            'dry-run: git merge hotfix/my-hotfix',
+          `dry-run: git status\n` +
+            `dry-run: git checkout ${hotfixBranch}/${hotfixName}\n` +
+            `dry-run: git tag -a -m 'chore(release) ${tag}' ${tag}\n` +
+            `dry-run: git checkout ${testBranch}\n` +
+            `dry-run: git merge ${hotfixBranch}/${hotfixName}`,
         )
       else {
-        expect(branchExists(`hotfix/${hotfixName}`)).toBe(true)
+        expect(branchExists(`${hotfixBranch}/${hotfixName}`)).toBe(true)
         expect(getCurrentBranch()).toMatch(testBranch)
         expect(getLatestTag()).toMatch(tag)
         exec(`git tag -d ${tag}`)
-        deleteBranch(`hotfix/${hotfixName}`)
+        deleteBranch(`${hotfixBranch}/${hotfixName}`)
       }
     })
   })
