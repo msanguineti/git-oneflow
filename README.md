@@ -1,4 +1,4 @@
-# ![git-OneFlow](g1-logo.png) <!-- omit in toc -->
+# ![git-OneFlow](g1-logo.png)
 
 [![CodeFactor](https://www.codefactor.io/repository/github/msanguineti/git-oneflow/badge/main)](https://www.codefactor.io/repository/github/msanguineti/git-oneflow/overview/main)
 [![npm](https://badgen.net/npm/v/git-oneflow)](https://www.npmjs.com/package/git-oneflow)
@@ -32,37 +32,9 @@ Fun facts:
 1. _Two branches_ model + integration option #2 gives... :drumroll: GitFlow :)
 2. Adam Ruka doesn't really like the idea of 'tools' like this one
 
-## Table of Contents <!-- omit in toc -->
-
-- [Node Compatibility](#node-compatibility)
-- [Install](#install)
-- [Usage](#usage)
-  - [Node Package Execute - npx](#node-package-execute---npx)
-- [Configuration](#configuration)
-  - [Defaults](#defaults)
-    - [One main branch](#one-main-branch)
-    - [Feature branches](#feature-branches)
-    - [Release/Hotfix branches](#releasehotfix-branches)
-      - [Tags](#tags)
-  - [Configuration file](#configuration-file)
-    - [Configuration options](#configuration-options)
-    - [Generate default file](#generate-default-file)
-- [Commands](#commands)
-  - [Common options to **all** commands](#common-options-to-all-commands)
-  - [The `start` command](#the-start-command)
-    - [`start` options](#start-options)
-  - [The `finish` command](#the-finish-command)
-    - [Common `finish` options](#common-finish-options)
-    - [`finish feature` options](#finish-feature-options)
-    - [`finish release` and `finish hotfix` options](#finish-release-and-finish-hotfix-options)
-  - [`--help` and `--dry-run` options](#--help-and---dry-run-options)
-- [Changelog](#changelog)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Node Compatibility
 
-Node versions 14 and above are supported.
+Supported version are LTS and above.
 
 ## Install
 
@@ -160,7 +132,7 @@ gof init
 
 `init` starts an interactive session that allows for customising the configuration of **_git-OneFlow_**
 
-This creates a `.gitoneflowrc` file with the chosen configuration [options](#options). **_git-OneFlow_** uses [`cosmiconfig`](https://www.npmjs.com/package/cosmiconfig) under the hood.
+This creates a `.git-oneflowrc` file with the chosen configuration [options](#options). **_git-OneFlow_** uses [`cosmiconfig`](https://www.npmjs.com/package/cosmiconfig) under the hood.
 
 To specify a configuration file on the command line use `-c|--configuration` with the name of the file (and it's path).
 
