@@ -132,7 +132,7 @@ gof init
 
 `init` starts an interactive session that allows for customising the configuration of **_git-OneFlow_**
 
-This creates a `.gitoneflowrc` file with the chosen configuration [options](#options). **_git-OneFlow_** uses [`cosmiconfig`](https://www.npmjs.com/package/cosmiconfig) under the hood.
+This creates a `.git-oneflowrc` file with the chosen configuration [options](#options). **_git-OneFlow_** uses [`cosmiconfig`](https://www.npmjs.com/package/cosmiconfig) under the hood.
 
 To specify a configuration file on the command line use `-c|--configuration` with the name of the file (and it's path).
 
