@@ -134,6 +134,15 @@ test('failed interactive rebase stops before changing target', (t) => {
   git('add', 'other')
   git('commit', '-m', 'main')
   const before = git('rev-parse', 'main')
+  git('tag', 'existing')
+  const remote = join(root, 'remote.git')
+  execFileSync('git', ['init', '--bare', remote])
+  git('remote', 'add', 'origin', remote)
+  git('push', 'origin', 'main', 'feature/example', '--tags')
+  const refs = git('show-ref')
+  const remoteRefs = execFileSync('git', ['--git-dir', remote, 'show-ref'], {
+    encoding: 'utf8',
+  })
   // Git runs this command as the interactive sequence editor.
   writeFileSync(join(root, 'gitconfig'), '[sequence]\n editor = false\n')
   const result = raw(
@@ -141,12 +150,19 @@ test('failed interactive rebase stops before changing target', (t) => {
     'feature',
     'example',
     '--interactive',
-    '--no-push',
-    '--no-delete',
+    '--push',
+    '--delete',
   )
   assert.notEqual(result.status, 0)
   assert.equal(git('rev-parse', 'main'), before)
   assert.equal(git('branch', '--show-current'), 'feature/example')
+  assert.equal(git('show-ref'), refs)
+  assert.equal(
+    execFileSync('git', ['--git-dir', remote, 'show-ref'], {
+      encoding: 'utf8',
+    }),
+    remoteRefs,
+  )
 })
 
 test('help and version bypass configuration and Git; invalid configuration fails', (t) => {
@@ -228,7 +244,9 @@ test('conflicting rebase leaves state recoverable and stops downstream actions',
   const remote = join(root, 'remote.git')
   execFileSync('git', ['init', '--bare', remote])
   git('remote', 'add', 'origin', remote)
-  git('push', 'origin', 'main', 'feature/conflict')
+  git('tag', 'existing')
+  git('push', 'origin', 'main', 'feature/conflict', '--tags')
+  const refs = git('show-ref')
   const remoteRefs = execFileSync('git', ['--git-dir', remote, 'show-ref'], {
     encoding: 'utf8',
   })
@@ -237,10 +255,11 @@ test('conflicting rebase leaves state recoverable and stops downstream actions',
     'feature',
     'conflict',
     '--no-interactive',
-    '--no-push',
-    '--no-delete',
+    '--push',
+    '--delete',
   )
   assert.notEqual(result.status, 0)
+  assert.equal(git('show-ref'), refs)
   assert.match(result.stderr + result.stdout, /rebase --(continue|abort)/)
   assert.equal(git('rev-parse', 'main'), before)
   assert.match(git('status', '--porcelain'), /UU file/)
