@@ -28,17 +28,16 @@ portability: Git invocation, paths, prompts and package launchers need evidence.
 
 The owner chose lightweight trunk-based development. `main` is the integration
 branch. As a routine setup default, make small changes on short-lived branches
-from `main` and integrate through pull requests, respecting
-the existing GitHub branch protection. Keep branches current and avoid long-lived
-development branches.
+from `main` and integrate through pull requests, respecting the existing GitHub
+branch protection. Keep branches current and avoid long-lived development branches.
 Use separate worktrees or otherwise isolate concurrent writers.
 
 Use Conventional Commits, as configured by the existing commit hook. Run checks
 appropriate to the change and address relevant review findings before integration.
-GitHub currently reports `CodeFactor` and `build (18.x)` as required checks on
-`main`; full protection and review settings were not accessible during setup, so
-confirm current hosting rules before integration. Existing CI runs a build and
-dry-run tests for pull requests targeting `main`.
+During setup on 2026-10-29, GitHub reported `CodeFactor` and `build (18.x)` as
+required checks on `main`; full protection and review settings were inaccessible.
+Confirm current hosting rules and coordinate required-check changes before
+integration. Existing CI runs a build and dry-run tests for pull requests to `main`.
 
 The executor may make local commits for authorized work. Push, merge and release
 require their own authorization. A GitHub release triggers the npm publishing
@@ -54,8 +53,9 @@ The remaining modernization outcomes are an isolated, useful test baseline on
 supported runtimes; corrected command/configuration behavior and safe Git failure
 handling; a smaller dependency tree and simple npm distribution; and verified
 cross-platform release preparation with a lightweight maintenance procedure.
+Setup and programme preparation are closed locally. The next phase is the
+supported-runtime and isolated-test baseline; implementation has not started.
 The programme and next phase are in ignored `.dev/programme.md` and `.dev/phase.md`.
-They describe planned work, not completed implementation.
 
 The proposed packaging direction is plain TypeScript compilation to readable
 JavaScript, without bundling or minification. Confirm it with an installed-tarball
