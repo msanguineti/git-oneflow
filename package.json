@@ -26,7 +26,7 @@
     "format": "prettier --check .",
     "prepare": "husky",
     "prepack": "npm run build",
-    "test:package": "node scripts/test-package.js"
+    "test:package": "node scripts/check-package.js"
   },
   "repository": {
     "type": "git",
