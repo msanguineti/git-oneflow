@@ -12,7 +12,9 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const cli = fileURLToPath(new URL('../bin/cli.js', import.meta.url))
+const cli =
+  process.env.ONEFLOW_CLI ||
+  fileURLToPath(new URL('../bin/index.js', import.meta.url))
 const version = JSON.parse(
   readFileSync(new URL('../package.json', import.meta.url)),
 ).version

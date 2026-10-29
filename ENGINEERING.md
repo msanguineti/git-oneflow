@@ -37,7 +37,7 @@ appropriate to the change and address relevant review findings before integratio
 During setup on 2026-10-29, GitHub reported `CodeFactor` and `build (18.x)` as
 required checks on `main`; full protection and review settings were inaccessible.
 Confirm current hosting rules and coordinate required-check changes before
-integration. CI runs the build and checks on maintained Node LTS lines for pull requests and pushes to `main`.
+integration. CI is configured to run the build and checks on maintained Node LTS lines on Linux and the latest LTS on macOS and Windows for pull requests and pushes to `main`.
 
 The executor may make local commits for authorized work. Push, merge and release
 require their own authorization. A GitHub release triggers the npm publishing

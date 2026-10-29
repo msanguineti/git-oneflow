@@ -1,5 +1,5 @@
 import { spawnSync } from 'child_process'
-import { info } from './log'
+import { info } from './log.js'
 
 const run = (args: string[], inherit = false) =>
   spawnSync('git', args, {

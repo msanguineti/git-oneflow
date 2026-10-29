@@ -1,5 +1,5 @@
 import { cosmiconfigSync } from 'cosmiconfig'
-import { name } from '../../package.json'
+import { name } from './package.js'
 
 const explorer = cosmiconfigSync(name)
 

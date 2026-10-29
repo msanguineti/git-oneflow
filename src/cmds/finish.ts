@@ -4,20 +4,20 @@ import {
   GofOptionsType,
   GofCommand,
   makeGofCmd,
-} from './gofCommand'
+} from './gofCommand.js'
 import {
   getConfigValue,
   optionNames,
   getBaseBranch,
   StrategyOptions,
   strategyOptionValues,
-} from '../lib/config'
+} from '../lib/config.js'
 import {
   promptUser,
   askInput,
   presentChoices,
   askConfirmation,
-} from '../lib/inquisitor'
+} from '../lib/inquisitor.js'
 import {
   getLatestTag,
   getLocalBranches,
@@ -28,8 +28,8 @@ import {
   tagBranch,
   mergeBranch,
   rebase,
-} from '../lib/git'
-import { warning } from '../lib/log'
+} from '../lib/git.js'
+import { warning } from '../lib/log.js'
 
 const askTagNameToUser = async (): Promise<string | undefined> => {
   return getConfigValue('tagCommit')
@@ -302,7 +302,7 @@ const feature: GofCommand = {
       opts.onto ??
       (getConfigValue('askOnFeatureFinish')
         ? await letUserSelectBranch()
-        : getConfigValue('development') ?? getConfigValue('main'))
+        : (getConfigValue('development') ?? getConfigValue('main')))
 
     if (strategy.startsWith('rebase'))
       rebase(
