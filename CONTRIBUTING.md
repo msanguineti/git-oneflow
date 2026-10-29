@@ -4,7 +4,8 @@ Git-OneFlow uses Node.js and npm. For an existing checkout, install the locked
 dependencies with `npm ci`. The repository's `.nvmrc` selects Node 18, which is
 end of life; the build and dry-run tests were also checked with Node 24 during
 engineering setup. The package currently declares Node 18 or later and npm 10
-or later; the supported version policy needs review.
+or later. The maintenance policy is to support maintained Node LTS versions and
+newer non-EOL stable releases; the current tooling has not yet been aligned with it.
 
 Run checks appropriate to your change:
 
