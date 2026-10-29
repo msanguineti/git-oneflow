@@ -10,8 +10,8 @@ product direction merely because they exist.
 
 ## Repository workflow
 
-The owner chose lightweight trunk-based development and the `chore/` branch prefix.
-`main` is the integration branch. As a routine setup default, make small changes
+The owner chose lightweight trunk-based development. `main` is the integration
+branch. As a routine setup default, make small changes
 on short-lived branches from `main` and integrate through pull requests, respecting
 the existing GitHub branch protection. Keep branches current and avoid long-lived
 development branches.
