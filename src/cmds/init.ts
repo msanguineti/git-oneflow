@@ -78,32 +78,32 @@ const configInitQuestions = (): GofQuestion[] => [
   askConfirmation({
     message: 'Always rebase interactively?',
     name: optionNames.interactive,
-    defaultValue: getConfigValue('interactive') === 'true',
+    defaultValue: getConfigValue('interactive'),
   }),
   askConfirmation({
     message: 'Push to origin after merge?',
     name: optionNames.pushAfterMerge,
-    defaultValue: getConfigValue('pushAfterMerge') === 'true',
+    defaultValue: getConfigValue('pushAfterMerge'),
   }),
   askConfirmation({
     message: 'Delete branch after merge?',
     name: optionNames.deleteAfterMerge,
-    defaultValue: getConfigValue('deleteAfterMerge') === 'true',
+    defaultValue: getConfigValue('deleteAfterMerge'),
   }),
   askConfirmation({
     message: 'Tag releases and hotfixes?',
     name: optionNames.tagCommit,
-    defaultValue: getConfigValue('tagCommit') === 'true',
+    defaultValue: getConfigValue('tagCommit'),
   }),
   askConfirmation({
     message: 'Ask for ref branch on feature start?',
     name: optionNames.askOnFeatureStart,
-    defaultValue: getConfigValue('askOnFeatureStart') === 'true',
+    defaultValue: getConfigValue('askOnFeatureStart'),
   }),
   askConfirmation({
     message: 'Ask for merge branch on feature finish?',
     name: optionNames.askOnFeatureFinish,
-    defaultValue: getConfigValue('askOnFeatureFinish') === 'true',
+    defaultValue: getConfigValue('askOnFeatureFinish'),
   }),
 ]
 

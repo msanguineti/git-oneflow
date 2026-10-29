@@ -54,10 +54,15 @@ the originating initiator owns that decision. Require the aggregate `checks` job
 before integration. The programme and current work record are in ignored
 `.dev/programme.md` and `.dev/phase.md`.
 
-The remaining modernization outcomes are corrected command/configuration behavior
-and safe Git failure handling; a smaller dependency tree and simple npm
-distribution; and verified cross-platform release preparation with a lightweight
-maintenance procedure.
+Command/configuration correctness and Git execution safety are implemented and
+accepted for Phase 2 on 2026-10-29. Git runs through argument-based child processes;
+failures stop subsequent actions, configuration retains typed values, and ShellJS
+has been removed. Verification covers Linux with Git 2.47.3; cross-platform evidence
+remains outstanding. Phase acceptance is separate from PR integration and release.
+
+The remaining modernization outcomes are a smaller dependency tree and simple npm
+distribution, followed by verified cross-platform release preparation with a
+lightweight maintenance procedure.
 
 The proposed packaging direction is plain TypeScript compilation to readable
 JavaScript, without bundling or minification. Confirm it with an installed-tarball

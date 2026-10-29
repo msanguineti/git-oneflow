@@ -15,12 +15,12 @@ const getDefaultReference = async (
   switch (cmdName) {
     case 'feature':
       return getConfigValue('askOnFeatureStart')
-        ? await letUserSelectBranch()
-        : getConfigValue('development') ?? getConfigValue('main')
+        ? `refs/heads/${await letUserSelectBranch()}`
+        : `refs/heads/${getConfigValue('development') ?? getConfigValue('main')}`
     case 'release':
-      return getConfigValue('main')
+      return `refs/heads/${getConfigValue('main')}`
     case 'hotfix':
-      return getLatestTag() ?? getConfigValue('main')
+      return getLatestTag() ?? `refs/heads/${getConfigValue('main')}`
   }
 }
 
@@ -30,7 +30,12 @@ const letUserSelectBranch = async (): Promise<string> => {
       message: 'Which branch to start from?',
       name: 'branch',
       defaultValue: optionNames.main,
-      choices: () => getLocalBranches('feature') as string[],
+      choices: () =>
+        getLocalBranches().filter(
+          (name) =>
+            !getConfigValue('features') ||
+            !name.startsWith(`${getConfigValue('features')}/`),
+        ),
       when: () => true,
     }),
   ])
@@ -59,11 +64,7 @@ const cmdAction = async (
 
   const base = opts.base ?? getBaseBranch(cmd.name())
 
-  const ref =
-    opts.ref ??
-    (getConfigValue('askOnFeatureStart')
-      ? await letUserSelectBranch()
-      : await getDefaultReference(cmd.name()))
+  const ref = opts.ref ?? (await getDefaultReference(cmd.name()))
 
   createBranch(base ? `${base}/${name}` : name, ref)
 }
