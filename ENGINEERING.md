@@ -10,10 +10,11 @@ product direction merely because they exist.
 
 ## Repository workflow
 
-The owner chose lightweight trunk-based development. `main` is the integration
-branch. As a routine setup default, make small changes on short-lived branches
-from `main` and integrate through pull requests, accommodating the existing GitHub
-branch protection. Keep branches current and avoid long-lived development branches.
+The owner chose lightweight trunk-based development and the `chore/` branch prefix.
+`main` is the integration branch. As a routine setup default, make small changes
+on short-lived branches from `main` and integrate through pull requests, respecting
+the existing GitHub branch protection. Keep branches current and avoid long-lived
+development branches.
 Use separate worktrees or otherwise isolate concurrent writers.
 
 Use Conventional Commits, as configured by the existing commit hook. Run checks
