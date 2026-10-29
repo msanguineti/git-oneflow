@@ -50,34 +50,45 @@ export const optionNames = Object.keys(defaultConfiguration)
     return a
   }, {}) as { [key in keyof Configuration]: string }
 
+let configuration: Configuration = { ...defaultConfiguration }
+
 export const load = (file?: string): void => {
+  explorer.clearCaches()
   const result = file ? explorer.load(file) : explorer.search()
-
-  configFile = result?.filepath
-
-  const gofConfig = { ...defaultConfiguration, ...result?.config }
-
-  for (const key in gofConfig) {
-    if (Object.hasOwn(defaultConfiguration, key)) {
-      const value = gofConfig[key]
-
-      if (value) process.env[`gof_${key}`.toUpperCase()] = value
-    } else {
+  if (file && !result) throw new Error(`configuration file not found: ${file}`)
+  const values = result?.config ?? {}
+  if (typeof values !== 'object' || values === null || Array.isArray(values))
+    throw new Error('configuration must be an object')
+  for (const [key, value] of Object.entries(values)) {
+    if (!Object.hasOwn(defaultConfiguration, key))
       throw new Error(
         `unknown configuration option ${key} in ${result?.filepath}`,
       )
-    }
+    const expected = defaultConfiguration[key as keyof Configuration]
+    const type = key === 'development' ? 'string' : typeof expected
+    if (typeof value !== type)
+      throw new Error(
+        `invalid type for configuration option ${key}: expected ${type}`,
+      )
+    if (
+      key === 'strategy' &&
+      !strategyOptionValues.includes(value as StrategyOptions)
+    )
+      throw new Error(`unknown strategy option: ${value}`)
   }
+  configuration = { ...defaultConfiguration, ...values }
+  configFile = result?.filepath
 }
 
 export const getConfigFile = (): string | undefined => configFile
 
-export const getConfigValue = (key: keyof Configuration): string | undefined =>
-  process.env[`gof_${key}`.toUpperCase()]
+export const getConfigValue = <K extends keyof Configuration>(
+  key: K,
+): Configuration[K] => configuration[key]
 
-export const getDefaultValue = (
-  key: keyof Configuration,
-): string | boolean | undefined => defaultConfiguration[key]
+export const getDefaultValue = <K extends keyof Configuration>(
+  key: K,
+): Configuration[K] => defaultConfiguration[key]
 
 export const getBaseBranch = (cmd: string): string | undefined => {
   switch (cmd) {

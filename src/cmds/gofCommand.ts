@@ -1,6 +1,5 @@
 import { Command } from 'commander'
-import path from 'path'
-import { load, getBaseBranch } from '../lib/config'
+import { getBaseBranch } from '../lib/config'
 import { info } from '../lib/log'
 
 export type GofCmdOption = {
@@ -41,9 +40,6 @@ export const makeGofCmd = ({
 
   cmd
     .option('-c, --config <file>', 'configuration file to use')
-    .on('option:config', (file) => {
-      load(path.resolve(file))
-    })
     .option('--dry-run', 'just show which commands would be run')
     .on('option:dry-run', () => {
       process.env.GOF_DRY_RUN = 'true'

@@ -134,11 +134,16 @@ gof init
 
 This creates a `.git-oneflowrc` file with the chosen configuration [options](#options). **_git-OneFlow_** uses [`cosmiconfig`](https://www.npmjs.com/package/cosmiconfig) under the hood.
 
-To specify a configuration file on the command line use `-c|--configuration` with the name of the file (and it's path).
+To specify a configuration file on the command line use `-c|--config` with the name of the file (and it's path).
 
 ```sh
 gof start feature -c config/my-gof-config.json
 ```
+
+An explicit `--config` file replaces the discovered configuration; omitted keys use
+the defaults. Command-line options take precedence over the selected file. Boolean
+settings must be JSON booleans, and branch prefixes may be empty strings. Invalid
+keys, types, strategies, or explicit files cause the command to fail.
 
 #### Configuration options
 
@@ -150,7 +155,7 @@ gof start feature -c config/my-gof-config.json
 | `releases`           | name of the releases branch (prefixed to the release name)               | `release`   | empty string or a valid branch name                                                                                                                                                                                                                                                                                                    |
 | `hotfixes`           | name of the hotfixes branch (prefixed to the hotfix name)                | `hotfix`    | empty string or a valid branch name                                                                                                                                                                                                                                                                                                    |
 | `strategy`           | which feature integration merge strategy to use                          | `rebase`    | Valid options are: `rebase`, `rebase-no-ff` and `no-ff`                                                                                                                                                                                                                                                                                |
-| `interactive`        | whether to rebase interactively `rebase -i`                              | `true`      | the values `true` or `false`, not the strings 'true' or 'false'. See [example](#generate-default-file). If set to `false` this, and other boolean options, act as a permanent `off` switch for the given option. In this case, it is like `--no-interactive` is always specified on the command line.                                  |
+| `interactive`        | whether to rebase interactively `rebase -i`                              | `true`      | the values `true` or `false`, not the strings 'true' or 'false'. See [example](#generate-default-file). Command-line options override this setting, including `--interactive` and `--no-interactive`.                                                                                                                                  |
 | `pushAfterMerge`     | whether to push to `origin` after finishing                              | `true`      | `true`, `false`                                                                                                                                                                                                                                                                                                                        |
 | `deleteAfterMerge`   | whether to delete the working branch after merging with main/development | `true`      | `true`, `false`                                                                                                                                                                                                                                                                                                                        |
 | `tagCommit`          | whether to ask to tag releases and hotfixes                              | `true`      | `true`, `false`. This option is used to decide whether to prompt the user or not in case a tag hasn't been specified, for example with `--tag 2.3.4`.                                                                                                                                                                                  |
@@ -254,7 +259,16 @@ A help menu is available with every command. Just append `-h` or `--help` to acc
 gof finish release --help
 ```
 
-Another interesting way to experiment with **_git-OneFlow_** is to use the `--dry-run` option. This will show the commands that would be invoked without actually doing anything.
+Git failures stop the workflow and return a nonzero exit status. Earlier successful
+steps are not rolled back. If a rebase conflicts, resolve the files and run
+`git rebase --continue`, or use `git rebase --abort` to return to the state before
+that rebase. For a merge conflict, resolve and commit it or use `git merge --abort`
+while the merge is in progress. Inspect `git status` before continuing.
+
+The Git commands have been tested with Git 2.47.3 on Linux; a minimum Git version
+has not been established.
+
+Another interesting way to experiment with **_git-OneFlow_** is to use the `--dry-run` option. This shows intended Git mutations without performing them; read-only Git queries still run.
 
 It is possible to activate the `dry-run` mode also by setting the environment variable `GOF_DRY_RUN`
 

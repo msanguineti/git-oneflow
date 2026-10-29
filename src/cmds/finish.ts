@@ -32,7 +32,7 @@ import {
 import { warning } from '../lib/log'
 
 const askTagNameToUser = async (): Promise<string | undefined> => {
-  return getConfigValue('tagCommit') === 'true'
+  return getConfigValue('tagCommit')
     ? (
         await promptUser([
           askInput({
@@ -93,7 +93,12 @@ const letUserSelectBranch = async (): Promise<string> => {
         message: 'Which branch to merge onto?',
         name: 'branch',
         defaultValue: optionNames.main,
-        choices: () => getLocalBranches('feature') as string[],
+        choices: () =>
+          getLocalBranches().filter(
+            (name) =>
+              !getConfigValue('features') ||
+              !name.startsWith(`${getConfigValue('features')}/`),
+          ),
         when: () => true,
       }),
     ])
@@ -157,7 +162,7 @@ const maybeDeleteBranch = async (
   _delete: boolean | undefined,
   branchName: string,
 ): Promise<void> => {
-  const doDelete = _delete ?? getConfigValue('deleteAfterMerge') === 'true'
+  const doDelete = _delete ?? getConfigValue('deleteAfterMerge')
   if (doDelete) {
     deleteBranch(branchName)
     const ans = await promptUser([
@@ -175,7 +180,7 @@ const maybePush = (
   onto: string,
   tag: GofOptionsType,
 ): void => {
-  const doPush = push ?? getConfigValue('pushAfterMerge') === 'true'
+  const doPush = push ?? getConfigValue('pushAfterMerge')
   if (doPush) pushToOrigin(onto, tag)
 }
 
@@ -205,8 +210,6 @@ const releaseHotfixAction = async (
 
   maybePush(opts.push as boolean | undefined, onto as string, tag)
 
-  await maybeDeleteBranch(opts.delete as boolean | undefined, branchName)
-
   if (
     getConfigValue('development') &&
     (
@@ -221,8 +224,11 @@ const releaseHotfixAction = async (
     ).confirmation
   ) {
     checkoutBranch(getConfigValue('main') as string)
-    mergeBranch((tag as string) || branchName, '--ff-only')
+    mergeBranch((tag as string) || branchName, '--ff-only', !!tag)
+    maybePush(opts.push as boolean | undefined, getConfigValue('main'), tag)
   }
+
+  await maybeDeleteBranch(opts.delete as boolean | undefined, branchName)
 }
 
 const release: GofCommand = {
@@ -301,8 +307,7 @@ const feature: GofCommand = {
     if (strategy.startsWith('rebase'))
       rebase(
         onto as string,
-        (opts.interactive as boolean) ??
-          getConfigValue('interactive') === 'true',
+        (opts.interactive as boolean) ?? getConfigValue('interactive'),
       )
 
     checkoutBranch(onto as string)
