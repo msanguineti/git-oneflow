@@ -37,7 +37,7 @@ appropriate to the change and address relevant review findings before integratio
 During setup on 2026-10-29, GitHub reported `CodeFactor` and `build (18.x)` as
 required checks on `main`; full protection and review settings were inaccessible.
 Confirm current hosting rules and coordinate required-check changes before
-integration. Existing CI runs a build and dry-run tests for pull requests to `main`.
+integration. CI runs the build and checks on maintained Node LTS lines for pull requests and pushes to `main`.
 
 The executor may make local commits for authorized work. Push, merge and release
 require their own authorization. A GitHub release triggers the npm publishing
@@ -46,16 +46,15 @@ workflow; creating one is a release action. Preserve existing hooks and protecti
 ## Development and current limits
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for current development and verification.
-The repository still selects Node 18 locally, tests Node 18 and 20 in CI, and
-publishes with Node 18. Those settings have not yet been modernized.
+The development baseline targets Node 22, 24 and 26 on Linux, with isolated Git
+fixture tests and non-writing checks. Phase 1 implementation is under review; its
+acceptance and hosting check-name coordination remain outstanding. The programme
+and phase evidence are in ignored `.dev/programme.md` and `.dev/phase.md`.
 
-The remaining modernization outcomes are an isolated, useful test baseline on
-supported runtimes; corrected command/configuration behavior and safe Git failure
-handling; a smaller dependency tree and simple npm distribution; and verified
-cross-platform release preparation with a lightweight maintenance procedure.
-Setup and programme preparation are closed locally. The next phase is the
-supported-runtime and isolated-test baseline; implementation has not started.
-The programme and next phase are in ignored `.dev/programme.md` and `.dev/phase.md`.
+The remaining modernization outcomes are corrected command/configuration behavior
+and safe Git failure handling; a smaller dependency tree and simple npm
+distribution; and verified cross-platform release preparation with a lightweight
+maintenance procedure.
 
 The proposed packaging direction is plain TypeScript compilation to readable
 JavaScript, without bundling or minification. Confirm it with an installed-tarball
