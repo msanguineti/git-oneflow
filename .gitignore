@@ -66,3 +66,6 @@ typings/
 gof.config.js
 
 bin/
+
+# Local engineering coordination
+.dev/
