@@ -47,9 +47,9 @@ workflow; creating one is a release action. Preserve existing hooks and protecti
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for current development and verification.
 The development baseline targets Node 22, 24 and 26 on Linux, with isolated Git
-fixture tests and non-writing checks. Phase 1 implementation is under review; its
-acceptance and hosting check-name coordination remain outstanding. The programme
-and phase evidence are in ignored `.dev/programme.md` and `.dev/phase.md`.
+fixture tests and non-writing checks. The baseline is accepted locally; hosting
+check-name coordination and integration remain outstanding. The programme and
+current work record are in ignored `.dev/programme.md` and `.dev/phase.md`.
 
 The remaining modernization outcomes are corrected command/configuration behavior
 and safe Git failure handling; a smaller dependency tree and simple npm
