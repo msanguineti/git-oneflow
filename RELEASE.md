@@ -31,9 +31,12 @@ pull requests cannot run it.
    Git/platform constraints, dependency updates and security advisories. Align
    engines, setup, CI and documentation when supported lines change. Dependabot and
    the existing checks remain in use; run the checks in CONTRIBUTING.md.
-2. Confirm the version and distribution tag with the owner. This workflow publishes
-   to npm's default `latest` tag; a different distribution tag requires a reviewed
-   workflow change before release. Prepare release notes from the draft below and
+2. Confirm the version and release type with the owner. GitHub pre-releases publish
+   under npm's `next` tag; stable GitHub releases publish under `latest`. The workflow
+   selects the npm tag automatically from the GitHub pre-release checkbox. For a
+   release candidate, use a package version such as `4.0.0-rc.1` and matching GitHub
+   tag `v4.0.0-rc.1`. Users can install it with `npm install -g git-oneflow@next`.
+   Prepare release notes from the draft below and
    verify the candidate commit, version and `v<version>` tag match. Confirm the
    current branch protection and required `checks` job before integration.
 3. After integration and explicit publication authorization, create the matching

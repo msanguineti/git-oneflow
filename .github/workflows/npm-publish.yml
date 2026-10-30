@@ -101,4 +101,7 @@ jobs:
         env:
           EXPECTED_DIGEST: ${{ needs.candidate.outputs.digest }}
         run: node scripts/verify-candidate.js candidate/package.tgz
-      - run: npm publish candidate/package.tgz
+      - name: Publish to npm
+        env:
+          NPM_DIST_TAG: ${{ github.event.release.prerelease && 'next' || 'latest' }}
+        run: npm publish candidate/package.tgz --tag "$NPM_DIST_TAG"
