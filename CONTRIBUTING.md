@@ -5,13 +5,16 @@ runtime support and maintainability; new features are not being added.
 
 ## Setup
 
-Use a maintained Node.js LTS release (currently 22, 24 or 26; minimum 22.8.0).
-`.nvmrc` selects Node 26. Git is required for the test suite.
+Use the latest patch of a maintained Node.js LTS release (currently 22, 24 or 26)
+or a newer non-EOL stable release. Current minimum patches are 22.23.4, 24.22.2
+and 26.13.0.
+`.nvmrc` selects the latest Node 22 patch. Install or update it with `nvm install`
+before running `nvm use`. Git is required for the test suite.
 Install locked dependencies with `npm ci`.
 
-The package also supports newer non-EOL stable Node releases. Recheck the
+Keep supported lines on their latest patches and recheck the
 [Node release schedule](https://nodejs.org/en/about/previous-releases) when
-maintaining or releasing the project.
+maintaining or releasing the project; drop lines once they reach end of life.
 
 ## Checks
 
@@ -25,6 +28,9 @@ npm run format
 npm test
 npm run test:package
 ```
+
+ESLint uses `eslint.config.js` for TypeScript source checks; generated `bin/` and
+local `.dev/` records are excluded.
 
 Tests create temporary Git repositories and clean them up afterward. The source
 tests require a built CLI. The package check builds and installs a tarball in a

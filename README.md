@@ -25,10 +25,11 @@ runtimes.
 
 ## Node Compatibility
 
-Node.js 22.8.0 or newer is required. Terminal colors use Node.js color detection;
-its standard `NO_COLOR` and `FORCE_COLOR` environment variables apply.
+Use the latest patch of a maintained Node.js LTS release or a newer non-EOL stable
+release. Current minimum patches are 22.23.4, 24.22.2 and 26.13.0.
 
-Maintained Node.js LTS lines and newer non-EOL stable releases are supported.
+Terminal colors use Node.js color detection; its standard `NO_COLOR` and
+`FORCE_COLOR` environment variables apply.
 
 ## Install
 

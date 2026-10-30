@@ -23,8 +23,8 @@ Backward compatibility is not a requirement. Changes must serve the maintenance
 outcomes, preserve the tool's OneFlow purpose, and document intentional behavior
 changes; no compatibility layers or gratuitous redesign are required.
 
-Support maintained Node LTS lines and newer non-EOL stable releases; drop lines
-when they reach EOL. Recheck the official Node release schedule during maintenance
+Support maintained Node LTS lines and newer non-EOL stable releases; keep each
+supported line on its latest patch and drop lines when they reach EOL. Recheck the official Node release schedule during maintenance
 and before releases, updating engines, local setup, CI and documentation together.
 Linux, macOS and Windows remain targets. npm/npx distribution alone does not prove
 portability: Git invocation, paths, prompts and package launchers need evidence.
@@ -54,8 +54,8 @@ workflow; creating one is a release action. Preserve existing hooks and protecti
 ## Development and current limits
 
 See CONTRIBUTING.md for setup and checks, and RELEASE.md for the public maintainer
-procedure. The baseline supports Node 22/24/26 (minimum 22.8.0), with isolated Git
-fixtures and non-writing checks. Git uses argument-based child processes; failures
+procedure. The baseline supports the latest patches of Node 22/24/26 (current
+minimums 22.23.4/24.22.2/26.13.0), with isolated Git fixtures and non-writing checks. Git uses argument-based child processes; failures
 stop subsequent actions and configuration retains typed values. The CLI ships
 readable TypeScript-compiled ESM, built by prepack with all runtime modules included.
 ShellJS, Rollup/plugins/Terser and the color helper have been removed; Node built-ins

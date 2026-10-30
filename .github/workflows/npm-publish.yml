@@ -30,7 +30,7 @@ jobs:
       revision: ${{ steps.revision.outputs.sha }}
       npm_tag: ${{ steps.context.outputs.npm_tag }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.event_name == 'release' && github.event.release.tag_name || github.sha }}
       - id: revision
@@ -39,8 +39,10 @@ jobs:
         run: |
           test "$(git rev-parse HEAD)" = "$EVENT_SHA"
           echo "sha=$EVENT_SHA" >> "$GITHUB_OUTPUT"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
+          package-manager-cache: false
+          check-latest: true
           node-version: 26.x
       - run: npm ci
       - name: Resolve release context
@@ -84,11 +86,13 @@ jobs:
           - { os: windows-latest, node-version: 26.x }
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ needs.candidate.outputs.revision }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
+          package-manager-cache: false
+          check-latest: true
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - uses: actions/download-artifact@v4
@@ -117,11 +121,13 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ needs.candidate.outputs.revision }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
+          package-manager-cache: false
+          check-latest: true
           node-version: 26.x
           registry-url: https://registry.npmjs.org/
       - uses: actions/download-artifact@v4

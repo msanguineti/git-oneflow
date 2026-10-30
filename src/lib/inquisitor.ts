@@ -1,12 +1,9 @@
-import inquirer, {
-  Question,
-  Answers,
-  InputQuestion,
-  ListQuestion,
-  ConfirmQuestion,
-} from 'inquirer'
+import inquirer, { type Answers, type DistinctQuestion } from 'inquirer'
 
-export type GofQuestion = Question
+export type GofQuestion = DistinctQuestion<Answers>
+type InputQuestion = Extract<GofQuestion, { type: 'input' }>
+type SelectQuestion = Extract<GofQuestion, { type: 'select' }>
+type ConfirmQuestion = Extract<GofQuestion, { type: 'confirm' }>
 
 export const askInput = ({
   message,
@@ -19,16 +16,13 @@ export const askInput = ({
   name: string
   defaultValue?: string | boolean
   when?: (answer: Answers) => boolean
-  validate?: (
-    input: string,
-    answer: Answers,
-  ) => string | boolean | Promise<string | boolean>
+  validate?: (input: string) => string | boolean | Promise<string | boolean>
 }): InputQuestion => {
   return {
     type: 'input',
     name,
     message,
-    default: defaultValue,
+    default: defaultValue === undefined ? undefined : String(defaultValue),
     when,
     validate,
   }
@@ -46,9 +40,9 @@ export const presentChoices = ({
   choices: string[] | ((answer: Answers) => string[])
   when?: (answer: Answers) => boolean
   defaultValue?: string
-}): ListQuestion => {
+}): SelectQuestion => {
   return {
-    type: 'list',
+    type: 'select',
     name,
     message,
     choices,
