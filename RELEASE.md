@@ -33,7 +33,7 @@ for current requirements and package access settings.
 
 1. Update the version in `package.json` and `package-lock.json` together with
    `npm version <version> --no-git-tag-version`. This updates the files without
-   creating a commit or tag. For a release candidate, use `4.0.0-rc.1`; use `4.0.0`
+   creating a commit or tag. For a release candidate, use `4.0.0-rc.2`; use `4.0.0`
    for the corresponding stable release. Commit the change through the normal PR
    workflow. Prepare release notes describing changes and any breaking behavior.
 2. Run the checks in [CONTRIBUTING.md](CONTRIBUTING.md), open a pull request and
@@ -47,7 +47,7 @@ for current requirements and package access settings.
 
    | GitHub release | Example version | npm tag  |
    | -------------- | --------------- | -------- |
-   | Pre-release    | `4.0.0-rc.1`    | `next`   |
+   | Pre-release    | `4.0.0-rc.2`    | `next`   |
    | Stable release | `4.0.0`         | `latest` |
 
 The workflow checks the source, packs one tarball, verifies its SHA-256 digest and
