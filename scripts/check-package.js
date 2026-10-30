@@ -54,7 +54,7 @@ try {
       return execFileSync(
         'cmd.exe',
         ['/d', '/s', '/c', `""${executable}" ${args.join(' ')}"`],
-        { cwd, encoding: 'utf8' },
+        { cwd, encoding: 'utf8', windowsVerbatimArguments: true },
       )
     }
     return execFileSync(executable, args, { cwd, encoding: 'utf8' })
