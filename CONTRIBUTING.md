@@ -10,7 +10,12 @@ or a newer non-EOL stable release. Current minimum patches are 22.23.4, 24.22.2
 and 26.13.0.
 `.nvmrc` selects the latest Node 22 patch. Install or update it with `nvm install`
 before running `nvm use`. Git is required for the test suite.
-Install locked dependencies with `npm ci`.
+
+```sh
+nvm install
+nvm use
+npm ci
+```
 
 Keep supported lines on their latest patches and recheck the
 [Node release schedule](https://nodejs.org/en/about/previous-releases) when
@@ -48,8 +53,8 @@ tarball across that matrix using the release workflow.
 ## Pull requests
 
 Create a short-lived branch from `main`, keep changes focused, and open a pull
-request back to `main`. Use Conventional Commits; the commit hook checks commit
-messages and formats staged files. Include relevant regression coverage and update
+request back to `main`. Use Conventional Commits. The hooks check commit
+messages and format staged files. Include relevant regression coverage and update
 user documentation when behavior changes. The aggregate `checks` and `package-checks` jobs must pass
 before integration; follow the repository's branch protection requirements.
 

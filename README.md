@@ -3,11 +3,12 @@
 [![npm](https://badgen.net/npm/v/git-oneflow)](https://www.npmjs.com/package/git-oneflow)
 [![License: MIT](https://badgen.net/badge/license/MIT/blue)](LICENSE)
 
-> CLI tools implementing the _OneFlow_ git branching model.
+Command-line tools for the OneFlow Git workflow: create and finish feature, release
+and hotfix branches with `gof` or `git-oneflow`.
 
-OneFlow is a git branching model proposed by [Adam Ruka](https://github.com/skinny85) as an [alternative to GitFlow](https://www.endoflineblog.com/gitflow-considered-harmful).
+OneFlow is a Git branching model proposed by [Adam Ruka](https://github.com/skinny85) as an [alternative to GitFlow](https://www.endoflineblog.com/gitflow-considered-harmful).
 
-In [this article](https://www.endoflineblog.com/oneflow-a-git-branching-model-and-workflow#develop-feature-branches), Adam describes how it works and when it should be employed.
+His [OneFlow guide](https://www.endoflineblog.com/oneflow-a-git-branching-model-and-workflow#develop-feature-branches) explains the workflow and its tradeoffs.
 
 git-OneFlow supports both a single main branch and separate main/development
 branches. By default, it uses `main` and integrates feature branches by rebasing.
@@ -52,11 +53,11 @@ or
 gof --help
 ```
 
-`gof` is a convenient alias for the overly verbose and long to type `git-oneflow`.
+Both names run the same command.
 
-### Node Package Execute - npx
+### Run with npx
 
-It is possible to run `git-oneflow` directly (i.e. no local installation) from the `npm` registry with Node Package Execute:
+To run the package without installing it globally:
 
 ```sh
 npx git-oneflow --help
@@ -64,7 +65,7 @@ npx git-oneflow --help
 
 ## Configuration
 
-**_git-OneFlow_** provides defaults for a single-main workflow. Some operations
+git-OneFlow provides defaults for a single-main workflow. Some operations
 require explicit options for the separate main/development variant described by
 Adam Ruka.
 
@@ -76,7 +77,7 @@ Adam Ruka.
 
 #### Feature branches
 
-Feature branches stem from `feature`:
+Feature branch names use the `feature/` prefix and start from `main`:
 
 ```sh
 gof start feature my-feature
@@ -84,7 +85,8 @@ gof start feature my-feature
 git checkout -b feature/my-feature refs/heads/main
 ```
 
-Finishing a feature is done by rebasing:
+By default, finishing a feature rebases it onto `main`, integrates it, pushes and
+deletes the local feature branch:
 
 ```sh
 gof finish feature my-feature
@@ -116,6 +118,19 @@ specific development commit with `--ref`, for example:
 gof start release 2.3.0 --ref develop
 ```
 
+To finish the release started above:
+
+```sh
+gof finish release 2.3.0 -t 2.3.0
+# equivalent to...
+git checkout release/2.3.0
+git tag -a -m '2.3.0' 2.3.0
+git checkout main
+git merge release/2.3.0
+git push --follow-tags origin main
+git branch -d release/2.3.0
+```
+
 A hotfix starts from the nearest annotated tag reachable from the current HEAD,
 as selected by `git describe --abbrev=0`, or from `main` if none is reachable.
 Lightweight and unreachable tags are not considered. Use `--ref` to select a
@@ -137,19 +152,6 @@ Replace the branch and tag names with your own. With separate main and
 development branches, confirm the prompts to advance `main` to each tagged
 commit. Inspect the tags and branch history before publishing the release.
 
-...then
-
-```sh
-gof finish release 2.3.0 -t 2.3.0
-# equivalent to...
-git checkout release/2.3.0
-git tag -a -m '2.3.0' 2.3.0
-git checkout main
-git merge release/2.3.0
-git push --follow-tags origin main
-git branch -d release/2.3.0
-```
-
 After deleting a local branch, the tool also asks whether to delete its remote
 counterpart; the confirmation defaults to yes. This prompt occurs even when
 `--no-push` is supplied. Use `--no-delete` to retain the local branch and avoid
@@ -157,7 +159,13 @@ the remote deletion prompt.
 
 ##### Tags
 
-Tags creation when releasing or hot-fixing might not be needed. One case would be if something like [`standard-version`](https://www.npmjs.com/package/standard-version) is used, which tags releases based on some commit conventions. Therefore, a `--no-tag` option is used to avoid tagging the commit. A commit is either tagged on the command line by passing `-t|--tag <tagName>` or the program will ask to specify a tag name. If both `--tag` (or `-t`) and `--no-tag` are supplied, the last occurrence wins. The same ordering applies to other positive/negative option pairs, such as `--push` and `--no-push`. Use only the form you intend.
+Use `--tag <name>` (or `-t <name>`) to create an annotated tag when finishing a
+release or hotfix. Otherwise, the tool asks for a tag name by default. Use
+`--no-tag` to skip tagging, for example when another tool manages your release tags.
+
+If both `--tag` and `--no-tag` are supplied, the last occurrence wins. The same
+ordering applies to positive/negative option pairs such as `--push` and
+`--no-push`. Use only the form you intend.
 
 ### Configuration file
 
@@ -165,16 +173,15 @@ Tags creation when releasing or hot-fixing might not be needed. One case would b
 gof init
 ```
 
-`init` starts an interactive session that allows for customising the configuration of **_git-OneFlow_**
-
-This creates a `.git-oneflowrc` file with the chosen configuration [options](#configuration-options). **_git-OneFlow_** uses [`cosmiconfig`](https://www.npmjs.com/package/cosmiconfig) under the hood.
+`init` asks for your configuration and writes it to `.git-oneflowrc`. Configuration
+files are loaded with [`cosmiconfig`](https://www.npmjs.com/package/cosmiconfig).
 
 Use the tool only with trusted configuration and repositories. Discovered or
 explicit JavaScript configuration can execute code before its values are validated.
 Git can also execute hooks, editors and transports configured by the repository
 or environment; the tool inherits the user's PATH and Git configuration.
 
-To specify a configuration file on the command line use `-c|--config` with the name of the file (and it's path).
+Use `--config <file>` (or `-c <file>`) to select a configuration file:
 
 ```sh
 gof start feature -c config/my-gof-config.json
@@ -187,20 +194,24 @@ keys, types, strategies, or explicit files cause the command to fail.
 
 #### Configuration options
 
-| Option               | Description                                                              | Default     | Details                                                                                                                                                                                                                                                                                                                                |
-| -------------------- | ------------------------------------------------------------------------ | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `main`               | name of the main (production) branch                                     | `main`      | must be set to an existing branch name                                                                                                                                                                                                                                                                                                 |
-| `development`        | name of the development branch                                           | `undefined` | not set or an existing branch name                                                                                                                                                                                                                                                                                                     |
-| `features`           | name of the features branch (prefixed to the feature name)               | `feature`   | empty string or a valid branch name. This strings works as a branch prefix, e.g. if the chosen feature name is `my-super-feature` the resulting (using the default) branch name for this feature will be `feature/my-super-feature`. An empty string will result in `my-super-feature`. This applies to releases and hotfixes as well. |
-| `releases`           | name of the releases branch (prefixed to the release name)               | `release`   | empty string or a valid branch name                                                                                                                                                                                                                                                                                                    |
-| `hotfixes`           | name of the hotfixes branch (prefixed to the hotfix name)                | `hotfix`    | empty string or a valid branch name                                                                                                                                                                                                                                                                                                    |
-| `strategy`           | which feature integration merge strategy to use                          | `rebase`    | Valid options are: `rebase`, `rebase-no-ff` and `no-ff`                                                                                                                                                                                                                                                                                |
-| `interactive`        | whether to rebase interactively `rebase -i`                              | `true`      | the values `true` or `false`, not the strings 'true' or 'false'. See [example](#generate-default-file). Command-line options override this setting, including `--interactive` and `--no-interactive`.                                                                                                                                  |
-| `pushAfterMerge`     | whether to push to `origin` after finishing                              | `true`      | `true`, `false`                                                                                                                                                                                                                                                                                                                        |
-| `deleteAfterMerge`   | whether to delete the working branch after merging with main/development | `true`      | `true`, `false`                                                                                                                                                                                                                                                                                                                        |
-| `tagCommit`          | whether to ask to tag releases and hotfixes                              | `true`      | `true`, `false`. This option is used to decide whether to prompt the user or not in case a tag hasn't been specified, for example with `--tag 2.3.4`.                                                                                                                                                                                  |
-| `askOnFeatureStart`  | whether to ask which branch to start a feature from                      | `false`     | `true`, `false`. This option is used to decide whether to prompt the user or not in case they start a feature.                                                                                                                                                                                                                         |
-| `askOnFeatureFinish` | whether to ask which branch to merge a feature onto                      | `false`     | `true`, `false`. This option is used to decide whether to prompt the user or not in case they finish a feature.                                                                                                                                                                                                                        |
+| Option               | Description                                                       | Default   |
+| -------------------- | ----------------------------------------------------------------- | --------- |
+| `main`               | Existing main (production) branch                                 | `main`    |
+| `development`        | Existing development branch; omit for a single-main workflow      | Not set   |
+| `features`           | Feature branch prefix                                             | `feature` |
+| `releases`           | Release branch prefix                                             | `release` |
+| `hotfixes`           | Hotfix branch prefix                                              | `hotfix`  |
+| `strategy`           | Feature integration strategy: `rebase`, `rebase-no-ff` or `no-ff` | `rebase`  |
+| `interactive`        | Use interactive rebase                                            | `true`    |
+| `pushAfterMerge`     | Push to `origin` after finishing                                  | `true`    |
+| `deleteAfterMerge`   | Delete the working branch after integration                       | `true`    |
+| `tagCommit`          | Ask for a release or hotfix tag when none was supplied            | `true`    |
+| `askOnFeatureStart`  | Ask which branch to start a feature from                          | `false`   |
+| `askOnFeatureFinish` | Ask which branch to integrate a feature into                      | `false`   |
+
+Branch prefixes must produce valid Git branch names. For example, the default
+`features` value produces `feature/my-feature`; an empty prefix produces
+`my-feature`. Boolean values must be `true` or `false`, without quotes.
 
 #### Generate default file
 
@@ -210,7 +221,7 @@ To create a configuration file with default values:
 gof init -y
 ```
 
-this will create `.git-oneflowrc` in the current directory with the following content:
+This writes `.git-oneflowrc` in the current directory:
 
 ```json
 {
@@ -230,17 +241,16 @@ this will create `.git-oneflowrc` in the current directory with the following co
 
 ## Commands
 
-Under the hood, **_git-OneFlow_** uses [`commander`](https://www.npmjs.com/package/commander). Essentially, it is possible to `start` or `finish` either a `feature`, a `release` or an `hotfix`.
-
-Each command can be passed options that modify the default behaviour.
+Use `start` or `finish` with `feature`, `release` or `hotfix`. Each subcommand
+accepts options to override its defaults.
 
 ### Common options to start and finish subcommands
 
-| Option flag           | Description                           |
-| --------------------- | ------------------------------------- |
-| -c, --config \<file\> | configuration file to use             |
-| -b, --base \<name\>   | override the current base branch name |
-| --no-base             | do not use a base branch name         |
+| Option flag           | Description                     |
+| --------------------- | ------------------------------- |
+| -c, --config \<file\> | configuration file to use       |
+| -b, --base \<name\>   | override the branch-name prefix |
+| --no-base             | omit the branch-name prefix     |
 
 These options apply to the feature, release and hotfix subcommands of `start`
 and `finish`; they do not apply to `init` or the parent commands.
@@ -268,7 +278,9 @@ Options are common to every sub-command (`start feature`, `start release`, `star
 
 ### The `finish` command
 
-The `finish` command syntax is exactly the same as the `start` command. What changes are the options that can be passed to the sub-commands.
+```sh
+gof finish <feature|release|hotfix> [options] [name]
+```
 
 #### Common `finish` options
 
@@ -298,7 +310,7 @@ The `finish` command syntax is exactly the same as the `start` command. What cha
 
 ### `--help` and `--dry-run` options
 
-A help menu is available with every command. Just append `-h` or `--help` to access help.
+Use `--help` (or `-h`) with any command to see its options.
 
 ```sh
 gof finish release --help
@@ -312,18 +324,20 @@ while the merge is in progress. Inspect `git status`, branches, tags and any rem
 
 Installed-package Git workflows run in CI on Linux, macOS and Windows. A minimum Git version has not been established; behavior can depend on the installed Git and platform.
 
-Another interesting way to experiment with **_git-OneFlow_** is to use the `--dry-run` option on a start or finish subcommand. This shows intended Git mutations without performing them; read-only Git queries still run. It does not apply to `init`, which writes a configuration file.
+Use `--dry-run` on a start or finish subcommand to show intended Git changes
+without making them. Read-only Git queries still run. This option does not apply
+to `init`, which writes a configuration file.
 
-It is possible to activate the `dry-run` mode also by setting the environment variable `GOF_DRY_RUN`
+You can also enable dry-run mode with the `GOF_DRY_RUN` environment variable:
 
 ```sh
-GOF_DRY_RUN=1 gof start release
+GOF_DRY_RUN=1 gof start release 4.0.0
 ```
 
-or for Windows
+In Windows Command Prompt:
 
 ```sh
-set GOF_DRY_RUN=1 & gof start release
+set GOF_DRY_RUN=1 & gof start release 4.0.0
 ```
 
 ## Changelog
@@ -336,4 +350,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, checks and pull request guidan
 
 ## License
 
-**_git-OneFlow_** is released under the MIT License. See [LICENSE](./LICENSE) for more details.
+git-OneFlow is released under the MIT License. See [LICENSE](./LICENSE) for more details.

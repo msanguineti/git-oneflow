@@ -1,7 +1,7 @@
 {
   "name": "git-oneflow",
-  "version": "4.0.0-rc.2",
-  "description": "CLI tooling implementing GIT OneFlow branching model",
+  "version": "4.0.0",
+  "description": "Command-line tools for the OneFlow Git workflow: feature, release and hotfix branches.",
   "bin": {
     "gof": "bin/index.js",
     "git-oneflow": "bin/index.js"
@@ -35,11 +35,14 @@
   "keywords": [
     "git",
     "oneflow",
-    "branching",
-    "model",
-    "Adam",
-    "Ruka",
-    "cli"
+    "git-workflow",
+    "branching-model",
+    "version-control",
+    "cli",
+    "command-line",
+    "feature-branch",
+    "release-branch",
+    "hotfix"
   ],
   "author": "Mirco Sanguineti",
   "license": "MIT",
