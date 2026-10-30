@@ -36,7 +36,7 @@ const askTagNameToUser = async (): Promise<string | undefined> => {
     ? (
         await promptUser([
           askInput({
-            message: `Tag name (latest tag: ${getLatestTag()})`,
+            message: `Tag name (nearest reachable annotated tag: ${getLatestTag() ?? 'none'})`,
             name: 'tag',
             validate: (input) =>
               '' !== input.trim() || 'Please, enter a valid tag name',

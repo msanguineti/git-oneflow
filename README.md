@@ -67,7 +67,9 @@ npx git-oneflow --help
 
 ## Configuration
 
-**_git-OneFlow_** comes with some defaults which faithfully mirror Adam Ruka recommendations.
+**_git-OneFlow_** provides defaults for a single-main workflow. Some operations
+require explicit options for the separate main/development variant described by
+Adam Ruka.
 
 ### Defaults
 
@@ -108,7 +110,32 @@ gof start release 2.3.0
 git checkout -b release/2.3.0 refs/heads/main
 ```
 
-A hotfix starts from the latest tag, or from `main` if no tag exists.
+When using a separate development branch, the default still starts a release
+from `main`. To include development work, select the development branch or a
+specific development commit with `--ref`, for example:
+
+```sh
+gof start release 2.3.0 --ref develop
+```
+
+A hotfix starts from the nearest annotated tag reachable from the current HEAD,
+as selected by `git describe --abbrev=0`, or from `main` if none is reachable.
+Lightweight and unreachable tags are not considered. Use `--ref` to select a
+different starting point explicitly.
+
+If a release branch is already open, finishing a hotfix with the default target
+does not add the fix to that release branch. Its eventual release tag can omit
+the fix even though the main or development branch contains it. Instead, finish
+the hotfix onto the open release branch before finishing that release:
+
+```sh
+gof finish hotfix 2.3.1 --onto release/2.4.0 --tag 2.3.1
+gof finish release 2.4.0 --tag 2.4.0
+```
+
+Replace the branch and tag names with your own. With separate main and
+development branches, confirm the prompts to advance `main` to each tagged
+commit. Inspect the tags and branch history before publishing the release.
 
 ...then
 
@@ -123,6 +150,11 @@ git push --follow-tags origin main
 git branch -d release/2.3.0
 ```
 
+After deleting a local branch, the tool also asks whether to delete its remote
+counterpart; the confirmation defaults to yes. This prompt occurs even when
+`--no-push` is supplied. Use `--no-delete` to retain the local branch and avoid
+the remote deletion prompt.
+
 ##### Tags
 
 Tags creation when releasing or hot-fixing might not be needed. One case would be if something like [`standard-version`](https://www.npmjs.com/package/standard-version) is used, which tags releases based on some commit conventions. Therefore, a `--no-tag` option is used to avoid tagging the commit. A commit is either tagged on the command line by passing `-t|--tag <tagName>` or the program will ask to specify a tag name. If both `--tag` (or `-t`) and `--no-tag` are supplied, the last occurrence wins. The same ordering applies to other positive/negative option pairs, such as `--push` and `--no-push`. Use only the form you intend.
@@ -136,6 +168,11 @@ gof init
 `init` starts an interactive session that allows for customising the configuration of **_git-OneFlow_**
 
 This creates a `.git-oneflowrc` file with the chosen configuration [options](#configuration-options). **_git-OneFlow_** uses [`cosmiconfig`](https://www.npmjs.com/package/cosmiconfig) under the hood.
+
+Use the tool only with trusted configuration and repositories. Discovered or
+explicit JavaScript configuration can execute code before its values are validated.
+Git can also execute hooks, editors and transports configured by the repository
+or environment; the tool inherits the user's PATH and Git configuration.
 
 To specify a configuration file on the command line use `-c|--config` with the name of the file (and it's path).
 
@@ -185,7 +222,9 @@ this will create `.git-oneflowrc` in the current directory with the following co
   "interactive": true,
   "deleteAfterMerge": true,
   "pushAfterMerge": true,
-  "tagCommit": true
+  "tagCommit": true,
+  "askOnFeatureStart": false,
+  "askOnFeatureFinish": false
 }
 ```
 
@@ -195,13 +234,16 @@ Under the hood, **_git-OneFlow_** uses [`commander`](https://www.npmjs.com/packa
 
 Each command can be passed options that modify the default behaviour.
 
-### Common options to **all** commands
+### Common options to start and finish subcommands
 
 | Option flag           | Description                           |
 | --------------------- | ------------------------------------- |
 | -c, --config \<file\> | configuration file to use             |
 | -b, --base \<name\>   | override the current base branch name |
 | --no-base             | do not use a base branch name         |
+
+These options apply to the feature, release and hotfix subcommands of `start`
+and `finish`; they do not apply to `init` or the parent commands.
 
 ### The `start` command
 
@@ -270,7 +312,7 @@ while the merge is in progress. Inspect `git status`, branches, tags and any rem
 
 Installed-package Git workflows run in CI on Linux, macOS and Windows. A minimum Git version has not been established; behavior can depend on the installed Git and platform.
 
-Another interesting way to experiment with **_git-OneFlow_** is to use the `--dry-run` option. This shows intended Git mutations without performing them; read-only Git queries still run.
+Another interesting way to experiment with **_git-OneFlow_** is to use the `--dry-run` option on a start or finish subcommand. This shows intended Git mutations without performing them; read-only Git queries still run. It does not apply to `init`, which writes a configuration file.
 
 It is possible to activate the `dry-run` mode also by setting the environment variable `GOF_DRY_RUN`
 

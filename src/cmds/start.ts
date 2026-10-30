@@ -125,7 +125,7 @@ const hotfix: GofCommand = {
     },
   ],
   opts: commonOptions,
-  desc: 'start a new hotfix from the latest tag (if exists) or the main branch',
+  desc: 'start a hotfix from the nearest reachable annotated tag or main',
   action: cmdAction,
   examples: [
     '$ gof start hotfix 2.3.1 -b bugs',
