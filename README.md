@@ -12,25 +12,16 @@ OneFlow is a git branching model proposed by [Adam Ruka](https://github.com/skin
 
 In [this article](https://www.endoflineblog.com/oneflow-a-git-branching-model-and-workflow#develop-feature-branches), Adam describes how it works and when it should be employed.
 
-**_This workflow is not for the uninitiated:_**
+git-OneFlow supports both a single main branch and separate main/development
+branches. By default, it uses `main` and integrates feature branches by rebasing.
+See [Configuration](#configuration) to choose branch names and integration options.
 
-1. Heavy use of `rebase`
-2. By default, work is off of `main`
-3. ???
-4. No Profit :( and surefire way to mess things up quickly and embarrassingly.
+The workflow uses Git rebase and can rewrite branch history. Read Git's
+[rebasing guidance](https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril)
+before using it on shared branches.
 
-For a good overview of why you should _and_ when you shouldn't use rebase read [this](https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril)
-
-I have simply put together some CLI commands to leverage the OneFlow model.
-
-I have remained strictly faithful to how Adam defines the workflow without adding anything fancy (yet). This means that, by default, **_git-OneFlow_** works with one main branch only (`main`) and new features are rebased. Check the [customisation](#customisation) section.
-
-Of course, one-size-fits-all does not always work, therefore, I have implemented all the feature integration options described in the article and both the _one main branch_ and _main and development branches_ models.
-
-Fun facts:
-
-1. _Two branches_ model + integration option #2 gives... :drumroll: GitFlow :)
-2. Adam Ruka doesn't really like the idea of 'tools' like this one
+The project is in maintenance mode, with updates focused on fixes and supported
+runtimes.
 
 ## Node Compatibility
 
@@ -84,7 +75,7 @@ Feature branches stem from `feature`:
 ```sh
 gof start feature my-feature
 # equivalent to...
-git checkout -b feature/my-feature
+git checkout -b feature/my-feature refs/heads/main
 ```
 
 Finishing a feature is done by rebasing:
@@ -107,8 +98,10 @@ Releases and hotfixes share the same workflow: (just substitute `hotfix` for `re
 ```sh
 gof start release 2.3.0
 # equivalent to...
-git checkout -b release/2.3.0
+git checkout -b release/2.3.0 refs/heads/main
 ```
+
+A hotfix starts from the latest tag, or from `main` if no tag exists.
 
 ...then
 
@@ -125,7 +118,7 @@ git branch -d release/2.3.0
 
 ##### Tags
 
-Tags creation when releasing or hot-fixing might not be needed. One case would be if something like [`standard-version`](https://www.npmjs.com/package/standard-version) is used, which tags releases based on some commit conventions. Therefore, a `--no-tag` option is used to avoid tagging the commit. A commit is either tagged on the command line by passing `-t|--tag <tagName>` or the program will ask to specify a tag name. If both `-t` and `--no-tag` are specified, `--no-tag` takes the precedence. This is true for any other `off` switch.
+Tags creation when releasing or hot-fixing might not be needed. One case would be if something like [`standard-version`](https://www.npmjs.com/package/standard-version) is used, which tags releases based on some commit conventions. Therefore, a `--no-tag` option is used to avoid tagging the commit. A commit is either tagged on the command line by passing `-t|--tag <tagName>` or the program will ask to specify a tag name. If both `--tag` (or `-t`) and `--no-tag` are supplied, the last occurrence wins. The same ordering applies to other positive/negative option pairs, such as `--push` and `--no-push`. Use only the form you intend.
 
 ### Configuration file
 
@@ -135,7 +128,7 @@ gof init
 
 `init` starts an interactive session that allows for customising the configuration of **_git-OneFlow_**
 
-This creates a `.git-oneflowrc` file with the chosen configuration [options](#options). **_git-OneFlow_** uses [`cosmiconfig`](https://www.npmjs.com/package/cosmiconfig) under the hood.
+This creates a `.git-oneflowrc` file with the chosen configuration [options](#configuration-options). **_git-OneFlow_** uses [`cosmiconfig`](https://www.npmjs.com/package/cosmiconfig) under the hood.
 
 To specify a configuration file on the command line use `-c|--config` with the name of the file (and it's path).
 
@@ -173,7 +166,7 @@ To create a configuration file with default values:
 gof init -y
 ```
 
-this will create `.gitonelfowrc` in the current directory with the following content:
+this will create `.git-oneflowrc` in the current directory with the following content:
 
 ```json
 {
@@ -266,10 +259,9 @@ Git failures stop the workflow and return a nonzero exit status. Earlier success
 steps are not rolled back. If a rebase conflicts, resolve the files and run
 `git rebase --continue`, or use `git rebase --abort` to return to the state before
 that rebase. For a merge conflict, resolve and commit it or use `git merge --abort`
-while the merge is in progress. Inspect `git status` before continuing.
+while the merge is in progress. Inspect `git status`, branches, tags and any remote updates before continuing. Earlier steps may already have succeeded; do not blindly rerun the command. Finish the remaining Git operations explicitly after resolving or aborting the conflict.
 
-The Git commands have been tested with Git 2.47.3 on Linux; a minimum Git version
-has not been established.
+Installed-package Git workflows run in CI on Linux, macOS and Windows. A minimum Git version has not been established; behavior can depend on the installed Git and platform.
 
 Another interesting way to experiment with **_git-OneFlow_** is to use the `--dry-run` option. This shows intended Git mutations without performing them; read-only Git queries still run.
 
@@ -291,7 +283,7 @@ The changelog can be found on the [Releases page](https://github.com/msanguineti
 
 ## Contributing
 
-PRs welcome!
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, checks and pull request guidance.
 
 ## License
 

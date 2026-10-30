@@ -7,6 +7,11 @@ git-OneFlow is a command-line tool for the OneFlow Git branching model. The
 implementation and tests establish current behavior. Existing experimental branches
 are not approved product direction merely because they exist.
 
+Write public documentation for its readers: README for users, CONTRIBUTING for
+contributors and RELEASE for package maintainers. Keep agent instructions,
+programme/acceptance state, approval discussions and unpublished release drafts in
+agent guidance or ignored `.dev/` records, outside public guides.
+
 The owner's standing direction is perpetual maintenance: no new features. A finite
 modernization programme will improve correctness, Git safety, distribution and
 maintainability, then finish. Keep the implementation and verification small and
