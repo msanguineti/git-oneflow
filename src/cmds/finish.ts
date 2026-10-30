@@ -20,6 +20,7 @@ import {
 } from '../lib/inquisitor.js'
 import {
   getLatestTag,
+  branchExists,
   getLocalBranches,
   getCurrentBranch,
   checkoutBranch,
@@ -36,7 +37,7 @@ const askTagNameToUser = async (): Promise<string | undefined> => {
     ? (
         await promptUser([
           askInput({
-            message: `Tag name (latest tag: ${getLatestTag()})`,
+            message: `Tag name (nearest reachable annotated tag: ${getLatestTag() ?? 'none'})`,
             name: 'tag',
             validate: (input) =>
               '' !== input.trim() || 'Please, enter a valid tag name',
@@ -189,6 +190,18 @@ const releaseHotfixAction = async (
   opts: Record<string, GofOptionsType>,
   cmd: Command,
 ): Promise<void> => {
+  const onto =
+    opts.onto ?? getConfigValue('development') ?? getConfigValue('main')
+
+  if (cmd.name() === 'hotfix') {
+    if (!opts.onto)
+      throw new Error(
+        'finish hotfix requires --onto <branch>; target the open release branch, or main/development when no release is open',
+      )
+    if (!branchExists(onto as string))
+      throw new Error(`local branch does not exist: ${onto}`)
+  }
+
   const branchName = await maybeCheckoutAndGetBranchName(
     cmd.name(),
     opts.base as string,
@@ -202,9 +215,6 @@ const releaseHotfixAction = async (
   } else {
     warning('commit has not been tagged!')
   }
-
-  const onto =
-    opts.onto ?? getConfigValue('development') ?? getConfigValue('main')
 
   checkoutBranch(onto as string)
 
@@ -248,13 +258,13 @@ const release: GofCommand = {
 
 const hotfix: GofCommand = {
   name: 'hotfix',
-  desc: 'finish a hotfix',
+  desc: 'finish a hotfix (requires --onto <branch>)',
   args: [{ name: '[name]', desc: 'the name of the hotfix to finish' }],
   opts: [...tagOptions, ...commonOptions],
   action: releaseHotfixAction,
   examples: [
-    '$ gof finish hotfix 2.3.1 -b bugs',
-    '$ gof f h 2.3.1',
+    '$ gof finish hotfix 2.3.1 -b bugs --onto main',
+    '$ gof f h 2.3.1 --onto release/2.4.0',
     '$ git-oneflow finish hotfix -o main --no-delete 2.3.1',
   ],
 }

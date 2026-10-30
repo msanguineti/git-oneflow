@@ -1,5 +1,4 @@
 import { Command } from 'commander'
-import { getBaseBranch } from '../lib/config.js'
 import { info } from '../lib/log.js'
 
 export type GofCmdOption = {
@@ -44,10 +43,7 @@ export const makeGofCmd = ({
     .on('option:dry-run', () => {
       process.env.GOF_DRY_RUN = 'true'
     })
-    .option(
-      '-b, --base <name>',
-      `override the current base branch name: '${getBaseBranch(cmd.name())}'`,
-    )
+    .option('-b, --base <name>', 'override the configured branch prefix')
     .option('--no-base', 'do not use a base branch name')
     .option('--debug')
     .on('option:debug', () =>

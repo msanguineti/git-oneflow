@@ -317,6 +317,64 @@ for (const strategy of ['rebase', 'no-ff', 'rebase-no-ff']) {
   })
 }
 
+test('hotfix finish rejects missing or unknown targets before changing Git state', (t) => {
+  const { root, git, raw } = fixture(t)
+  git('switch', '-c', 'hotfix/fix')
+  writeFileSync(join(root, 'file'), 'fixed\n')
+  git('commit', '-am', 'fix')
+  git('switch', 'main')
+  const snapshot = () => ({
+    refs: git('show-ref'),
+    head: git('symbolic-ref', 'HEAD'),
+    status: git('status', '--porcelain'),
+    file: readFileSync(join(root, 'file'), 'utf8'),
+  })
+  for (const [target, message] of [
+    [[], /hotfix requires --onto/],
+    [['--onto', 'missing'], /local branch does not exist/],
+  ]) {
+    const before = snapshot()
+    const result = raw(
+      'finish',
+      'hotfix',
+      'fix',
+      ...target,
+      '--tag',
+      'must-not-exist',
+    )
+    assert.notEqual(result.status, 0)
+    assert.match(result.stderr, message)
+    assert.deepEqual(snapshot(), before)
+  }
+})
+
+test('hotfix finish integrates into the explicitly selected open release', (t) => {
+  const { root, git, raw } = fixture(t)
+  const main = git('rev-parse', 'main')
+  git('branch', 'release/next')
+  assert.equal(raw('start', 'hotfix', 'fix').status, 0)
+  writeFileSync(join(root, 'file'), 'fixed\n')
+  git('commit', '-am', 'fix')
+  const fix = git('rev-parse', 'HEAD')
+  const result = raw(
+    'finish',
+    'hotfix',
+    'fix',
+    '--onto',
+    'release/next',
+    '--tag',
+    'fix-tag',
+    '--no-push',
+    '--no-delete',
+  )
+  assert.equal(result.status, 0, result.stderr)
+  assert.equal(git('branch', '--show-current'), 'release/next')
+  assert.equal(git('rev-parse', 'main'), main)
+  assert.equal(git('rev-parse', 'release/next'), fix)
+  assert.equal(git('rev-parse', 'fix-tag^{}'), fix)
+  assert.equal(readFileSync(join(root, 'file'), 'utf8'), 'fixed\n')
+})
+
 test('release and hotfix push tags and target branches to a local remote', (t) => {
   const { root, git, raw } = fixture(t)
   const remote = join(root, 'remote.git')
@@ -333,6 +391,7 @@ test('release and hotfix push tags and target branches to a local remote', (t) =
       'finish',
       kind,
       version,
+      ...(kind === 'hotfix' ? ['--onto', 'main'] : []),
       '--tag',
       version,
       '--push',
