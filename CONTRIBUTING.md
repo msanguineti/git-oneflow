@@ -18,7 +18,8 @@ npm run test:package
 
 The test suite requires Git and a built CLI. It creates temporary repositories and
 cleans them up after each test. The package check builds and installs a tarball in a temporary directory and runs the
-CLI tests against it. Pull requests and pushes to `main` run these checks on Linux
+CLI tests against it. To check an existing tarball without repacking, use
+`npm run test:package -- /path/to/package.tgz`. Pull requests and pushes to `main` run these checks on Linux
 across supported LTS lines and on macOS and Windows with the latest LTS. See [ENGINEERING.md](ENGINEERING.md) for
 the repository workflow.
 

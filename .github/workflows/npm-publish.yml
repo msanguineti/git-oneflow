@@ -1,6 +1,8 @@
 name: Node.js Package
 
 on:
+  pull_request:
+    branches: [main]
   release:
     types: [published]
 
@@ -16,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.release.tag_name }}
+          ref: ${{ github.event_name == 'release' && github.event.release.tag_name || github.sha }}
       - id: revision
         env:
           EVENT_SHA: ${{ github.sha }}
@@ -28,6 +30,7 @@ jobs:
           node-version: 26.x
       - run: npm ci
       - name: Check tag and package version
+        if: github.event_name == 'release'
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: node -e "if (process.env.RELEASE_TAG !== 'v' + require('./package.json').version) throw Error('Tag must match package version')"
@@ -76,6 +79,7 @@ jobs:
       - run: npm run test:package -- candidate/package.tgz
 
   publish-npm:
+    if: github.event_name == 'release'
     needs: [candidate, test-package]
     runs-on: ubuntu-latest
     permissions:

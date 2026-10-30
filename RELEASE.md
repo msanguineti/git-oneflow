@@ -15,9 +15,17 @@ publishing repository. The publishing job uses a GitHub-hosted runner, Node 26,
 npm 11.5.1 or newer and `id-token: write`. Saving the configuration does not test
 OIDC; authentication is verified only by a real authorized publication. Review npm's
 [trusted publisher instructions](https://docs.npmjs.com/trusted-publishers/) and
-package access settings. Do not retain a write token as a workflow fallback.
+package access settings. Create the publisher close to the authorized first release:
+a new configuration expires unless its first successful publish completes within
+two days. If expired, delete it and create a new one before that release. Do not
+publish merely to prevent expiry. Do not retain a write token as a workflow fallback.
 
 ## Candidate and publication
+
+Pull requests exercise the same packing, artifact transfer and installed-package
+matrix used for releases. Each consumer logs the verified SHA-256 digest. The
+publishing job runs only for a published release, after that matrix succeeds;
+pull requests cannot run it.
 
 1. Before a release, check [Node lifecycle](https://nodejs.org/en/about/previous-releases),
    Git/platform constraints, dependency updates and security advisories. Align
