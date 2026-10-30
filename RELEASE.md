@@ -31,16 +31,18 @@ for current requirements and package access settings.
 
 ## Prepare a release
 
-1. Update the version in `package.json` and `package-lock.json` together. For a
-   release candidate, use a version such as `4.0.0-rc.1`; use `4.0.0` for the
-   corresponding stable release. Prepare release notes describing changes and any
-   breaking behavior.
+1. Update the version in `package.json` and `package-lock.json` together with
+   `npm version <version> --no-git-tag-version`. This updates the files without
+   creating a commit or tag. For a release candidate, use `4.0.0-rc.1`; use `4.0.0`
+   for the corresponding stable release. Commit the change through the normal PR
+   workflow. Prepare release notes describing changes and any breaking behavior.
 2. Run the checks in [CONTRIBUTING.md](CONTRIBUTING.md), open a pull request and
    merge after the required checks pass. PRs test packing, artifact transfer and
    installed-package behavior on the same platform matrix used for publishing.
-3. Create a tag named `v<version>` on the checked commit on `main`. The workflow
-   rejects a tag that does not match the package version.
-4. Publish a GitHub release for that tag. Select **Set as a pre-release** for a
+3. In the GitHub release form, create a tag named `v<version>` on the checked
+   commit on `main` after the version PR is merged. The workflow rejects a tag
+   that does not match the package version.
+4. Publish the GitHub release for that tag. Select **Set as a pre-release** for a
    release candidate. GitHub Actions chooses the npm distribution tag automatically:
 
    | GitHub release | Example version | npm tag  |

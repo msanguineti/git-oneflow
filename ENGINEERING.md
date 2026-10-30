@@ -12,9 +12,9 @@ contributors and RELEASE for package maintainers. Keep agent instructions,
 programme/acceptance state, approval discussions and unpublished release drafts in
 agent guidance or ignored `.dev/` records, outside public guides.
 
-The owner's standing direction is perpetual maintenance: no new features. A finite
-modernization programme will improve correctness, Git safety, distribution and
-maintainability, then finish. Keep the implementation and verification small and
+The owner's standing direction is perpetual maintenance: no new features. The
+finite modernization programme was accepted and integrated on 2026-10-30 after
+improving correctness, Git safety, distribution and maintainability. Keep the implementation and verification small and
 practical; avoid speculative abstractions and large, repetitive test suites.
 Remove external dependencies wherever Node built-ins or a small direct solution
 reduce total maintenance. Do not trade a library for a large home-grown framework.
@@ -39,10 +39,11 @@ Use separate worktrees or otherwise isolate concurrent writers.
 
 Use Conventional Commits, as configured by the existing commit hook. Run checks
 appropriate to the change and address relevant review findings before integration.
-During setup on 2026-10-29, GitHub reported `CodeFactor` and `build (18.x)` as
-required checks on `main`; full protection and review settings were inaccessible.
-Confirm current hosting rules and coordinate required-check changes before
-integration. CI is configured to run the build and checks on maintained Node LTS lines on Linux and the latest LTS on macOS and Windows for pull requests and pushes to `main`.
+GitHub's branch response on 2026-10-30 reported `checks` as the sole required
+context on protected `main`; full protection/review/bypass settings were
+inaccessible. Recheck hosting rules before integration and coordinate any required
+check changes. CI runs on maintained Node LTS lines on Linux and the latest LTS on
+macOS and Windows for pull requests and pushes to `main`.
 
 The executor may make local commits for authorized work. Push, merge and release
 require their own authorization. A GitHub release triggers the npm publishing
@@ -50,30 +51,27 @@ workflow; creating one is a release action. Preserve existing hooks and protecti
 
 ## Development and current limits
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for current development and verification.
-The development baseline targets Node 22, 24 and 26 on Linux, with isolated Git
-fixture tests and non-writing checks. The initiating maintainer accepted Phase 1
-with owner confirmation on 2026-10-29 after independent review and passing hosted
-CI. Executor completion and reviewer recommendations do not confer phase acceptance;
-the originating initiator owns that decision. Require the aggregate `checks` job
-before integration. The programme and current work record are in ignored
-`.dev/programme.md` and `.dev/phase.md`.
+See CONTRIBUTING.md for setup and checks, and RELEASE.md for the public maintainer
+procedure. The baseline supports Node 22/24/26 (minimum 22.8.0), with isolated Git
+fixtures and non-writing checks. Git uses argument-based child processes; failures
+stop subsequent actions and configuration retains typed values. The CLI ships
+readable TypeScript-compiled ESM, built by prepack with all runtime modules included.
+ShellJS, Rollup/plugins/Terser and the color helper have been removed; Node built-ins
+handle cleanup and styling. Configuration and prompt libraries remain because
+replacing them would add parser and terminal maintenance.
 
-Command/configuration correctness and Git execution safety are implemented and
-accepted for Phase 2 on 2026-10-29. Git runs through argument-based child processes;
-failures stop subsequent actions and configuration retains typed values. ShellJS
-has been removed. Phase acceptance is separate from integration and release.
+The accepted baseline was integrated through PRs #999–#1002. Final PR #1002 checks
+covered full source checks and one installed tarball across Linux Node 22/24/26
+and macOS/Windows Node 26. The release workflow verifies artifact identity and
+publishes those checked bytes. Published GitHub pre-releases select npm `next`;
+stable releases select `latest`. Authentication uses npm trusted publishing.
+Actual npm setup/OIDC/publication remains unverified until a real release; the
+owner knowingly chose to attempt a pre-release. Do not infer success from CI or
+create a release as an agent probe.
 
-The initiating maintainer accepted Phase 3 on 2026-10-30 after independent review
-and passing hosted checks on Linux Node 22/24/26 and macOS/Windows Node 26, including
-installed-tarball launchers and Git workflows. The CLI ships readable JavaScript
-compiled by TypeScript, with a prepack build and all runtime modules included.
-Rollup, its plugins, Terser and the color helper have been removed; cleanup and
-styling use Node built-ins. Node 22.8.0 is the minimum. Configuration and prompt
-libraries remain because replacing them would add parser and terminal maintenance.
-
-Release readiness and a lightweight permanent maintenance procedure are the
-remaining programme outcome. Confirm hosting protection and required-check names
-before integration; prepare release authentication, checked-artifact publishing and
-recovery guidance before release. Neither integration nor publication follows from
-phase acceptance.
+The closed modernization account is in ignored `.dev/programme.md`; the current
+maintenance phase and release handoff are in `.dev/phase.md`. Phase acceptance is
+separate from integration and publication. Independent technical and acceptance
+reviews precede the initiating maintainer's closure decision. Finishing one phase
+does not authorize another or a release. Keep requirements and evidence until
+acceptance, then consolidate the phase's local records.

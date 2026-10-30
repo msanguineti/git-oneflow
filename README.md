@@ -36,6 +36,12 @@ Maintained Node.js LTS lines and newer non-EOL stable releases are supported.
 npm install -g git-oneflow
 ```
 
+To install a pre-release after it is published:
+
+```sh
+npm install -g git-oneflow@next
+```
+
 ## Usage
 
 ```sh
