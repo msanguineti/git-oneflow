@@ -102,7 +102,8 @@ git branch -d feature/my-feature
 
 #### Release/Hotfix branches
 
-Releases and hotfixes share the same workflow: (just substitute `hotfix` for `release` in the following examples)
+Releases and hotfixes both use `start` and `finish`. Finishing a hotfix also
+requires an explicit `--onto` target, as described below.
 
 ```sh
 gof start release 2.3.0
@@ -123,10 +124,12 @@ as selected by `git describe --abbrev=0`, or from `main` if none is reachable.
 Lightweight and unreachable tags are not considered. Use `--ref` to select a
 different starting point explicitly.
 
-If a release branch is already open, finishing a hotfix with the default target
-does not add the fix to that release branch. Its eventual release tag can omit
-the fix even though the main or development branch contains it. Instead, finish
-the hotfix onto the open release branch before finishing that release:
+`finish hotfix` requires `--onto <local-branch>`. When a release branch is open,
+target that branch so its eventual release tag includes the fix. Otherwise, target
+your main or development branch. A missing or invalid target stops the command
+before checkout, tagging, merging or pushing.
+
+For a hotfix during an open release:
 
 ```sh
 gof finish hotfix 2.3.1 --onto release/2.4.0 --tag 2.3.1
@@ -272,13 +275,13 @@ The `finish` command syntax is exactly the same as the `start` command. What cha
 
 #### Common `finish` options
 
-| Option flag        | Description                    |
-| ------------------ | ------------------------------ |
-| -o,--onto \<onto\> | branch to merge or rebase onto |
-| -p,--push          | push to origin after merge     |
-| --no-push          | do not push                    |
-| -d,--delete        | delete branch after merge      |
-| --no-delete        | do not delete branch           |
+| Option flag        | Description                                          |
+| ------------------ | ---------------------------------------------------- |
+| -o,--onto \<onto\> | branch to merge or rebase onto (required for hotfix) |
+| -p,--push          | push to origin after merge                           |
+| --no-push          | do not push                                          |
+| -d,--delete        | delete branch after merge                            |
+| --no-delete        | do not delete branch                                 |
 
 #### `finish feature` options
 
