@@ -68,9 +68,30 @@ registry before retrying. If the version already exists, verify its integrity an
 distribution tag. npm versions cannot be overwritten; users can select a known
 prior version while a correction is prepared under a new version number.
 
-If no version was published, correct the cause, recheck the tag and source, and
-rerun the release workflow. A rerun builds and verifies a new candidate. A failure
-in this publishing workflow does not require changes to users' Git repositories.
+If no version was published and only a transient service or account issue caused
+the failure, rerun the failed job after correcting it. A workflow rerun uses the
+original commit and workflow; it does not pick up fixes merged later to `main`.
+
+### Retry after a workflow correction
+
+To retry an existing release without changing its tag or package version:
+
+1. Merge the workflow fix after both PR check aggregates pass. The corrected
+   `main` must still build the exact original package contents.
+2. In the failed release run, find the **Verify candidate identity** step and copy
+   the verified package SHA-256. Use the tarball digest, not the artifact ZIP digest.
+3. In **Actions → Node.js Package → Run workflow**, select `main`. Enter the existing
+   GitHub release tag and that original tarball SHA-256.
+4. Inspect the new run. It reads the existing release to choose `next` or `latest`,
+   rebuilds from corrected `main`, requires the package bytes to match the original
+   digest, and runs the complete package matrix before publishing. Source provenance
+   identifies the corrected `main` commit that reproduced those bytes.
+
+If the bytes differ, recovery stops. Investigate the difference; do not substitute
+an unverified new digest to bypass the check. Once published, verify npm integrity
+and the distribution tag as described above. This procedure creates no Git tags
+or GitHub releases. A failure in publishing does not require changes to users' Git
+repositories.
 
 ## Ongoing maintenance
 

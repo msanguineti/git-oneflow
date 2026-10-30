@@ -1,6 +1,16 @@
 name: Node.js Package
 
 on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing published GitHub release tag
+        required: true
+        type: string
+      expected_tarball_sha256:
+        description: Original verified package tarball SHA-256 (not artifact ZIP digest)
+        required: true
+        type: string
   pull_request:
     branches: [main]
   release:
@@ -9,12 +19,16 @@ on:
 permissions:
   contents: read
 
+env:
+  CANDIDATE_TARBALL: ./candidate/package.tgz
+
 jobs:
   candidate:
     runs-on: ubuntu-latest
     outputs:
       digest: ${{ steps.pack.outputs.digest }}
       revision: ${{ steps.revision.outputs.sha }}
+      npm_tag: ${{ steps.context.outputs.npm_tag }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,11 +43,11 @@ jobs:
         with:
           node-version: 26.x
       - run: npm ci
-      - name: Check tag and package version
-        if: github.event_name == 'release'
+      - name: Resolve release context
+        id: context
         env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: node -e "if (process.env.RELEASE_TAG !== 'v' + require('./package.json').version) throw Error('Tag must match package version')"
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/release-context.js
       - run: npm run typecheck && npm run build && npm run lint && npm run format && npm test
       - name: Pack candidate once
         id: pack
@@ -42,6 +56,15 @@ jobs:
           npm pack --pack-destination candidate
           mv candidate/*.tgz candidate/package.tgz
           echo "digest=$(sha256sum candidate/package.tgz | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+      - name: Reproduce the original release package
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          EXPECTED_DIGEST: ${{ steps.context.outputs.expected_digest }}
+        run: node scripts/verify-candidate.js candidate/package.tgz
+      - name: Check npm publication without publishing
+        env:
+          NPM_DIST_TAG: ${{ steps.context.outputs.npm_tag }}
+        run: npm publish "$CANDIDATE_TARBALL" --dry-run --tag "$NPM_DIST_TAG"
       - uses: actions/upload-artifact@v4
         with:
           name: release-candidate
@@ -78,8 +101,16 @@ jobs:
         run: node scripts/verify-candidate.js candidate/package.tgz
       - run: npm run test:package -- candidate/package.tgz
 
+  package-checks:
+    name: package-checks
+    if: always()
+    needs: [candidate, test-package]
+    runs-on: ubuntu-latest
+    steps:
+      - run: test "${{ needs.candidate.result }}" = success && test "${{ needs.test-package.result }}" = success
+
   publish-npm:
-    if: github.event_name == 'release'
+    if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
     needs: [candidate, test-package]
     runs-on: ubuntu-latest
     permissions:
@@ -103,5 +134,5 @@ jobs:
         run: node scripts/verify-candidate.js candidate/package.tgz
       - name: Publish to npm
         env:
-          NPM_DIST_TAG: ${{ github.event.release.prerelease && 'next' || 'latest' }}
-        run: npm publish candidate/package.tgz --tag "$NPM_DIST_TAG"
+          NPM_DIST_TAG: ${{ needs.candidate.outputs.npm_tag }}
+        run: npm publish "$CANDIDATE_TARBALL" --tag "$NPM_DIST_TAG"
