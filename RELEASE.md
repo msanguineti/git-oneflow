@@ -1,70 +1,78 @@
 # Releasing and maintenance
 
-This procedure releases the npm package, not a project's `gof finish release`
-command. Publication, tags and GitHub releases require explicit owner authorization.
-The proposed next version is 4.0.0 because the changes since 3.1.0 include breaking
-behavior; the owner must confirm the version, release tag and npm distribution tag.
+GitHub Actions publishes this project to the public npm registry when a GitHub
+release is published. This guide is for package maintainers. The CLI command
+`gof finish release` manages branches in a user's repository; it does not publish
+this npm package.
 
-## Owner setup
+## Configure npm publishing
 
-An npm package administrator configures a trusted publisher for `git-oneflow`:
-GitHub Actions, organization/user `msanguineti`, repository `git-oneflow`, workflow
-filename `npm-publish.yml`, no environment name, and allow direct `npm publish`.
-Fields are case-sensitive. Confirm the repository URL in package.json matches the
-publishing repository. The publishing job uses a GitHub-hosted runner, Node 26,
-npm 11.5.1 or newer and `id-token: write`. Saving the configuration does not test
-OIDC; authentication is verified only by a real authorized publication. Review npm's
-[trusted publisher instructions](https://docs.npmjs.com/trusted-publishers/) and
-package access settings. Create the publisher close to the authorized first release:
-a new configuration expires unless its first successful publish completes within
-two days. If expired, delete it and create a new one before that release. Do not
-publish merely to prevent expiry. Do not retain a write token as a workflow fallback.
+In the `git-oneflow` package settings on npmjs.org, add a trusted publisher with:
 
-## Candidate and publication
+- Provider: GitHub Actions
+- Organization or user: `msanguineti`
+- Repository: `git-oneflow`
+- Workflow filename: `npm-publish.yml`
+- Environment: leave blank
+- Allowed action: direct `npm publish`
 
-Pull requests exercise the same packing, artifact transfer and installed-package
-matrix used for releases. Each consumer logs the verified SHA-256 digest. The
-publishing job runs only for a published release, after that matrix succeeds;
-pull requests cannot run it.
+The workflow uses OIDC authentication on a GitHub-hosted runner; it does not need
+an npm token secret. Its publishing job uses Node 26, npm 11.5.1 or newer and
+`id-token: write`. The repository URL in `package.json` must match the publishing
+repository.
 
-1. Before a release, check [Node lifecycle](https://nodejs.org/en/about/previous-releases),
-   Git/platform constraints, dependency updates and security advisories. Align
-   engines, setup, CI and documentation when supported lines change. Dependabot and
-   the existing checks remain in use; run the checks in CONTRIBUTING.md.
-2. Confirm the version and release type with the owner. GitHub pre-releases publish
-   under npm's `next` tag; stable GitHub releases publish under `latest`. The workflow
-   selects the npm tag automatically from the GitHub pre-release checkbox. For a
-   release candidate, use a package version such as `4.0.0-rc.1` and matching GitHub
-   tag `v4.0.0-rc.1`. Users can install it with `npm install -g git-oneflow@next`.
-   Prepare release notes from the draft below and
-   verify the candidate commit, version and `v<version>` tag match. Confirm the
-   current branch protection and required `checks` job before integration.
-3. After integration and explicit publication authorization, create the matching
-   tag and publish a GitHub release. This triggers the release workflow. It checks
-   the source, packs once, checks that tarball on the supported matrix and publishes
-   the same bytes only after every leg succeeds. Retain the workflow run and artifact
-   digest as release evidence. A successful dry run does not prove npm authentication.
-4. Inspect the workflow and npm registry version, distribution tag and integrity.
-   Compare registry integrity to the retained tarball (for example, using
-   `npm view git-oneflow@<version> dist.integrity` and calculate the retained tarball's SHA-512 directly). Confirm
-   the installed package and release notes are available.
+Configure the publisher shortly before the first release. A new configuration
+expires unless its first successful publish completes within two days. Delete and
+recreate an expired configuration when ready to release. Saving the settings or
+running a dry run does not verify authentication.
 
-If publishing fails or its outcome is uncertain, inspect the workflow and registry
-before retrying. npm versions cannot be overwritten. If the version exists, verify
-its integrity and tag; use a known prior package or publish a corrected new version
-with authorization. Do not rewrite users' repositories. If no version was published,
-correct the cause and repeat the authorized release workflow after verifying the tag
-and artifact. A release workflow rerun creates and verifies a new candidate.
+See npm's [trusted publishing documentation](https://docs.npmjs.com/trusted-publishers/)
+for current requirements and package access settings.
 
-## Draft release notes for 4.0.0
+## Prepare a release
 
-- Requires Node.js 22.8.0 or newer; maintained LTS and newer non-EOL stable lines
-  are supported. Linux, macOS and Windows installed-package workflows run in CI.
-- Git commands use argument-based execution and stop on failures. Earlier successful
-  operations are not rolled back; inspect Git state before recovery.
-- Configuration values are validated and typed; invalid values and explicit files
-  fail instead of being silently accepted. Command-line options override config.
-- The package ships readable TypeScript-compiled JavaScript and no longer needs
-  ShellJS, Rollup or the former color helper. Terminal colors use Node's detection.
-- These changes may break older Node installations and configurations that relied
-  on previously accepted invalid values or failure behavior.
+1. Update the version in `package.json` and `package-lock.json` together. For a
+   release candidate, use a version such as `4.0.0-rc.1`; use `4.0.0` for the
+   corresponding stable release. Prepare release notes describing changes and any
+   breaking behavior.
+2. Run the checks in [CONTRIBUTING.md](CONTRIBUTING.md), open a pull request and
+   merge after the required checks pass. PRs test packing, artifact transfer and
+   installed-package behavior on the same platform matrix used for publishing.
+3. Create a tag named `v<version>` on the checked commit on `main`. The workflow
+   rejects a tag that does not match the package version.
+4. Publish a GitHub release for that tag. Select **Set as a pre-release** for a
+   release candidate. GitHub Actions chooses the npm distribution tag automatically:
+
+   | GitHub release | Example version | npm tag  |
+   | -------------- | --------------- | -------- |
+   | Pre-release    | `4.0.0-rc.1`    | `next`   |
+   | Stable release | `4.0.0`         | `latest` |
+
+The workflow checks the source, packs one tarball, verifies its SHA-256 digest and
+installed behavior across supported runtimes/platforms, then publishes those same
+bytes after every matrix job succeeds. Each consumer logs the verified digest.
+PRs cannot run the publishing job.
+
+## Verify publication and recover from failures
+
+Check the workflow result, npm version, distribution tag and package integrity.
+Use `npm view git-oneflow@<version> dist.integrity` and compare it with the retained
+tarball's SHA-512 integrity. Keep the workflow run and artifact digest with the
+release record. Check that the release notes and published package are available.
+Pre-releases can be installed with `npm install -g git-oneflow@next`.
+
+If publication fails or the outcome is uncertain, inspect the workflow and npm
+registry before retrying. If the version already exists, verify its integrity and
+distribution tag. npm versions cannot be overwritten; users can select a known
+prior version while a correction is prepared under a new version number.
+
+If no version was published, correct the cause, recheck the tag and source, and
+rerun the release workflow. A rerun builds and verifies a new candidate. A failure
+in this publishing workflow does not require changes to users' Git repositories.
+
+## Ongoing maintenance
+
+Before releases and during maintenance, check the [Node release schedule](https://nodejs.org/en/about/previous-releases),
+Git/platform behavior, dependency updates and security advisories. When dropping
+an EOL Node line, update package engines, local setup, CI and documentation together.
+Use the checks in CONTRIBUTING.md and review Dependabot updates.

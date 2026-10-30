@@ -12,25 +12,16 @@ OneFlow is a git branching model proposed by [Adam Ruka](https://github.com/skin
 
 In [this article](https://www.endoflineblog.com/oneflow-a-git-branching-model-and-workflow#develop-feature-branches), Adam describes how it works and when it should be employed.
 
-**_This workflow is not for the uninitiated:_**
+git-OneFlow supports both a single main branch and separate main/development
+branches. By default, it uses `main` and integrates feature branches by rebasing.
+See [Configuration](#configuration) to choose branch names and integration options.
 
-1. Heavy use of `rebase`
-2. By default, work is off of `main`
-3. ???
-4. No Profit :( and surefire way to mess things up quickly and embarrassingly.
+The workflow uses Git rebase and can rewrite branch history. Read Git's
+[rebasing guidance](https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril)
+before using it on shared branches.
 
-For a good overview of why you should _and_ when you shouldn't use rebase read [this](https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril)
-
-I have simply put together some CLI commands to leverage the OneFlow model.
-
-I have remained strictly faithful to how Adam defines the workflow as a maintenance-only tool. This means that, by default, **_git-OneFlow_** works with one main branch only (`main`) and new features are rebased. Check the [customisation](#customisation) section.
-
-Of course, one-size-fits-all does not always work, therefore, I have implemented all the feature integration options described in the article and both the _one main branch_ and _main and development branches_ models.
-
-Fun facts:
-
-1. _Two branches_ model + integration option #2 gives... :drumroll: GitFlow :)
-2. Adam Ruka doesn't really like the idea of 'tools' like this one
+The project is in maintenance mode, with updates focused on fixes and supported
+runtimes.
 
 ## Node Compatibility
 
@@ -137,7 +128,7 @@ gof init
 
 `init` starts an interactive session that allows for customising the configuration of **_git-OneFlow_**
 
-This creates a `.git-oneflowrc` file with the chosen configuration [options](#options). **_git-OneFlow_** uses [`cosmiconfig`](https://www.npmjs.com/package/cosmiconfig) under the hood.
+This creates a `.git-oneflowrc` file with the chosen configuration [options](#configuration-options). **_git-OneFlow_** uses [`cosmiconfig`](https://www.npmjs.com/package/cosmiconfig) under the hood.
 
 To specify a configuration file on the command line use `-c|--config` with the name of the file (and it's path).
 
@@ -292,7 +283,7 @@ The changelog can be found on the [Releases page](https://github.com/msanguineti
 
 ## Contributing
 
-PRs welcome!
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, checks and pull request guidance.
 
 ## License
 
