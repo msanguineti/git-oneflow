@@ -39,11 +39,13 @@ Use separate worktrees or otherwise isolate concurrent writers.
 
 Use Conventional Commits, as configured by the existing commit hook. Run checks
 appropriate to the change and address relevant review findings before integration.
-GitHub's branch response on 2026-10-30 reported `checks` as the sole required
-context on protected `main`; full protection/review/bypass settings were
-inaccessible. Recheck hosting rules before integration and coordinate any required
-check changes. CI runs on maintained Node LTS lines on Linux and the latest LTS on
-macOS and Windows for pull requests and pushes to `main`.
+Protect `main` with pull requests, required `checks` and `package-checks`, strict
+up-to-date checks and administrator enforcement; block force pushes and deletion.
+Zero mandatory reviewer approvals keeps the owner-led maintenance workflow small;
+independent engineering review remains required for consequential changes. Recheck
+actual hosting settings before integration. CI runs on PRs across maintained Node
+LTS lines on Linux and the latest LTS on macOS and Windows. It does not repeat the
+full Node matrix after merging to `main`.
 
 The executor may make local commits for authorized work. Push, merge and release
 require their own authorization. A GitHub release triggers the npm publishing
@@ -65,8 +67,12 @@ covered full source checks and one installed tarball across Linux Node 22/24/26
 and macOS/Windows Node 26. The release workflow verifies artifact identity and
 publishes those checked bytes. Published GitHub pre-releases select npm `next`;
 stable releases select `latest`. Authentication uses npm trusted publishing.
-Actual npm setup/OIDC/publication remains unverified until a real release; the
-owner knowingly chose to attempt a pre-release. Do not infer success from CI or
+The first RC publication failed before authentication because its relative tarball
+path lacked `./`. Publication now uses an explicit local path and an actual npm
+dry run before upload. Manual recovery on corrected `main` requires an existing
+published release and equality with its independently verified tarball digest;
+this preserves the original package bytes and honest automatic source provenance.
+Actual npm setup/OIDC/publication remains unverified until a successful attempt. Do not infer success from CI or
 create a release as an agent probe.
 
 The closed modernization account is in ignored `.dev/programme.md`; the current

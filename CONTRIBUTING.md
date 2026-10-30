@@ -35,7 +35,7 @@ To check an existing tarball without repacking, run:
 npm run test:package -- /path/to/package.tgz
 ```
 
-Pull requests and pushes to `main` run the checks on Linux across supported LTS
+Pull requests run the checks on Linux across supported LTS
 lines and on macOS and Windows with the latest LTS. PRs also check one shared
 tarball across that matrix using the release workflow.
 
@@ -44,7 +44,7 @@ tarball across that matrix using the release workflow.
 Create a short-lived branch from `main`, keep changes focused, and open a pull
 request back to `main`. Use Conventional Commits; the commit hook checks commit
 messages and formats staged files. Include relevant regression coverage and update
-user documentation when behavior changes. The aggregate `checks` job must pass
+user documentation when behavior changes. The aggregate `checks` and `package-checks` jobs must pass
 before integration; follow the repository's branch protection requirements.
 
 For npm publishing, recovery and recurring maintenance tasks, see
