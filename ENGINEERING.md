@@ -56,16 +56,19 @@ before integration. The programme and current work record are in ignored
 
 Command/configuration correctness and Git execution safety are implemented and
 accepted for Phase 2 on 2026-10-29. Git runs through argument-based child processes;
-failures stop subsequent actions, configuration retains typed values, and ShellJS
-has been removed. Verification covers Linux with Git 2.47.3; cross-platform evidence
-remains outstanding. Phase acceptance is separate from PR integration and release.
+failures stop subsequent actions and configuration retains typed values. ShellJS
+has been removed. Phase acceptance is separate from integration and release.
 
-The remaining modernization outcomes are a smaller dependency tree and simple npm
-distribution, followed by verified cross-platform release preparation with a
-lightweight maintenance procedure.
+The initiating maintainer accepted Phase 3 on 2026-10-30 after independent review
+and passing hosted checks on Linux Node 22/24/26 and macOS/Windows Node 26, including
+installed-tarball launchers and Git workflows. The CLI ships readable JavaScript
+compiled by TypeScript, with a prepack build and all runtime modules included.
+Rollup, its plugins, Terser and the color helper have been removed; cleanup and
+styling use Node built-ins. Node 22.8.0 is the minimum. Configuration and prompt
+libraries remain because replacing them would add parser and terminal maintenance.
 
-The proposed packaging direction is plain TypeScript compilation to readable
-JavaScript, without bundling or minification. Confirm it with an installed-tarball
-smoke check; use a simple esbuild command only if plain compilation needs more
-lasting machinery. Runtime dependencies are external already, so a single-file
-bundle is not an established requirement.
+Release readiness and a lightweight permanent maintenance procedure are the
+remaining programme outcome. Confirm hosting protection and required-check names
+before integration; prepare release authentication, checked-artifact publishing and
+recovery guidance before release. Neither integration nor publication follows from
+phase acceptance.
