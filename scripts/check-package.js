@@ -20,11 +20,17 @@ const runNpm = (args, cwd) =>
     env: { ...process.env, HUSKY: '0' },
   })
 try {
-  const output = runNpm(
-    ['pack', '--json', '--pack-destination', root],
-    process.cwd(),
-  )
-  const artifact = JSON.parse(output.slice(output.indexOf('[')))[0].filename
+  let artifact = process.argv[2] && resolve(process.argv[2])
+  if (!artifact) {
+    const output = runNpm(
+      ['pack', '--json', '--pack-destination', root],
+      process.cwd(),
+    )
+    artifact = join(
+      root,
+      JSON.parse(output.slice(output.indexOf('[')))[0].filename,
+    )
+  }
   writeFileSync(join(root, 'package.json'), '{"private":true}')
   runNpm(
     [
@@ -33,7 +39,7 @@ try {
       '--ignore-scripts',
       '--no-audit',
       '--no-fund',
-      join(root, artifact),
+      artifact,
     ],
     root,
   )

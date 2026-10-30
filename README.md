@@ -23,7 +23,7 @@ For a good overview of why you should _and_ when you shouldn't use rebase read [
 
 I have simply put together some CLI commands to leverage the OneFlow model.
 
-I have remained strictly faithful to how Adam defines the workflow without adding anything fancy (yet). This means that, by default, **_git-OneFlow_** works with one main branch only (`main`) and new features are rebased. Check the [customisation](#customisation) section.
+I have remained strictly faithful to how Adam defines the workflow as a maintenance-only tool. This means that, by default, **_git-OneFlow_** works with one main branch only (`main`) and new features are rebased. Check the [customisation](#customisation) section.
 
 Of course, one-size-fits-all does not always work, therefore, I have implemented all the feature integration options described in the article and both the _one main branch_ and _main and development branches_ models.
 
@@ -84,7 +84,7 @@ Feature branches stem from `feature`:
 ```sh
 gof start feature my-feature
 # equivalent to...
-git checkout -b feature/my-feature
+git checkout -b feature/my-feature refs/heads/main
 ```
 
 Finishing a feature is done by rebasing:
@@ -107,8 +107,10 @@ Releases and hotfixes share the same workflow: (just substitute `hotfix` for `re
 ```sh
 gof start release 2.3.0
 # equivalent to...
-git checkout -b release/2.3.0
+git checkout -b release/2.3.0 refs/heads/main
 ```
+
+A hotfix starts from the latest tag, or from `main` if no tag exists.
 
 ...then
 
@@ -173,7 +175,7 @@ To create a configuration file with default values:
 gof init -y
 ```
 
-this will create `.gitonelfowrc` in the current directory with the following content:
+this will create `.git-oneflowrc` in the current directory with the following content:
 
 ```json
 {
@@ -266,10 +268,9 @@ Git failures stop the workflow and return a nonzero exit status. Earlier success
 steps are not rolled back. If a rebase conflicts, resolve the files and run
 `git rebase --continue`, or use `git rebase --abort` to return to the state before
 that rebase. For a merge conflict, resolve and commit it or use `git merge --abort`
-while the merge is in progress. Inspect `git status` before continuing.
+while the merge is in progress. Inspect `git status`, branches, tags and any remote updates before continuing. Earlier steps may already have succeeded; do not blindly rerun the command. Finish the remaining Git operations explicitly after resolving or aborting the conflict.
 
-The Git commands have been tested with Git 2.47.3 on Linux; a minimum Git version
-has not been established.
+Installed-package Git workflows run in CI on Linux, macOS and Windows. A minimum Git version has not been established; behavior can depend on the installed Git and platform.
 
 Another interesting way to experiment with **_git-OneFlow_** is to use the `--dry-run` option. This shows intended Git mutations without performing them; read-only Git queries still run.
 

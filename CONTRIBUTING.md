@@ -21,3 +21,7 @@ cleans them up after each test. The package check builds and installs a tarball 
 CLI tests against it. Pull requests and pushes to `main` run these checks on Linux
 across supported LTS lines and on macOS and Windows with the latest LTS. See [ENGINEERING.md](ENGINEERING.md) for
 the repository workflow.
+
+For release preparation, recovery and the recurring maintenance checks, see
+[RELEASE.md](RELEASE.md). The project is in maintenance mode; new features are out
+of scope.

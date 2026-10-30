@@ -2,31 +2,99 @@ name: Node.js Package
 
 on:
   release:
-    types: [created]
+    types: [published]
+
+permissions:
+  contents: read
 
 jobs:
-  build:
+  candidate:
     runs-on: ubuntu-latest
+    outputs:
+      digest: ${{ steps.pack.outputs.digest }}
+      revision: ${{ steps.revision.outputs.sha }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - id: revision
+        env:
+          EVENT_SHA: ${{ github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EVENT_SHA"
+          echo "sha=$EVENT_SHA" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@v4
         with:
-          node-version: 26
+          node-version: 26.x
       - run: npm ci
-      - run: npm run build
-      - run: npm test
+      - name: Check tag and package version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: node -e "if (process.env.RELEASE_TAG !== 'v' + require('./package.json').version) throw Error('Tag must match package version')"
+      - run: npm run typecheck && npm run build && npm run lint && npm run format && npm test
+      - name: Pack candidate once
+        id: pack
+        run: |
+          mkdir candidate
+          npm pack --pack-destination candidate
+          mv candidate/*.tgz candidate/package.tgz
+          echo "digest=$(sha256sum candidate/package.tgz | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-candidate
+          path: candidate/package.tgz
+          if-no-files-found: error
+
+  test-package:
+    needs: candidate
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, node-version: 22.x }
+          - { os: ubuntu-latest, node-version: 24.x }
+          - { os: ubuntu-latest, node-version: 26.x }
+          - { os: macos-latest, node-version: 26.x }
+          - { os: windows-latest, node-version: 26.x }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.candidate.outputs.revision }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-candidate
+          path: candidate
+      - name: Verify candidate identity
+        env:
+          EXPECTED_DIGEST: ${{ needs.candidate.outputs.digest }}
+        run: node scripts/verify-candidate.js candidate/package.tgz
+      - run: npm run test:package -- candidate/package.tgz
 
   publish-npm:
-    needs: build
+    needs: [candidate, test-package]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.candidate.outputs.revision }}
       - uses: actions/setup-node@v4
         with:
-          node-version: 26
+          node-version: 26.x
           registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm run build
-      - run: npm publish
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-candidate
+          path: candidate
+      - name: Verify candidate identity
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          EXPECTED_DIGEST: ${{ needs.candidate.outputs.digest }}
+        run: node scripts/verify-candidate.js candidate/package.tgz
+      - run: npm publish candidate/package.tgz
