@@ -72,8 +72,8 @@ path lacked `./`. Publication now uses an explicit local path and an actual npm
 dry run before upload. Manual recovery on corrected `main` requires an existing
 published release and equality with its independently verified tarball digest;
 this preserves the original package bytes and honest automatic source provenance.
-Actual npm setup/OIDC/publication remains unverified until a successful attempt. Do not infer success from CI or
-create a release as an agent probe.
+Trusted publishing was verified by the successful 4.0.0-rc.2 publication.
+Creating a release still requires the owner’s authorization.
 
 The closed modernization account is in ignored `.dev/programme.md`; the current
 maintenance phase and release handoff are in `.dev/phase.md`. Phase acceptance is

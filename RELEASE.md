@@ -33,9 +33,10 @@ for current requirements and package access settings.
 
 1. Update the version in `package.json` and `package-lock.json` together with
    `npm version <version> --no-git-tag-version`. This updates the files without
-   creating a commit or tag. For a release candidate, use `4.0.0-rc.2`; use `4.0.0`
-   for the corresponding stable release. Commit the change through the normal PR
-   workflow. Prepare release notes describing changes and any breaking behavior.
+   creating a commit or tag. For example, use `npm version 4.0.0 --no-git-tag-version`
+   to prepare version 4.0.0. Choose an unused version; release candidates have a
+   suffix such as `-rc.1`. Prepare release notes describing changes and any breaking
+   behavior.
 2. Run the checks in [CONTRIBUTING.md](CONTRIBUTING.md), open a pull request and
    merge after the required checks pass. PRs test packing, artifact transfer and
    installed-package behavior on the same platform matrix used for publishing.
