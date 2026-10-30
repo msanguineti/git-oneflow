@@ -197,9 +197,11 @@ const releaseHotfixAction = async (
 
   const tag = opts.tag ?? (await askTagNameToUser())
 
-  tag
-    ? tagBranch(tag as string, (opts.message as string) ?? tag)
-    : warning('commit has not been tagged!')
+  if (tag) {
+    tagBranch(tag as string, (opts.message as string) ?? tag)
+  } else {
+    warning('commit has not been tagged!')
+  }
 
   const onto =
     opts.onto ?? getConfigValue('development') ?? getConfigValue('main')

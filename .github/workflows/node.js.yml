@@ -25,9 +25,11 @@ jobs:
           - os: windows-latest
             node-version: 26.x
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
+          package-manager-cache: false
+          check-latest: true
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm run typecheck
