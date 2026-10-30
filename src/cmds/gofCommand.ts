@@ -1,6 +1,6 @@
 import { Command } from 'commander'
-import { getBaseBranch } from '../lib/config'
-import { info } from '../lib/log'
+import { getBaseBranch } from '../lib/config.js'
+import { info } from '../lib/log.js'
 
 export type GofCmdOption = {
   flags: string

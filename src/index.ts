@@ -1,12 +1,13 @@
+#!/usr/bin/env node
 import { Command } from 'commander'
 import path from 'path'
-import { name, version } from '../package.json'
-import makeFinishCmd from './cmds/finish'
-import makeInitCmd from './cmds/init'
-import makeStartCmd from './cmds/start'
-import { load } from './lib/config'
-import { isOK } from './lib/git'
-import { error } from './lib/log'
+import { name, version } from './lib/package.js'
+import makeFinishCmd from './cmds/finish.js'
+import makeInitCmd from './cmds/init.js'
+import makeStartCmd from './cmds/start.js'
+import { load } from './lib/config.js'
+import { isOK } from './lib/git.js'
+import { error } from './lib/log.js'
 
 const main = async (): Promise<void> => {
   try {

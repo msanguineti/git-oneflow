@@ -1,13 +1,13 @@
 import { Command } from 'commander'
-import { getConfigValue, optionNames, getBaseBranch } from '../lib/config'
-import { getLatestTag, getLocalBranches, createBranch } from '../lib/git'
+import { getConfigValue, optionNames, getBaseBranch } from '../lib/config.js'
+import { getLatestTag, getLocalBranches, createBranch } from '../lib/git.js'
 import {
   GofOptionsType,
   GofCmdOption,
   GofCommand,
   makeGofCmd,
-} from './gofCommand'
-import { promptUser, presentChoices, askInput } from '../lib/inquisitor'
+} from './gofCommand.js'
+import { promptUser, presentChoices, askInput } from '../lib/inquisitor.js'
 
 const getDefaultReference = async (
   cmdName: string,

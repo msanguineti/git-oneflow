@@ -1,4 +1,12 @@
-import { cyan, gray, red, white, yellow } from 'fude'
+import { styleText } from 'node:util'
+
+const cyan = (text: string) => styleText('cyan', text)
+const gray = (text: string) => styleText('gray', text)
+const red = (text: string) => styleText('red', text, { stream: process.stderr })
+const white = (text: string) =>
+  styleText('white', text, { stream: process.stderr })
+const yellow = (text: string) =>
+  styleText('yellow', text, { stream: process.stderr })
 
 export const info = (key: string, msg: string): void => {
   console.info(`${gray(key)}: ${cyan(msg)}`)

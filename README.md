@@ -34,7 +34,10 @@ Fun facts:
 
 ## Node Compatibility
 
-Supported version are LTS and above.
+Node.js 22.8.0 or newer is required. Terminal colors use Node.js color detection;
+its standard `NO_COLOR` and `FORCE_COLOR` environment variables apply.
+
+Maintained Node.js LTS lines and newer non-EOL stable releases are supported.
 
 ## Install
 

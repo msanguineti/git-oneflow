@@ -1,7 +1,7 @@
 import { Command } from 'commander'
 import fs from 'fs'
 import path from 'path'
-import { name } from '../../package.json'
+import { name } from '../lib/package.js'
 import {
   optionNames,
   getConfigValue,
@@ -9,17 +9,17 @@ import {
   strategyOptionValues,
   defaultConfiguration,
   getConfigFile,
-} from '../lib/config'
-import { warning, info } from '../lib/log'
+} from '../lib/config.js'
+import { warning, info } from '../lib/log.js'
 import {
   GofQuestion,
   presentChoices,
   askConfirmation,
   askInput,
   promptUser,
-} from '../lib/inquisitor'
-import yoda from '../lib/yoda'
-import { getLocalBranches, isValidBranchName } from '../lib/git'
+} from '../lib/inquisitor.js'
+import yoda from '../lib/yoda.js'
+import { getLocalBranches, isValidBranchName } from '../lib/git.js'
 
 const configInitQuestions = (): GofQuestion[] => [
   presentChoices({
