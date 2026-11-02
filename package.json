@@ -51,7 +51,7 @@
   },
   "homepage": "https://github.com/msanguineti/git-oneflow#readme",
   "devDependencies": {
-    "@commitlint/cli": "^20.1.0",
+    "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^20.0.0",
     "@eslint/js": "^10.0.1",
     "eslint": "^10.13.0",
