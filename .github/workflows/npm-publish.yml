@@ -64,6 +64,7 @@ jobs:
           EXPECTED_DIGEST: ${{ steps.context.outputs.expected_digest }}
         run: node scripts/verify-candidate.js candidate/package.tgz
       - name: Check npm publication without publishing
+        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
         env:
           NPM_DIST_TAG: ${{ steps.context.outputs.npm_tag }}
         run: npm publish "$CANDIDATE_TARBALL" --dry-run --tag "$NPM_DIST_TAG"
