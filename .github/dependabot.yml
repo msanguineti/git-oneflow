@@ -6,6 +6,12 @@ updates:
       interval: weekly
     open-pull-requests-limit: 10
     versioning-strategy: increase
+    groups:
+      development-minor-patch:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
     labels:
       - 'dependencies'
       - 'npm'
@@ -14,6 +20,13 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 10
+    groups:
+      actions-minor-patch:
+        patterns:
+          - '*'
+        update-types:
+          - minor
+          - patch
     labels:
       - 'dependencies'
       - 'github_actions'
