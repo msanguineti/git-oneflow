@@ -21,6 +21,35 @@ before using it on shared branches.
 The project is in maintenance mode, with updates focused on fixes and supported
 runtimes.
 
+## Newer alternative: Twigsmith
+
+[Twigsmith 1.0](https://github.com/msanguineti/twigsmith/releases/tag/v1.0.0)
+is the Rust successor to git-OneFlow. Consider it for native executables or
+configurable OneFlow, GitHub Flow, GitFlow and lightweight trunk workflows,
+including supported direct integration and hosted review routes.
+git-OneFlow remains in maintenance mode for fixes and supported runtimes; its
+installation and usage documentation continues below.
+
+Twigsmith has a different interface and configuration model:
+
+- **Installation:** install the separate npm package with
+  `npm install -g twigsmith@1.0.0`, or download a native archive.
+  Native downloads need neither Node.js nor Rust. Check Twigsmith's
+  [platform requirements](https://github.com/msanguineti/twigsmith/blob/main/docs/USAGE.md#native-archives-and-npm-installation),
+  including Git 2.45+.
+- **Configuration:** use `tgi config` to choose and edit workflow settings;
+  `.git-oneflowrc` is not imported. Bundles generate ordinary
+  `twigsmith.config.toml`, YAML or JSON settings.
+- **Commands:** invoke `twigsmith` or `tgi`; it installs no `git-oneflow` or
+  `gof` aliases. Use `tgi start feature/my-feature` and `tgi finish` for
+  the current branch. Release/hotfix policy is explicit, not inferred from a prefix.
+- **Migration:** update scripts and aliases for the new commands and options.
+  Existing `git-oneflow`/`gof` shell-completion registrations are preserved;
+  remove them manually only when no longer needed.
+
+Read the [migration guide](https://github.com/msanguineti/twigsmith/blob/main/docs/USAGE.md#moving-from-the-nodejs-git-oneflow-package)
+before switching; Twigsmith is not a drop-in replacement.
+
 ## Node Compatibility
 
 Use the latest patch of a maintained Node.js LTS release or a newer non-EOL stable
