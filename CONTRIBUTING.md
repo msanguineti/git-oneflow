@@ -53,8 +53,12 @@ tarball across that matrix using the release workflow.
 ## Pull requests
 
 Create a short-lived branch from `main`, keep changes focused, and open a pull
-request back to `main`. Use Conventional Commits. The hooks check commit
-messages and format staged files. Include relevant regression coverage and update
+request back to `main`. Use Conventional Commit headers: `type: description`,
+optionally `type(scope): description` or `type!: description`. The commit hook
+checks this format without enforcing a fixed type list, subject case or length.
+Git-generated merge/revert messages and temporary autosquash commits are accepted.
+Husky installs the hooks; lint-staged lints TypeScript and formats staged files.
+Include relevant regression coverage and update
 user documentation when behavior changes. The aggregate `checks` and `package-checks` jobs must pass
 before integration; follow the repository's branch protection requirements.
 
