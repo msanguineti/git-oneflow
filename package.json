@@ -63,7 +63,7 @@
   "dependencies": {
     "commander": "^12.0.0",
     "cosmiconfig": "^9.0.0",
-    "inquirer": "^13.4.3"
+    "inquirer": "^14.2.5"
   },
   "lint-staged": {
     "**/*.ts": "eslint --fix",
