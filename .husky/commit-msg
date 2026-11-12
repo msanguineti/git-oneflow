@@ -1,2 +1,2 @@
 # shellcheck disable=SC2148
-npx commitlint --edit $1
+node scripts/check-commit-message.js "$1"
