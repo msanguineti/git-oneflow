@@ -1,6 +1,6 @@
 {
   "name": "git-oneflow",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Command-line tools for the OneFlow Git workflow: feature, release and hotfix branches.",
   "bin": {
     "gof": "bin/index.js",
