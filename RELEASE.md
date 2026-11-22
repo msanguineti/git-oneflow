@@ -33,10 +33,9 @@ for current requirements and package access settings.
 
 1. Update the version in `package.json` and `package-lock.json` together with
    `npm version <version> --no-git-tag-version`. This updates the files without
-   creating a commit or tag. For example, use `npm version 4.0.0 --no-git-tag-version`
-   to prepare version 4.0.0. Choose an unused version; release candidates have a
-   suffix such as `-rc.1`. Prepare release notes describing changes and any breaking
-   behavior.
+   creating a commit or tag. Choose an unused version. Release candidates have a
+   suffix such as `-rc.1`. Prepare release notes describing the changes and any
+   breaking behavior.
 2. Run the checks in [CONTRIBUTING.md](CONTRIBUTING.md), open a pull request and
    merge after the required checks pass. PRs test packing, artifact transfer and
    installed-package behavior on the same platform matrix used for publishing.
@@ -51,17 +50,25 @@ for current requirements and package access settings.
    | Pre-release    | `4.0.0-rc.2`    | `next`   |
    | Stable release | `4.0.0`         | `latest` |
 
-The workflow checks the source, packs one tarball, verifies its SHA-256 digest and
-installed behavior across supported runtimes/platforms, then publishes those same
-bytes after every matrix job succeeds. Each consumer logs the verified digest.
-PRs cannot run the publishing job.
+The workflow checks the source and packs one tarball. Release and recovery runs
+also run an npm publication dry run. Each package check verifies and logs the
+tarball's SHA-256 digest before testing it. Publication uses those same bytes
+after every matrix job succeeds.
 
 ## Verify publication and recover from failures
 
 Check the workflow result, npm version, distribution tag and package integrity.
 Use `npm view git-oneflow@<version> dist.integrity` and compare it with the retained
-tarball's SHA-512 integrity. Keep the workflow run and artifact digest with the
-release record. Check that the release notes and published package are available.
+tarball's SHA-512 integrity. The registry uses a `sha512-` prefix followed by the
+base64 digest. To compute it with Node.js, replace `package.tgz` with the path to
+the retained tarball.
+
+```sh
+node -e "const { createHash } = require('node:crypto'); const { readFileSync } = require('node:fs'); console.log('sha512-' + createHash('sha512').update(readFileSync(process.argv[1])).digest('base64'))" package.tgz
+```
+
+Keep the workflow run and artifact digest with the release record. Check that the
+release notes and published package are available.
 Pre-releases can be installed with `npm install -g git-oneflow@next`.
 
 If publication fails or the outcome is uncertain, inspect the workflow and npm
@@ -80,7 +87,8 @@ To retry an existing release without changing its tag or package version:
 1. Merge the workflow fix after both PR check aggregates pass. The corrected
    `main` must still build the exact original package contents.
 2. In the failed release run, find the **Verify candidate identity** step and copy
-   the verified package SHA-256. Use the tarball digest, not the artifact ZIP digest.
+   the verified tarball SHA-256. This recovery requires an original verified
+   tarball digest. A failure before artifact verification can leave it unavailable.
 3. In **Actions → Node.js Package → Run workflow**, select `main`. Enter the existing
    GitHub release tag and that original tarball SHA-256.
 4. Inspect the new run. It reads the existing release to choose `next` or `latest`,
