@@ -1,7 +1,13 @@
-import { cosmiconfigSync } from 'cosmiconfig'
+import { cosmiconfigSync, defaultLoadersSync } from 'cosmiconfig'
 import { name } from './package.js'
 
-const explorer = cosmiconfigSync(name)
+const explorer = cosmiconfigSync(name, {
+  loaders: {
+    // Preserve the default-export convention with Cosmiconfig 10's require() loader.
+    '.ts': (filepath, content): unknown =>
+      defaultLoadersSync['.ts'](filepath, content).default,
+  },
+})
 
 let configFile: string | undefined
 

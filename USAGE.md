@@ -1,6 +1,6 @@
 # Using git-OneFlow
 
-Run git-OneFlow from a trusted Git repository. Discovered or explicit JavaScript
+Run git-OneFlow from a trusted Git repository. JavaScript and TypeScript
 configuration can execute code before its values are validated. Git also uses
 the invoking user's PATH and Git configuration, including hooks, editors and
 transports.
@@ -125,6 +125,14 @@ An explicit `--config` file replaces the discovered configuration; omitted keys 
 the defaults. Command-line options take precedence over the selected file. Boolean
 settings must be JSON booleans, and branch prefixes may be empty strings. Invalid
 keys, types, strategies, or explicit files cause the command to fail.
+
+Use `export default` in a TypeScript configuration file, or assign the settings
+to `exports.default` in a CommonJS package. Node.js type stripping supports
+syntax such as type annotations and interfaces. For syntax that needs
+compilation, such as enums, use JavaScript or JSON configuration instead.
+
+In YAML configuration, replace `<<` merge keys with the explicit settings they
+supplied. The YAML loader treats `<<` as an ordinary key.
 
 ### Configuration options
 

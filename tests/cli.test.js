@@ -205,6 +205,18 @@ test('explicit configuration replaces discovery and invalid settings fail', (t) 
   )
 })
 
+test('discovered TypeScript configuration applies its default export', (t) => {
+  const { root, git, run } = fixture(t)
+  writeFileSync(
+    join(root, 'git-oneflow.config.ts'),
+    'const features: string = "topic"\nexport default { features }\n',
+  )
+
+  run('start', 'feature', 'example')
+
+  assert.equal(git('branch', '--show-current'), 'topic/example')
+})
+
 test('Git inputs are not interpreted by a shell and unsafe refs are rejected', (t) => {
   const { root, git, raw } = fixture(t)
   const name = 'safe;touch PWNED'
