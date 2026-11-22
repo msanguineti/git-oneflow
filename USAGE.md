@@ -126,10 +126,10 @@ the defaults. Command-line options take precedence over the selected file. Boole
 settings must be JSON booleans, and branch prefixes may be empty strings. Invalid
 keys, types, strategies, or explicit files cause the command to fail.
 
-Export the configuration as the default export of a `.ts` file. TypeScript
-configuration uses Node.js type stripping, which supports syntax such as type
-annotations and interfaces. For syntax that needs compilation, such as enums,
-use JavaScript or JSON configuration instead.
+Use `export default` in a TypeScript configuration file, or assign the settings
+to `exports.default` in a CommonJS package. Node.js type stripping supports
+syntax such as type annotations and interfaces. For syntax that needs
+compilation, such as enums, use JavaScript or JSON configuration instead.
 
 In YAML configuration, replace `<<` merge keys with the explicit settings they
 supplied. The YAML loader treats `<<` as an ordinary key.
