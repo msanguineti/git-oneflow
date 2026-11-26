@@ -55,10 +55,10 @@
     "@types/node": "^26.6.6",
     "eslint": "^10.15.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.6.1",
+    "lint-staged": "^17.6.2",
     "prettier": "^3.10.1",
     "typescript": "^5.3.3",
-    "typescript-eslint": "^8.72.1"
+    "typescript-eslint": "^8.74.0"
   },
   "dependencies": {
     "commander": "^15.1.0",
